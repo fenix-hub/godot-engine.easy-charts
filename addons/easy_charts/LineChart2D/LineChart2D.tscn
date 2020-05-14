@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/easy_charts/LineChart2D/LineChart2D.gd" type="Script" id=1]
+[ext_resource path="res://addons/easy_charts/Utilities/Point/PointData.tscn" type="PackedScene" id=2]
+
+[node name="LineChart2D" type="Node2D"]
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+font_color = Color( 0.137255, 0.137255, 0.137255, 1 )
+
+[node name="Grid" type="Node2D" parent="."]
+
+[node name="VLine" type="Line2D" parent="Grid"]
+points = PoolVector2Array( 0, 0, 0, 0 )
+width = 1.0
+default_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+
+[node name="HLine" type="Line2D" parent="Grid"]
+points = PoolVector2Array( 0, 0, 0, 0 )
+width = 1.0
+default_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+
+[node name="Outlines" type="Line2D" parent="."]
+points = PoolVector2Array( 0, 0, 2, 0, 2, 2, 0, 2, 0, 0 )
+width = 2.0
+default_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+
+[node name="Functions" type="Node2D" parent="."]
+
+[node name="Function" type="Line2D" parent="Functions"]
+points = PoolVector2Array( 0, 0, 0, 0 )
+width = 5.0
+default_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+
+[node name="FunctionsTween" type="Tween" parent="."]
+
+[node name="OutlinesTween" type="Tween" parent="."]
+
+[node name="GridTween" type="Tween" parent="."]
+
+[node name="PointData" parent="." instance=ExtResource( 2 )]
+
+[node name="PointData" parent="PointData" index="0"]
+visible = false
+[connection signal="script_changed" from="." to="." method="_script_changed"]
+
+[editable path="PointData"]

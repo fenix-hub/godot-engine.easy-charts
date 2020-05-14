@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/easy_charts/ChartContainer.gd" type="Script" id=1]
+
+[node name="Control" type="ColorRect"]
+margin_right = 15.0
+margin_bottom = 3.0
+rect_min_size = Vector2( 15, 3 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

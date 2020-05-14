@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/easy_charts/Utilities/Rect/Rect.gd" type="Script" id=1]
+
+[node name="Rect" type="Control"]
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="mouse_entered" from="." to="." method="_on_Rect_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_Rect_mouse_exited"]
