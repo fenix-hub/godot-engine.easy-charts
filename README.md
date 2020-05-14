@@ -136,6 +136,12 @@ This library offers a set of chart for each main Godot Node:
 ![example02](imgs/example02.png)
 ![example03](imgs/example03.gif)
 
+##### Some references for charts and plots
+![Flourish](https://app.flourish.studio/projects)
+![Chart.js](https://www.chartjs.org/samples/latest/)
+![Google Charts](https://developers.google.com/chart)
+
+
 # Disclaimer  
 This addon was built for a **personal use** intention. It was released as an open source plugin in the hope that it could be useful to the Godot Engine Community.  
 As a "work in progress" project, there is *no warranty* for any eventual issue and bug that may broke your project.  
