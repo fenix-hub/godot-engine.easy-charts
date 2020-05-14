@@ -137,9 +137,9 @@ This library offers a set of chart for each main Godot Node:
 ![example03](imgs/example03.gif)
 
 ##### Some references for charts and plots
-[Flourish](https://app.flourish.studio/projects)
-[Chart.js](https://www.chartjs.org/samples/latest/)
-[Google Charts](https://developers.google.com/chart)
+[Flourish](https://app.flourish.studio/projects)   
+[Chart.js](https://www.chartjs.org/samples/latest/)   
+[Google Charts](https://developers.google.com/chart)   
 
 
 # Disclaimer  
