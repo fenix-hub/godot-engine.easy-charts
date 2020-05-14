@@ -18,7 +18,13 @@ Godot Version: *3.2stable*
 This plugin was born from the personal necessity to plot some charts and tables for my university degree project.   
 Here's an example:    ![]()   
 Charts are really useful when it comes to visually represent values in a powerful and more understandable way, mostly when these charts also have visually pleasing features.   
-If you need to plot a chart with some values in it and just take a screenshot, or use it in your Godot Engine's game or project, you've come to the right place.  
+If you need to plot a chart with some values in it and just take a screenshot, or use it in your Godot Engine's game or project, you've come to the right place.   
+![st](imgs/startup_company2.jpg)   
+[*Startup Company*](https://store.steampowered.com/app/606800/Startup_Company/)   
+
+![wa](imgs/workplace_analytics.png)   
+[*Microsoft Workplace Analytics*](https://www.microsoft.com/microsoft-365/partners/workplaceanalytics)   
+
 
 ## How does it work?
 *Easy Charts* contains a collection of nodes for each main node in Godot: Control Nodes, 2D Nodes and 3D Spatials.
@@ -43,6 +49,43 @@ Running the project like this, will produce this chart:
 
 5. Moving the cursor around you will be able to see a floating box with the values contained in the chart:  
 ![example7](imgs/values.gif)
+
+## Chart Tools   
+Chart Tools are a set of utilities parallel to the plot itself.   
+![signals](imgs/signals.png)    
+Available Chart Tools are:  
+- *Legend Output*: once a chart is plotted, you can get an output legend connecting the right signal, or just using custom functions. A legend is a simple `Array` of custom Control nodes, which contains informations about the chart for each function plotted.    
+Once plotted, the chart will emit a custom `chart_plotted( chart )` signal. To get the legend, you just can connect this signal, or use the `get_legend` functions afterwards. A `legend` variable can then be used to print out or represent in a full customizable way the legend of functions. For example, these lines of codes:   
+![code1](imgs/legend_code.png)   
+![tree1](imgs/tree_legend.png)    
+You can get this result:   
+![debug](imgs/debug_legend.png)
+![editor2](imgs/editor_legend.png)
+
+- *Point Value*: as you can see, each chart is pretty much interactable, giving you the opportunity to visualize the point represented with hovering it with your mouse. But what if you want to use its values for your own purposes? No problem, with the use of the signal `point_pressed ( point : Point )` you will be able to get all the informations about a point you clicked on in the chart.   
+![codep](imgs/code_point.png)   
+![debug1](imgs/debug_point.png)    
+
+
+# Available Charts and when to use them    
+This library offers a set of chart for each main Godot Node:   
+- **Control Nodes:** "Control Charts" are fast Charts that can be plotted in a Control space, such as UIs or Control user interactable areas. They offer basic Control properties, such as Margins, size inheritance and control. No animations, no real time changes, just charts.   
+- **2D Nodes:** "2D Charts" are a set of Charts which can be Used in 2D spaces. They offer additional tools, such as animations and real time changes in editor. They can be used to implement more aesthetic charts in 2D contexts.   
+- **[wip] 3D Nodes:** "3D Charts" are a set of Charts which can be Used in both 2D and 3D spaces. They offer the possibility to plot 3D datasets, which are common in machine learning contexts or just data analysis. A Camera Control will also be available, which can be used to move around the chart.
+
+*Available Charts*:  
+- LineChart [Control, 2D, wip 3D]
+- BarChart  [Control, 2D, wipr 3D]
+- ScatterChart [wip Control, wip 2D, 3D]
+
+*Work in progress*:
+- Area Chart
+- Pie Chart
+- Donut Chart
+- Radar Chart
+- Bubble Chart
+- Parliament Chart
+
 
 
 # Disclaimer  
