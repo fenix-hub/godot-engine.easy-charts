@@ -86,7 +86,10 @@ This library offers a set of chart for each main Godot Node:
 - Bubble Chart
 - Parliament Chart
 
-
+### Some Examples    
+![example01](imgs/example01.png)
+![example02](imgs/example02.png)
+![example03](imgs/example03.gif)
 
 # Disclaimer  
 This addon was built for a **personal use** intention. It was released as an open source plugin in the hope that it could be useful to the Godot Engine Community.  
