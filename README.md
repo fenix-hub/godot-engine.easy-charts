@@ -19,10 +19,10 @@ This plugin was born from the personal necessity to plot some charts and tables 
 Here's an example:    ![]()   
 Charts are really useful when it comes to visually represent values in a powerful and more understandable way, mostly when these charts also have visually pleasing features.   
 If you need to plot a chart with some values in it and just take a screenshot, or use it in your Godot Engine's game or project, you've come to the right place.   
-![st](imgs/startup_company2.jpg)   
+![st](imgs/startup_company2.jpg | width=100)   
 [*Startup Company*](https://store.steampowered.com/app/606800/Startup_Company/)   
 
-![wa](imgs/workplace_analytics.png)   
+![wa](imgs/workplace_analytics.png | width=100)   
 [*Microsoft Workplace Analytics*](https://www.microsoft.com/microsoft-365/partners/workplaceanalytics)   
 
 
