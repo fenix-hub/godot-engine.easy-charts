@@ -12,10 +12,7 @@ var font_size : float = 16
 var const_height : float = font_size/2*font_size/20
 var const_width : float = font_size/2
 
-var source : String
-var delimiter : String 
-
-var OFFSET : Vector2 = Vector2(50,30)
+var OFFSET : Vector2 = Vector2(0,0)
 
 #-------------------------------------------------------------------------#
 var origin : Vector2
@@ -29,7 +26,6 @@ var v_dist : float
 
 # quantization, representing the interval in which values will be displayed
 var x_decim : float = 1.0
-export (float) var y_decim : float = 5.0
 
 # define values on x an y axis
 var x_chors : Array
@@ -61,26 +57,43 @@ var point_values : Array
 var point_positions : Array
 
 var legend : Array setget set_legend,get_legend
-var are_values_columns : bool
 
 # ---------------------
-export (bool) var invert_xy : bool
 var SIZE : Vector2 = Vector2()
+export (String, FILE) var source : String = ""
+export (String) var delimiter : String = ";"
+
+export (bool) var are_values_columns : bool = false
+export (bool) var invert_xy : bool = false
+
+export (int,0,100) var x_values : int = 0
+
+export (float,1,20,0.5) var column_width : float = 10
+export (float,0,10,0.5) var column_gap : float = 2
+
+export (float,0,10) var y_decim : float = 5.0
 export (PoolColorArray) var function_colors = [Color("#1e1e1e")]
+
+export (bool) var boxed : bool = true
 export (Color) var v_lines_color : Color = Color("#cacaca")
 export (Color) var h_lines_color : Color = Color("#cacaca")
 export (Color) var outline_color : Color = Color("#1e1e1e")
+export (float,0.01,1) var drawing_duration : float = 0.3
 export (Font) var font : Font
 export (Font) var bold_font : Font
 export (Color) var font_color : Color = Color("#1e1e1e")
-export (String,"Default","Clean","Minimal","Invert") var template : String = "Default" setget apply_template
+export (String,"Default","Clean","Gradient","Minimal","Invert") var template : String = "Default" setget apply_template
 
-signal linechart_plotted()
+var templates : Dictionary = {}
 
-#func _ready():
-#	plot_line_chart("res://ChartNode/datas.csv",";",true,0)
+signal chart_plotted(chart)
+signal point_pressed(point)
 
-func plot_line_chart(source_ : String, delimiter_ : String, are_values_columns_ : bool, x_values_ : int, invert_xy_ : bool = false):
+
+func _ready():
+	pass
+
+func _plot(source_ : String, delimiter_ : String, are_values_columns_ : bool, x_values_ : int, invert_xy_ : bool = false):
 	randomize()
 	
 	load_font()
@@ -94,7 +107,26 @@ func plot_line_chart(source_ : String, delimiter_ : String, are_values_columns_ 
 	calculate_coordinates()
 	calculate_colors()
 	create_legend()
-	emit_signal("linechart_plotted")
+	emit_signal("chart_plotted")
+
+func plot():
+	randomize()
+	
+	load_font()
+	PointData.hide()
+	
+	if source == "" or source == null:
+		Utilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
+		return
+	datas = read_datas(source,delimiter)
+	count_functions()
+	structure_datas(datas,are_values_columns,x_values)
+	build_chart()
+	calculate_pass()
+	calculate_coordinates()
+	calculate_colors()
+	create_legend()
+	emit_signal("chart_plotted")
 
 func calculate_colors():
 	if function_colors.empty() or function_colors.size() < functions:
@@ -177,7 +209,7 @@ func structure_datas(database : Array, are_values_columns : bool, x_values : int
 		y_chors.append(p as String)
 
 func build_chart():
-	SIZE = get_parent().get_size()
+	SIZE = get_size()
 	origin = Vector2(OFFSET.x,SIZE.y-OFFSET.y)
 
 func calculate_pass():
@@ -388,10 +420,17 @@ func apply_template(template_name : String):
 	if Engine.editor_hint:
 		if template_name!=null and template_name!="":
 			template = template_name
-			var custom_template = get_parent().templates[template_name.to_lower()]
-			function_colors[0] = Color(custom_template.function_color)
+			var custom_template = templates[template_name.to_lower()]
+			function_colors = custom_template.function_colors
 			v_lines_color = Color(custom_template.v_lines_color)
 			h_lines_color = Color(custom_template.h_lines_color)
 			outline_color = Color(custom_template.outline_color)
 			font_color = Color(custom_template.font_color)
 			property_list_changed_notify()
+
+
+func _script_changed():
+	_ready()
+
+func _enter_tree():
+	templates = Utilities._load_templates()

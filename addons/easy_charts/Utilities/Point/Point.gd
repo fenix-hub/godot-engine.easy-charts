@@ -4,9 +4,9 @@ class_name Point
 const OFFSET : Vector2 = Vector2(13,13)
 var point_value : Array setget set_value,get_value
 var point_position : Vector2
-var color : Color
+var color : Color setget set_color_point, get_color_point
 var color_outline : Color
-var function : String
+var function : String setget set_function, get_function
 
 var mouse_entered : bool = false
 
@@ -78,3 +78,15 @@ func set_value( v : Array = [] ) :
 
 func get_value() -> Array:
 	return point_value
+
+func set_color_point( c : Color ):
+	color = c
+
+func get_color_point() -> Color:
+	return color
+
+func set_function( f : String ):
+	function = f
+
+func get_function() -> String:
+	return function
