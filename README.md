@@ -66,6 +66,32 @@ You can get this result:
 ![codep](imgs/code_point.png)   
 ![debug1](imgs/debug_point.png)    
 
+*Table of features:*    
+
+**Chart**    
+| Function | Description |
+| ------------- | ------------- |
+|`plot()`|Plot the selected chart with in editor properties|
+|`_plot(source : String, delimiter : String, are_values_columns : bool, x_values : int, invert_xy : bool = false)`|Plot the selected chart with hard coded properties|
+|`get_legend()`|Get the legend of the current chart. Returns an **Array** containing control nodes, which can be added as children |
+
+| Signals | Description |
+| ------------- | ------------- |
+|`chart_plotted(chart : Node)`|Returns the plotted Chart, which is a Node (Control, 2D Node, 3D Node)|
+|`point_pressed(point : Point)`|Returns the point pressed with Left Click, which is a custom class *Point*|
+
+**Legend**   
+| Function | Description |
+| ------------- | ------------- |
+|`get_function() -> Array`|Get the function's name, also visible in legend|
+|`get_function_color() -> Color`|Get the function's color, also visible in legend|
+
+**Point**   
+| Function | Description |
+| ------------- | ------------- |
+|`get_value() -> Array`|Get the point values, which are mapped coordinates in the plot. Returns a 2D array, with [0] and [1] as x and y values|
+|`get_function() -> String`|Get the point's function name, also visible in legend and chart|
+|`get_color_point() -> Color`|Get the point Color, also visible in legend and chart|
 
 # Available Charts and when to use them    
 This library offers a set of chart for each main Godot Node:   
