@@ -5,8 +5,8 @@
 Check my **[Discord](https://discord.gg/KnJGY9S)** to stay updated on this repository.  
 *(Recommended since the AssetLibrary is not automatically updated)*  
 
-# GitHub Integration
-A complete GitHub integration for your Godot Editor! Manage your project without even opening your browser.
+# Easy Charts
+A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.
 
 Author: *"Nicolo (fenix) Santilio"*  
 Version: *0.1.0*  
