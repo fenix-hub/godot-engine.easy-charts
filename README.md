@@ -14,7 +14,7 @@ Wiki: *[wip]*
 Godot Version: *3.2stable*  
 
 ## What is this?
-*Easy Charts* is collection of Control, 2D and 3D nodes to plot charts.   
+*Easy Charts* is a collection of Control, 2D and 3D nodes to plot charts.   
 This plugin was born from the personal necessity to plot some charts and tables for my university degree project.   
 Here's an example:    ![]()   
 Charts are really useful when it comes to visually represent values in a powerful and more understandable way, mostly when these charts also have visually pleasing features.   
@@ -97,7 +97,7 @@ You can get this result:
 
 
 **About templates**  
-Templates are defined in a .json file, and the format is pretty straight forward. You can use a reference the already present templates. 
+Templates are defined in a .json file, and the format is pretty straight forward.   
 However, adding custom templates is not yet recommended, since it would require to edit the Charts scripts. Templates are anyway accessible and customizable.   
 ```
 /addons/easy_charts/templates.json
