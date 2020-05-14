@@ -66,7 +66,7 @@ You can get this result:
 ![codep](imgs/code_point.png)   
 ![debug1](imgs/debug_point.png)    
 
-*Table of features:*    
+### Table of features    
 
 **Chart**    
 | Function | Description |
@@ -78,20 +78,39 @@ You can get this result:
 | Signals | Description |
 | ------------- | ------------- |
 |`chart_plotted(chart : Node)`|Returns the plotted Chart, which is a Node (Control, 2D Node, 3D Node)|
-|`point_pressed(point : Point)`|Returns the point pressed with Left Click, which is a custom class *Point*|
+|`point_pressed(point : Point)`|Returns the point pressed with Left Click, which is a custom class *Point*|   
+
 
 **Legend**   
 | Function | Description |
 | ------------- | ------------- |
 |`get_function() -> Array`|Get the function's name, also visible in legend|
-|`get_function_color() -> Color`|Get the function's color, also visible in legend|
+|`get_function_color() -> Color`|Get the function's color, also visible in legend|   
+
 
 **Point**   
 | Function | Description |
 | ------------- | ------------- |
 |`get_value() -> Array`|Get the point values, which are mapped coordinates in the plot. Returns a 2D array, with [0] and [1] as x and y values|
 |`get_function() -> String`|Get the point's function name, also visible in legend and chart|
-|`get_color_point() -> Color`|Get the point Color, also visible in legend and chart|
+|`get_color_point() -> Color`|Get the point Color, also visible in legend and chart|   
+
+
+**About templates**  
+Templates are defined in a .json file, and the format is pretty straight forward. You can use a reference the already present templates. 
+However, adding custom templates is not yet recommended, since it would require to edit the Charts scripts. Templates are anyway accessible and customizable.   
+```
+/addons/easy_charts/templates.json
+
+"default":
+{
+"function_colors" : ["#1e1e1e","#1e1e1e","#1e1e1e","#1e1e1e"],
+"v_lines_color" : "#cacaca",
+"h_lines_color" : "#cacaca",
+"outline_color" : "#1e1e1e",
+"font_color" : "#1e1e1e"
+},
+```
 
 # Available Charts and when to use them    
 This library offers a set of chart for each main Godot Node:   
