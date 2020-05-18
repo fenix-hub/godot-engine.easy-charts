@@ -285,7 +285,7 @@ func draw_function(f_index : int, function : Array):
 		pointv.connect("_mouse_entered",self,"show_data",[pointv])
 		pointv.connect("_mouse_exited",self,"hide_data")
 		pointv.connect("_point_pressed",self,"point_pressed")
-		pointv.create_point(function_colors[f_index], Color.white, function[point]+Vector2(0,10), pointv.format_value(point_values[f_index][point],false,true),(x_datas[f_index] if invert_xy else y_labels[f_index]))
+		pointv.create_point(function_colors[f_index], Color.white, function[point]+Vector2(0,5), pointv.format_value(point_values[f_index][point],false,true),(x_datas[f_index] if invert_xy else y_labels[f_index]))
 		pointv.rect_size.y =  origin.y - function[point].y
 		construct_column(line,f_index,function)
 		FunctionsTween.interpolate_method(line,"add_point",Vector2(function[point].x,origin.y),function[point],drawing_duration/function.size(),Tween.TRANS_QUINT,Tween.EASE_OUT)

@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/plugin%20version-0.1.0-blue)](https://github.com/fenix-hub/godot-engine.easy-charts)
+[![version](https://img.shields.io/badge/plugin%20version-0.1.5-blue)](https://github.com/fenix-hub/godot-engine.easy-charts)
 [![updates](https://img.shields.io/badge/plugin%20updates-on%20discord-purple)](https://discord.gg/JNrcucg)
 [![paypal](https://img.shields.io/badge/donations-PayPal-cyan)](https://paypal.me/NSantilio?locale.x=it_IT)
 
@@ -9,7 +9,7 @@ Check my **[Discord](https://discord.gg/KnJGY9S)** to stay updated on this repos
 A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.
 
 Author: *"Nicolo (fenix) Santilio"*  
-Version: *0.1.0*  
+Version: *0.1.5*  
 Wiki: *[wip]*  
 Godot Version: *3.2stable*  
 

@@ -78,7 +78,6 @@ export (bool) var boxed : bool = true
 export (Color) var v_lines_color : Color = Color("#cacaca")
 export (Color) var h_lines_color : Color = Color("#cacaca")
 export (Color) var outline_color : Color = Color("#1e1e1e")
-export (float,0.01,1) var drawing_duration : float = 0.3
 export (Font) var font : Font
 export (Font) var bold_font : Font
 export (Color) var font_color : Color = Color("#1e1e1e")
