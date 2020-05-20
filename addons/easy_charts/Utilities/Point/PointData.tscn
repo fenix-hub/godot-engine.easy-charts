@@ -3,8 +3,8 @@
 [ext_resource path="res://addons/easy_charts/Utilities/Point/PointData.gd" type="Script" id=1]
 
 [sub_resource type="StyleBoxFlat" id=1]
-content_margin_left = 8.0
-content_margin_right = 8.0
+content_margin_left = 10.0
+content_margin_right = 10.0
 content_margin_top = 5.0
 content_margin_bottom = 5.0
 bg_color = Color( 1, 1, 1, 0 )
@@ -22,21 +22,27 @@ corner_detail = 20
 [node name="PointData" type="CanvasLayer"]
 
 [node name="PointData" type="PanelContainer" parent="."]
-margin_right = 67.0
-margin_bottom = 41.0
+anchor_right = 0.0694688
+anchor_bottom = 0.067
+margin_right = -0.136002
+margin_bottom = 0.799999
+grow_horizontal = 2
 mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 1 )
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_use_anchors_": true
 }
 
 [node name="PointData" type="VBoxContainer" parent="PointData"]
-margin_left = 8.0
+margin_left = 10.0
 margin_top = 5.0
-margin_right = 59.0
+margin_right = 61.0
 margin_bottom = 36.0
+grow_horizontal = 2
+size_flags_horizontal = 3
 custom_constants/separation = 3
+alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -44,6 +50,7 @@ __meta__ = {
 [node name="Function" type="Label" parent="PointData/PointData"]
 margin_right = 51.0
 margin_bottom = 14.0
+size_flags_horizontal = 3
 align = 1
 valign = 1
 
@@ -51,18 +58,24 @@ valign = 1
 margin_top = 17.0
 margin_right = 51.0
 margin_bottom = 31.0
+grow_horizontal = 2
+size_flags_horizontal = 6
+alignment = 1
 
 [node name="x" type="Label" parent="PointData/PointData/Value"]
 margin_right = 39.0
 margin_bottom = 14.0
+size_flags_horizontal = 3
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Value:"
+align = 2
 valign = 1
 
 [node name="y" type="Label" parent="PointData/PointData/Value"]
 margin_left = 43.0
 margin_right = 51.0
 margin_bottom = 14.0
+size_flags_horizontal = 3
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "0"
 valign = 1

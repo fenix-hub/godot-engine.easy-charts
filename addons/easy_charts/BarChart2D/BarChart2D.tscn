@@ -6,8 +6,19 @@
 [node name="BarChart2D" type="Node2D"]
 script = ExtResource( 1 )
 __meta__ = {
-"_edit_group_": true
+"_edit_group_": true,
+"_editor_description_": "[BarChart2D] - General purpose node for Bar Charts
+
+A bar chart or bar graph is a chart or graph that presents categorical data with 
+rectangular bars with heights or lengths proportional to the values that they represent. 
+The bars can be plotted vertically or horizontally. A vertical bar chart is sometimes 
+called a column chart.
+A bar graph shows comparisons among discrete categories. One axis of the chart shows 
+the specific categories being compared, and the other axis represents a measured value. 
+Some bar graphs present bars clustered in groups of more than one, showing the 
+values of more than one measured variable."
 }
+function_colors = [ "#1e1e1e", "#1e1e1e", "#1e1e1e", "#1e1e1e" ]
 
 [node name="Grid" type="Node2D" parent="."]
 
@@ -43,6 +54,5 @@ default_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="PointData" parent="PointData" index="0"]
 visible = false
-[connection signal="script_changed" from="." to="." method="_script_changed"]
 
 [editable path="PointData"]

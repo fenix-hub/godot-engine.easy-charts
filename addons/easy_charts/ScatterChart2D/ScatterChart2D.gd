@@ -1,24 +1,25 @@
 tool
-extends Control
+extends Node2D
 
 """
-[BarChart] - General purpose node for Bar Charts
+[ScatterChart2D] - General purpose node for Scatter Charts
 
-A bar chart or bar graph is a chart or graph that presents categorical data with 
-rectangular bars with heights or lengths proportional to the values that they represent. 
-The bars can be plotted vertically or horizontally. A vertical bar chart is sometimes 
-called a column chart.
-A bar graph shows comparisons among discrete categories. One axis of the chart shows 
-the specific categories being compared, and the other axis represents a measured value. 
-Some bar graphs present bars clustered in groups of more than one, showing the 
-values of more than one measured variable.
+A scatter plot (also called a scatterplot, scatter graph, scatter chart, scattergram, or scatter diagram)
+ is a type of plot or mathematical diagram using Cartesian coordinates to display values for typically two variables 
+for a set of data. If the points are coded (color/shape/size), one additional variable can be displayed. 
+The data are displayed as a collection of points, each having the value of one variable determining the position on 
+the horizontal axis and the value of the other variable determining the position on the vertical axis.
 
 / source : Wikipedia /
 """
 
+onready var OutlinesTween : Tween = $OutlinesTween
+onready var PointTween : Tween = $PointTween
+onready var Functions : Node2D = $Functions
+onready var GridTween : Tween = $GridTween
 onready var PointData = $PointData/PointData
-onready var Points = $Points
-onready var Legend = $Legend
+onready var Outlines : Line2D = $Outlines
+onready var Grid : Node2D = $Grid
 
 var point_node : PackedScene = preload("../Utilities/Point/Point.tscn")
 var FunctionLegend : PackedScene = preload("../Utilities/Legend/FunctionLegend.tscn")
@@ -78,7 +79,7 @@ var point_positions : Array
 var legend : Array setget set_legend,get_legend
 
 # ---------------------
-var SIZE : Vector2 = Vector2()
+export (Vector2) var SIZE : Vector2 = Vector2() setget _set_size
 export (String, FILE, "*.txt, *.csv") var source : String = ""
 export (String) var delimiter : String = ";"
 export (bool) var origin_at_zero : bool = true
@@ -87,14 +88,12 @@ export (bool) var are_values_columns : bool = false
 export (int,0,100) var x_values_index : int = 0
 export(bool) var show_x_values_as_labels : bool = true
 
-export (float,1,20,0.5) var column_width : float = 10
-export (float,0,10,0.5) var column_gap : float = 2
+#export (float,1,20,0.5) var column_width : float = 10
+#export (float,0,10,0.5) var column_gap : float = 2
 
 export (float,0.1,10.0) var x_decim : float = 5.0
 export (float,0.1,10.0) var y_decim : float = 5.0
-
 export (int,"Dot,Triangle,Square") var point_shape : int = 0
-
 export (PoolColorArray) var function_colors = [Color("#1e1e1e")]
 export (Color) var v_lines_color : Color = Color("#cacaca")
 export (Color) var h_lines_color : Color = Color("#cacaca")
@@ -105,6 +104,7 @@ export (Font) var font : Font
 export (Font) var bold_font : Font
 export (Color) var font_color : Color = Color("#1e1e1e")
 export (String,"Default","Clean","Gradient","Minimal","Invert") var template : String = "Default" setget apply_template
+export (float,0.1,1) var drawing_duration : float = 0.5
 export (bool) var invert_chart : bool = false
 
 var templates : Dictionary = {}
@@ -117,6 +117,26 @@ func _point_plotted():
 
 func _ready():
 	pass
+
+func _set_size(size : Vector2):
+	SIZE = size
+	build_chart()
+	if Engine.editor_hint:
+		Outlines.set_point_position(0,Vector2(origin.x,0))
+		Outlines.set_point_position(1,Vector2(SIZE.x,0))
+		Outlines.set_point_position(2,Vector2(SIZE.x,origin.y))
+		Outlines.set_point_position(3,origin)
+		Outlines.set_point_position(4,Vector2(origin.x,0))
+		
+		Grid.get_node("VLine").set_point_position(0,Vector2((OFFSET.x+SIZE.x)/2,0))
+		Grid.get_node("VLine").set_point_position(1,Vector2((OFFSET.x+SIZE.x)/2,origin.y))
+		Grid.get_node("HLine").set_point_position(0,Vector2(origin.x,origin.y/2))
+		Grid.get_node("HLine").set_point_position(1,Vector2(SIZE.x,origin.y/2))
+
+func clear():
+	Outlines.points = []
+	Grid.get_node("HLine").queue_free()
+	Grid.get_node("VLine").queue_free()
 
 func load_font():
 	if font != null:
@@ -134,6 +154,7 @@ func load_font():
 func _plot(source_ : String, delimiter_ : String, are_values_columns_ : bool, x_values_index_ : int):
 	randomize()
 	
+	clear()
 	
 	load_font()
 	PointData.hide()
@@ -145,12 +166,15 @@ func _plot(source_ : String, delimiter_ : String, are_values_columns_ : bool, x_
 	calculate_pass()
 	calculate_coordinates()
 	calculate_colors()
+	draw_chart()
+	
 	create_legend()
-	emit_signal("chart_plotted")
+	emit_signal("chart_plotted", self)
 
 func plot():
 	randomize()
 	
+	clear()
 	
 	load_font()
 	PointData.hide()
@@ -165,30 +189,93 @@ func plot():
 	calculate_pass()
 	calculate_coordinates()
 	calculate_colors()
+	draw_chart()
+	
 	create_legend()
-	emit_signal("chart_plotted")
-
-func clear_points():
-	if Points.get_children():
-		for function in Points.get_children():
-			function.queue_free()
-	for legend in Legend.get_children():
-		legend.queue_free()
+	emit_signal("chart_plotted", self)
 
 func calculate_colors():
 	if function_colors.empty() or function_colors.size() < functions:
 		for function in functions:
 			function_colors.append(Color("#1e1e1e"))
 
-func build_chart():
-	SIZE = get_size()
-	origin = Vector2(OFFSET.x,SIZE.y-OFFSET.y)
+func draw_chart():
+	draw_outlines()
+	draw_v_grid()
+	draw_h_grid()
+	draw_functions()
 
-func point_pressed(point : Point):
-	emit_signal("point_pressed",point)
+func draw_outlines():
+	if boxed:
+		Outlines.set_default_color(box_color)
+		OutlinesTween.interpolate_method(Outlines,"add_point",
+		Vector2(origin.x,0),Vector2(SIZE.x,0),drawing_duration*0.5,Tween.TRANS_QUINT,Tween.EASE_OUT)
+		OutlinesTween.start()
+		yield(OutlinesTween,"tween_all_completed")
+		OutlinesTween.interpolate_method(Outlines,"add_point",
+		Vector2(SIZE.x,0),Vector2(SIZE.x,origin.y),drawing_duration*0.5,Tween.TRANS_QUINT,Tween.EASE_OUT)
+		OutlinesTween.start()
+		yield(OutlinesTween,"tween_all_completed")
+	OutlinesTween.interpolate_method(Outlines,"add_point",
+	Vector2(SIZE.x,origin.y),origin,drawing_duration*0.5,Tween.TRANS_QUINT,Tween.EASE_OUT)
+	OutlinesTween.start()
+	yield(OutlinesTween,"tween_all_completed")
+	OutlinesTween.interpolate_method(Outlines,"add_point",
+	origin,Vector2(origin.x,0),drawing_duration*0.5,Tween.TRANS_QUINT,Tween.EASE_OUT)
+	OutlinesTween.start()
+	yield(OutlinesTween,"tween_all_completed")
 
-func _enter_tree():
-	templates = Utilities._load_templates()
+func draw_v_grid():
+	for p in x_chors.size():
+		var point : Vector2 = origin+Vector2((p)*x_pass,0)
+		var v_grid : Line2D = Line2D.new()
+		Grid.add_child(v_grid)
+		v_grid.set_width(1)
+		v_grid.set_default_color(v_lines_color)
+		add_label(point+Vector2(-const_width/2*x_chors[p].length(),font_size/2), x_chors[p])
+		GridTween.interpolate_method(v_grid,"add_point",point,point-Vector2(0,SIZE.y-OFFSET.y),drawing_duration/(x_chors.size()),Tween.TRANS_EXPO,Tween.EASE_OUT)
+		GridTween.start()
+		yield(GridTween,"tween_all_completed")
+
+func draw_h_grid():
+	for p in y_chors.size():
+		var point : Vector2 = origin-Vector2(0,(p)*y_pass)
+		var h_grid : Line2D = Line2D.new()
+		Grid.add_child(h_grid)
+		h_grid.set_width(1)
+		h_grid.set_default_color(h_lines_color)
+		add_label(point-Vector2(y_chors[p].length()*const_width+font_size,font_size/2), y_chors[p])
+		GridTween.interpolate_method(h_grid,"add_point",point,Vector2(SIZE.x,point.y),drawing_duration/(y_chors.size()),Tween.TRANS_EXPO,Tween.EASE_OUT)
+		GridTween.start()
+		yield(GridTween,"tween_all_completed")
+
+
+func add_label(point : Vector2, text : String):
+		var lbl : Label = Label.new()
+		if font != null:
+			lbl.set("custom_fonts/font",font)
+		lbl.set("custom_colors/font_color",font_color)
+		Grid.add_child(lbl)
+		lbl.rect_position = point
+		lbl.set_text(text)
+
+func draw_functions():
+	for function in point_positions.size():
+		draw_function(function,point_positions[function])
+
+func draw_function(f_index : int, function : Array):
+	var pointv : Point 
+	for point in function.size():
+		pointv = point_node.instance()
+		Functions.add_child(pointv)
+		pointv.connect("_mouse_entered",self,"show_data")
+		pointv.connect("_mouse_exited",self,"hide_data")
+		pointv.connect("_point_pressed",self,"point_pressed")
+		pointv.create_point(point_shape, function_colors[f_index], Color.white, function[point],
+		pointv.format_value(point_values[f_index][point],false,false),
+		y_labels[point if invert_chart else f_index] as String)
+		yield(get_tree().create_timer(drawing_duration/function.size()), "timeout")
+
 
 func read_datas(source : String, delimiter : String):
 	var file : File = File.new()
@@ -288,6 +375,8 @@ func structure_datas(database : Array, are_values_columns : bool, x_values_index
 			p = (h_dist*multi) + ((x_margin_min) if not origin_at_zero else 0)
 			x_labels.append(p as String)
 
+func build_chart():
+	origin = Vector2(OFFSET.x,SIZE.y-OFFSET.y)
 
 func calculate_pass():
 	if invert_chart:
@@ -299,10 +388,7 @@ func calculate_pass():
 			x_chors = x_labels
 	
 	# calculate distance in pixel between 2 consecutive values/datas
-	if not are_values_columns:
-		x_pass = (SIZE.x - OFFSET.x*2 - (column_width) * ( y_datas.size() if not invert_chart else y_datas[0].size()+1 )  - column_gap - column_width/2) / (x_chors.size()-1)
-	else:
-		x_pass = (SIZE.x - OFFSET.x*2 - (column_width) * ( y_datas.size() if invert_chart else y_datas[0].size()+1 )  - column_gap - column_width/2) / (x_chors.size()-1)
+	x_pass = (SIZE.x - OFFSET.x) / (x_chors.size()-1)
 	y_pass = origin.y / (y_chors.size()-1)
 
 func calculate_coordinates():
@@ -336,7 +422,7 @@ func calculate_coordinates():
 	else:
 		for x in x_datas.size():
 			if origin_at_zero:
-				if not invert_chart:
+				if invert_chart:
 					x_coordinates.append(x_pass*x)
 				else:
 					x_coordinates.append(x_datas[x]*x_pass/h_dist)
@@ -351,80 +437,20 @@ func calculate_coordinates():
 		for function in y_coordinates.size():
 			for function_value in y_coordinates[function].size():
 				if are_values_columns:
-					point_values[function].append([x_datas[function_value],y_datas[function_value][function]])
-					point_positions[function].append(Vector2(OFFSET.x/2 + column_width/2 + (column_width + column_gap)*function + x_coordinates[function_value]+origin.x,origin.y-y_coordinates[function][function_value]))
+					point_positions[function_value].append(Vector2(x_coordinates[function]+origin.x, origin.y-y_coordinates[function][function_value]))
+					point_values[function_value].append([x_datas[function_value],y_datas[function_value][function]])
 				else:
-					point_positions[function].append(Vector2(OFFSET.x/2 + column_width/2 + (column_width + column_gap)*function + x_coordinates[function_value]+origin.x,origin.y-y_coordinates[function][function_value]))
+					point_positions[function].append(Vector2(x_coordinates[function_value]+origin.x,origin.y-y_coordinates[function][function_value]))
 					point_values[function].append([x_datas[function_value],y_datas[function_value][function]])
 	else:
 		for cluster in y_coordinates.size():
 			for y in y_coordinates[cluster].size():
 				if are_values_columns:
-					point_positions[y].append(Vector2(OFFSET.x/2 + column_width/2 + (column_width + column_gap)*y + x_coordinates[cluster] + origin.x, origin.y-y_coordinates[cluster][y]))
 					point_values[y].append([x_datas[cluster],y_datas[cluster][y]])
+					point_positions[y].append(Vector2(x_coordinates[cluster]+origin.x,origin.y-y_coordinates[cluster][y]))
 				else:
 					point_values[cluster].append([x_datas[y],y_datas[cluster][y]])
-					point_positions[cluster].append(Vector2(OFFSET.x/2 + column_width/2 + (column_width + column_gap)*cluster + x_coordinates[y]+origin.x,origin.y-y_coordinates[cluster][y]))
-
-func _draw():
-	clear_points()
-	
-	draw_grid()
-	draw_chart_outlines()
-	
-	var defined_colors : bool = false
-	if function_colors.size():
-		defined_colors = true
-	
-	for _function in point_values.size():
-		var PointContainer : Control = Control.new()
-		Points.add_child(PointContainer)
-		
-		for function_point in point_values[_function].size():
-			var point : Point = point_node.instance()
-			point.connect("_point_pressed",self,"point_pressed")
-			point.connect("_mouse_entered",self,"show_data")
-			point.connect("_mouse_exited",self,"hide_data")
-			
-			point.create_point(point_shape, function_colors[function_point if invert_chart else _function], 
-			Color.white, point_positions[_function][function_point], 
-			point.format_value(point_values[_function][function_point], false, false), 
-			y_labels[function_point if invert_chart else _function] as String)
-			PointContainer.add_child(point)
-			point.rect_size.y = origin.y - point_positions[_function][function_point].y
-			draw_line( Vector2(point_positions[_function][function_point].x, origin.y),
-				point_positions[_function][function_point], function_colors[_function], column_width, true)
-
-func draw_grid():
-	# ascisse
-	for p in x_chors.size():
-		var point : Vector2 = origin+Vector2((p)*x_pass,0)
-		# v grid
-		draw_line(point,point-Vector2(0,SIZE.y-OFFSET.y),v_lines_color,0.2,true)
-		# ascisse
-		draw_line(point-Vector2(0,5),point,v_lines_color,1,true)
-		var calculated_gap : float
-		if not are_values_columns:
-			calculated_gap = ( y_datas.size() if not invert_chart else y_datas[0].size()+1 ) 
-		else:
-			calculated_gap = ( y_datas.size() if invert_chart else y_datas[0].size()+1 ) 
-		draw_string(font,point+Vector2(-const_width/2*x_chors[p].length() + (column_width/2) * calculated_gap + column_gap,font_size),x_chors[p],font_color)
-
-	# ordinate
-	for p in y_chors.size():
-		var point : Vector2 = origin-Vector2(0,(p)*y_pass)
-		# h grid
-		draw_line(point,point+Vector2(SIZE.x-OFFSET.x,0),h_lines_color,0.2,true)
-		# ordinate
-		draw_line(point,point+Vector2(5,0),h_lines_color,1,true)
-		draw_string(font,point-Vector2(y_chors[p].length()*const_width+font_size,font_size/2),y_chors[p],font_color)
-
-func draw_chart_outlines():
-	if boxed:
-		draw_line(Vector2(origin.x,0),Vector2(SIZE.x,0),box_color,1,true)
-		draw_line(Vector2(SIZE.x,0),Vector2(SIZE.x,origin.y),box_color,1,true)
-	draw_line(Vector2(SIZE.x,origin.y),origin,box_color,1,true)
-	draw_line(origin,Vector2(origin.x,0),box_color,1,true)
+					point_positions[cluster].append(Vector2(x_coordinates[y]+origin.x,origin.y-y_coordinates[cluster][y]))
 
 func redraw():
 	build_chart()
@@ -439,6 +465,12 @@ func show_data(point):
 
 func hide_data():
 	PointData.hide()
+
+func clear_points():
+	function_colors.clear()
+	if Functions.get_children():
+		for function in Functions.get_children():
+			function.queue_free()
 
 func set_legend(l : Array):
 	legend = l
@@ -492,3 +524,8 @@ func apply_template(template_name : String):
 		box_color = Color(custom_template.outline_color)
 		font_color = Color(custom_template.font_color)
 	property_list_changed_notify()
+	
+	if Engine.editor_hint:
+		Outlines.set_default_color(box_color)
+		Grid.get_node("VLine").set_default_color(v_lines_color)
+		Grid.get_node("HLine").set_default_color(h_lines_color)

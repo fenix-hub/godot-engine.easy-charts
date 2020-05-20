@@ -10,8 +10,13 @@ var function : String setget set_function, get_function
 
 var mouse_entered : bool = false
 
+enum SHAPES {
+	DOT, TRIANGLE, SQUARE
+}
 
-signal _mouse_entered()
+var shape : int = 0 setget set_shape, get_shape
+
+signal _mouse_entered(point)
 signal _mouse_exited()
 signal _point_pressed(point)
 
@@ -22,10 +27,26 @@ func _ready():
 
 func _draw():
 	if mouse_entered:
-		draw_circle(OFFSET,7,color_outline)
-	draw_circle(OFFSET,5,color)
+		draw_point(7,color_outline)
+	draw_point(5,color)
 
-func create_point(color : Color, color_outline : Color, position : Vector2, value : Array, function : String):
+func draw_point(size : float, color : Color):
+	match shape:
+		SHAPES.DOT:
+			draw_circle(OFFSET, size, color)
+		SHAPES.TRIANGLE:
+			size+=4
+			draw_colored_polygon([
+				OFFSET-Vector2(0,size/2), OFFSET+Vector2(1,1)*size/2, OFFSET-Vector2(1,-1)*size/2
+			], color,[],null,null,false)
+		SHAPES.SQUARE:
+			size+=2
+			draw_colored_polygon([
+				OFFSET-Vector2(1,1)*size/2, OFFSET-Vector2(-1,1)*size/2, OFFSET+Vector2(1,1)*size/2, OFFSET-Vector2(1,-1)*size/2
+			], color,[],null,null,false)
+
+func create_point(shape : int, color : Color, color_outline : Color, position : Vector2, value : Array, function : String):
+	self.shape = shape
 	self.color = color
 	self.color_outline = color_outline
 	self.point_position = position
@@ -33,9 +54,10 @@ func create_point(color : Color, color_outline : Color, position : Vector2, valu
 	self.point_value = value
 	self.function = function
 
+
 func _on_Point_mouse_entered():
 	mouse_entered = true
-	emit_signal("_mouse_entered")
+	emit_signal("_mouse_entered",self)
 	update()
 
 func _on_Point_mouse_exited():
@@ -90,3 +112,9 @@ func set_function( f : String ):
 
 func get_function() -> String:
 	return function
+
+func set_shape(s : int):
+	shape = s
+
+func get_shape() -> int:
+	return shape
