@@ -132,7 +132,7 @@ This library offers a set of chart for each main Godot Node:
 - Parliament Chart
 
 ### Some Examples    
-![example01](imgs/example01.png)
+![example01](imgs/scatter.gif)
 ![example02](imgs/example02.png)
 ![example03](imgs/example03.gif)
 
