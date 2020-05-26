@@ -1,11 +1,10 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/easy_charts/ScatterChart3D/ScatterChart3D.gd" type="Script" id=1]
-[ext_resource path="res://d4hj068-433f5832-3c04-42db-9c2e-173a26a6970a.png" type="Texture" id=2]
+[ext_resource path="res://addons/easy_charts/Utilities/Point/PointData.tscn" type="PackedScene" id=2]
 
 [sub_resource type="SpatialMaterial" id=1]
 flags_unshaded = true
-albedo_texture = ExtResource( 2 )
 
 [sub_resource type="PlaneMesh" id=2]
 material = SubResource( 1 )
@@ -18,6 +17,7 @@ albedo_color = Color( 0, 1, 0.156863, 1 )
 
 [node name="ScatterChart3D" type="Spatial"]
 script = ExtResource( 1 )
+function_colors = [ "#1e1e1e", "#1e1e1e", "#1e1e1e", "#1e1e1e" ]
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
@@ -39,3 +39,7 @@ near = 0.01
 
 [node name="OmniLight" type="OmniLight" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0 )
+
+[node name="PointData" parent="." instance=ExtResource( 2 )]
+
+[editable path="PointData"]

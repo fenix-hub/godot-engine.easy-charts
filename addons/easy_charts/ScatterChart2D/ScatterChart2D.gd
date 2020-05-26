@@ -1,5 +1,5 @@
 tool
-extends Node2D
+extends Chart2D
 
 """
 [ScatterChart2D] - General purpose node for Scatter Charts
@@ -13,13 +13,13 @@ the horizontal axis and the value of the other variable determining the position
 / source : Wikipedia /
 """
 
-onready var OutlinesTween : Tween = $OutlinesTween
-onready var PointTween : Tween = $PointTween
-onready var Functions : Node2D = $Functions
-onready var GridTween : Tween = $GridTween
-onready var PointData = $PointData/PointData
-onready var Outlines : Line2D = $Outlines
-onready var Grid : Node2D = $Grid
+var OutlinesTween : Tween
+var PointTween : Tween
+var Functions : Node2D
+var GridTween : Tween
+var PointData : PointData
+var Outlines : Line2D
+var Grid : Node2D
 
 var point_node : PackedScene = preload("../Utilities/Point/Point.tscn")
 var FunctionLegend : PackedScene = preload("../Utilities/Legend/FunctionLegend.tscn")
@@ -93,8 +93,8 @@ export(bool) var show_x_values_as_labels : bool = true
 
 export (float,0.1,10.0) var x_decim : float = 5.0
 export (float,0.1,10.0) var y_decim : float = 5.0
-export (int,"Dot,Triangle,Square") var point_shape : int = 0
-export (PoolColorArray) var function_colors = [Color("#1e1e1e")]
+export (point_shapes) var point_shape : int = 0
+export (PoolColorArray) var function_colors = [Color("#1e1e1e")] as PoolColorArray
 export (Color) var v_lines_color : Color = Color("#cacaca")
 export (Color) var h_lines_color : Color = Color("#cacaca")
 
@@ -103,7 +103,7 @@ export (Color) var box_color : Color = Color("#1e1e1e")
 export (Font) var font : Font
 export (Font) var bold_font : Font
 export (Color) var font_color : Color = Color("#1e1e1e")
-export (String,"Default","Clean","Gradient","Minimal","Invert") var template : String = "Default" setget apply_template
+export (templates_names) var template : int = templates_names.Default setget apply_template
 export (float,0.1,1) var drawing_duration : float = 0.5
 export (bool) var invert_chart : bool = false
 
@@ -116,12 +116,22 @@ func _point_plotted():
 	pass
 
 func _ready():
-	pass
+	_get_children()
+
+func _get_children():
+	OutlinesTween = $OutlinesTween
+	PointTween = $PointTween
+	Functions = $Functions
+	GridTween = $GridTween
+	PointData = $PointData/PointData
+	Outlines = $Outlines
+	Grid = $Grid
 
 func _set_size(size : Vector2):
 	SIZE = size
 	build_chart()
 	if Engine.editor_hint:
+		_get_children()
 		Outlines.set_point_position(0,Vector2(origin.x,0))
 		Outlines.set_point_position(1,Vector2(SIZE.x,0))
 		Outlines.set_point_position(2,Vector2(SIZE.x,origin.y))
@@ -197,7 +207,7 @@ func plot():
 func calculate_colors():
 	if function_colors.empty() or function_colors.size() < functions:
 		for function in functions:
-			function_colors.append(Color("#1e1e1e"))
+			function_colors.append(Color("#1e1e1e") as Color)
 
 func draw_chart():
 	draw_outlines()
@@ -513,12 +523,12 @@ func create_legend():
 		function_legend.create_legend(f_name,function_colors[function],bold_font,font_color)
 		legend.append(function_legend)
 
-func apply_template(template_name : String):
+func apply_template(template_name : int):
 	template = template_name
 	templates = Utilities._load_templates()
-	if template_name!=null and template_name!="":
-		var custom_template = templates[template.to_lower()]
-		function_colors = custom_template.function_colors
+	if template_name!=null:
+		var custom_template = templates.get(templates.keys()[template_name])
+		function_colors = custom_template.function_colors as PoolColorArray
 		v_lines_color = Color(custom_template.v_lines_color)
 		h_lines_color = Color(custom_template.h_lines_color)
 		box_color = Color(custom_template.outline_color)
@@ -526,6 +536,11 @@ func apply_template(template_name : String):
 	property_list_changed_notify()
 	
 	if Engine.editor_hint:
+		_get_children()
 		Outlines.set_default_color(box_color)
 		Grid.get_node("VLine").set_default_color(v_lines_color)
 		Grid.get_node("HLine").set_default_color(h_lines_color)
+
+
+func _enter_tree():
+	_ready()

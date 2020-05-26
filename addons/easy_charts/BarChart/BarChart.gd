@@ -1,5 +1,5 @@
 tool
-extends Control
+extends Chart
 
 """
 [BarChart] - General purpose node for Bar Charts
@@ -93,7 +93,7 @@ export (float,0,10,0.5) var column_gap : float = 2
 export (float,0.1,10.0) var x_decim : float = 5.0
 export (float,0.1,10.0) var y_decim : float = 5.0
 
-export (int,"Dot,Triangle,Square") var point_shape : int = 0
+export (point_shapes) var point_shape : int = 0
 
 export (PoolColorArray) var function_colors = [Color("#1e1e1e")]
 export (Color) var v_lines_color : Color = Color("#cacaca")
@@ -104,7 +104,7 @@ export (Color) var box_color : Color = Color("#1e1e1e")
 export (Font) var font : Font
 export (Font) var bold_font : Font
 export (Color) var font_color : Color = Color("#1e1e1e")
-export (String,"Default","Clean","Gradient","Minimal","Invert") var template : String = "Default" setget apply_template
+export (templates_names) var template : int = Chart.templates_names.Default setget apply_template
 export (bool) var invert_chart : bool = false
 
 var templates : Dictionary = {}
@@ -169,7 +169,7 @@ func plot():
 	emit_signal("chart_plotted")
 
 func clear_points():
-	if Points.get_children():
+	if Points.get_children().size():
 		for function in Points.get_children():
 			function.queue_free()
 	for legend in Legend.get_children():
@@ -189,6 +189,7 @@ func point_pressed(point : Point):
 
 func _enter_tree():
 	templates = Utilities._load_templates()
+	_ready()
 
 func read_datas(source : String, delimiter : String):
 	var file : File = File.new()
@@ -481,14 +482,15 @@ func create_legend():
 		function_legend.create_legend(f_name,function_colors[function],bold_font,font_color)
 		legend.append(function_legend)
 
-func apply_template(template_name : String):
+func apply_template(template_name : int):
 	template = template_name
 	templates = Utilities._load_templates()
-	if template_name!=null and template_name!="":
-		var custom_template = templates[template.to_lower()]
-		function_colors = custom_template.function_colors
+	if template_name!=null:
+		var custom_template = templates.get(templates.keys()[template_name])
+		function_colors = custom_template.function_colors as PoolColorArray
 		v_lines_color = Color(custom_template.v_lines_color)
 		h_lines_color = Color(custom_template.h_lines_color)
 		box_color = Color(custom_template.outline_color)
 		font_color = Color(custom_template.font_color)
 	property_list_changed_notify()
+

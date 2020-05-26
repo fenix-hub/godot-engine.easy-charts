@@ -11,7 +11,7 @@ var function : String setget set_function, get_function
 var mouse_entered : bool = false
 
 enum SHAPES {
-	DOT, TRIANGLE, SQUARE
+	DOT, TRIANGLE, SQUARE, CROSS
 }
 
 var shape : int = 0 setget set_shape, get_shape
@@ -44,6 +44,10 @@ func draw_point(size : float, color : Color):
 			draw_colored_polygon([
 				OFFSET-Vector2(1,1)*size/2, OFFSET-Vector2(-1,1)*size/2, OFFSET+Vector2(1,1)*size/2, OFFSET-Vector2(1,-1)*size/2
 			], color,[],null,null,false)
+		SHAPES.CROSS:
+			size+=2
+			draw_line(OFFSET-Vector2(size,0), OFFSET+Vector2(size,0), color, size-5, true)
+			draw_line(OFFSET-Vector2(0,size), OFFSET+Vector2(0,size), color, size-5, true)
 
 func create_point(shape : int, color : Color, color_outline : Color, position : Vector2, value : Array, function : String):
 	self.shape = shape
