@@ -122,6 +122,7 @@ This library offers a set of chart for each main Godot Node:
 - LineChart [Control, 2D, wip 3D]
 - BarChart  [Control, 2D, wipr 3D]
 - ScatterChart [wip Control, wip 2D, 3D]
+- RadarChart [Control]
 
 *Work in progress*:
 - Area Chart
