@@ -1,5 +1,5 @@
 tool
-extends Control
+extends Chart
 
 """
 [Linechart] - General purpose node for Line Charts
@@ -93,7 +93,7 @@ export(bool) var show_x_values_as_labels : bool = true
 
 export (float,0.1,10.0) var x_decim : float = 5.0
 export (float,0.1,10.0) var y_decim : float = 5.0
-export (int,"Dot,Triangle,Square") var point_shape : int = 0
+export (point_shapes) var point_shape : int = 0
 export (PoolColorArray) var function_colors = [Color("#1e1e1e")]
 export (Color) var v_lines_color : Color = Color("#cacaca")
 export (Color) var h_lines_color : Color = Color("#cacaca")
@@ -103,7 +103,7 @@ export (Color) var box_color : Color = Color("#1e1e1e")
 export (Font) var font : Font
 export (Font) var bold_font : Font
 export (Color) var font_color : Color = Color("#1e1e1e")
-export (String,"Default","Clean","Gradient","Minimal","Invert") var template : String = "Default" setget apply_template
+export (templates_names) var template : int = Chart.templates_names.Default setget apply_template
 export (bool) var invert_chart : bool = false
 
 
@@ -114,7 +114,7 @@ signal point_pressed(point)
 
 
 func _ready():
-	apply_template(template)
+	pass
 
 func _plot(source_ : String, delimiter_ : String, are_values_columns_ : bool, x_values_index_ : int, invert_chart_ : bool = false):
 	randomize()
@@ -502,14 +502,17 @@ func count_functions():
 		else:
 			functions = datas.size()-1
 
-func apply_template(template_name : String):
+func apply_template(template_name : int):
 	template = template_name
 	templates = Utilities._load_templates()
-	if template_name!=null and template_name!="":
-		var custom_template = templates[template.to_lower()]
-		function_colors = custom_template.function_colors
+	if template_name!=null:
+		var custom_template = templates.get(templates.keys()[template_name])
+		function_colors = custom_template.function_colors as PoolColorArray
 		v_lines_color = Color(custom_template.v_lines_color)
 		h_lines_color = Color(custom_template.h_lines_color)
 		box_color = Color(custom_template.outline_color)
 		font_color = Color(custom_template.font_color)
 	property_list_changed_notify()
+
+func _enter_tree():
+	_ready()

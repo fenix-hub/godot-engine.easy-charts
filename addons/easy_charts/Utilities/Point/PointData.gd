@@ -1,4 +1,5 @@
 extends PanelContainer
+class_name PointData
 
 var value : String = ""
 var position : Vector2 = Vector2()
