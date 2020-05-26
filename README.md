@@ -134,7 +134,7 @@ This library offers a set of chart for each main Godot Node:
 
 ### Some Examples    
 ![example01](imgs/scatter.gif)
-![example02](imgs/example02.png)
+![example02](imgs/radar.png)
 ![example03](imgs/example03.gif)
 
 ##### Some references for charts and plots
