@@ -96,7 +96,7 @@ export (float,0,10,0.5) var column_gap : float = 2
 
 export (float,0.1,10.0) var x_decim : float = 5.0
 export (float,0.1,10.0) var y_decim : float = 5.0
-export (point_shapes) var point_shape : int = 0
+export (PointShapes) var point_shape : int = 0
 export (PoolColorArray) var function_colors = [Color("#1e1e1e")]
 export (Color) var v_lines_color : Color = Color("#cacaca")
 export (Color) var h_lines_color : Color = Color("#cacaca")
@@ -106,7 +106,7 @@ export (Color) var box_color : Color = Color("#1e1e1e")
 export (Font) var font : Font
 export (Font) var bold_font : Font
 export (Color) var font_color : Color = Color("#1e1e1e")
-export (templates_names) var template : int = Chart.templates_names.Default setget apply_template
+export (TemplatesNames) var template : int = Chart.TemplatesNames.Default setget apply_template
 export (float,0.1,1) var drawing_duration : float = 0.5
 export (bool) var invert_chart : bool = false
 

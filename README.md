@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/plugin%20version-0.2.5-blue)](https://github.com/fenix-hub/godot-engine.easy-charts)
+[![version](https://img.shields.io/badge/plugin%20version-0.2.8-blue)](https://github.com/fenix-hub/godot-engine.easy-charts)
 [![updates](https://img.shields.io/badge/plugin%20updates-on%20discord-purple)](https://discord.gg/JNrcucg)
 [![paypal](https://img.shields.io/badge/donations-PayPal-cyan)](https://paypal.me/NSantilio?locale.x=it_IT)
 
@@ -9,7 +9,7 @@ Check my **[Discord](https://discord.gg/KnJGY9S)** to stay updated on this repos
 A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.
 
 Author: *"Nicolo (fenix) Santilio"*  
-Version: *0.2.5*  
+Version: *0.2.8*  
 Wiki: *[wip]*  
 Godot Version: *3.2stable*  
 
@@ -113,7 +113,7 @@ However, adding custom templates is not yet recommended, since it would require 
 ```
 
 # Available Charts and when to use them    
-This library offers a set of chart for each main Godot Node:   
+This library offers a set of charts for each main Godot Node:   
 - **Control Nodes:** "Control Charts" are fast Charts that can be plotted in a Control space, such as UIs or Control user interactable areas. They offer basic Control properties, such as Margins, size inheritance and control. No animations, no real time changes, just charts.   
 - **2D Nodes:** "2D Charts" are a set of Charts which can be Used in 2D spaces. They offer additional tools, such as animations and real time changes in editor. They can be used to implement more aesthetic charts in 2D contexts.   
 - **[wip] 3D Nodes:** "3D Charts" are a set of Charts which can be Used in both 2D and 3D spaces. They offer the possibility to plot 3D datasets, which are common in machine learning contexts or just data analysis. A Camera Control will also be available, which can be used to move around the chart.
@@ -134,7 +134,7 @@ This library offers a set of chart for each main Godot Node:
 
 ### Some Examples    
 ![example01](imgs/scatter.gif)
-![example02](imgs/radar.png)
+![example02](imgs/example02.png)
 ![example03](imgs/example03.gif)
 
 ##### Some references for charts and plots
@@ -150,8 +150,4 @@ I don't assume any responsibility for possible corruptions of your project. It i
 
 -----------------
 > This text file was created via [TextEditor Integration](https://github.com/fenix-hub/godot-engine.text-editor) inside Godot Engine's Editor.
-
-
-
-
-
+> This text file was pushed  via [GitHub Integration](https://github.com/fenix-hub/godot-engine.github-integretion) inside Godot Engine's Editor.

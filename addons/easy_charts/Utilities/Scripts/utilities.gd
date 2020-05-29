@@ -21,3 +21,6 @@ func _load_templates() -> Dictionary:
 	var templates = JSON.parse(template_file.get_as_text()).get_result()
 	template_file.close()
 	return templates
+
+func get_template(template_index : int):
+	return templates.get(templates.keys()[template_index])
