@@ -24,7 +24,6 @@ signal _point_pressed(point)
 func _ready():
 	pass # Replace with function body.
 
-
 func _draw():
 	if mouse_entered:
 		draw_point(7,color_outline)
@@ -35,12 +34,12 @@ func draw_point(size : float, color : Color):
 		SHAPES.DOT:
 			draw_circle(OFFSET, size, color)
 		SHAPES.TRIANGLE:
-			size+=4
+			size+=6
 			draw_colored_polygon([
 				OFFSET-Vector2(0,size/2), OFFSET+Vector2(1,1)*size/2, OFFSET-Vector2(1,-1)*size/2
 			], color,[],null,null,false)
 		SHAPES.SQUARE:
-			size+=2
+			size+=4
 			draw_colored_polygon([
 				OFFSET-Vector2(1,1)*size/2, OFFSET-Vector2(-1,1)*size/2, OFFSET+Vector2(1,1)*size/2, OFFSET-Vector2(1,-1)*size/2
 			], color,[],null,null,false)
@@ -69,6 +68,12 @@ func _on_Point_mouse_exited():
 	emit_signal("_mouse_exited")
 	update()
 
+func _on_Point_gui_input(event):
+	if event is InputEventMouseButton:
+		if event.is_pressed():
+			if event.button_index == 1:
+				emit_signal("_point_pressed",self)
+
 func format_value(v : Array, format_x : bool, format_y : bool):
 	var x : String = str(v[0])
 	var y : String = str(v[1])
@@ -92,33 +97,27 @@ func format(n):
 			
 	return s.replace("Null","")
 
-
-func _on_Point_gui_input(event):
-	if event is InputEventMouseButton:
-		if event.is_pressed():
-			if event.button_index == 1:
-				emit_signal("_point_pressed",self)
-
 func set_value( v : Array = [] ) :
 	point_value = v
-
-func get_value() -> Array:
-	return point_value
 
 func set_color_point( c : Color ):
 	color = c
 
-func get_color_point() -> Color:
-	return color
-
 func set_function( f : String ):
 	function = f
 
-func get_function() -> String:
-	return function
-
 func set_shape(s : int):
 	shape = s
+
+# Public Getters
+func get_value() -> Array:
+	return point_value
+
+func get_color_point() -> Color:
+	return color
+
+func get_function() -> String:
+	return function
 
 func get_shape() -> int:
 	return shape

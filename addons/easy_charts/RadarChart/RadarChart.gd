@@ -13,175 +13,116 @@ distinct correlations, trade-offs, and a multitude of other comparative measures
 / source : Wikipedia /
 """
 
-onready var PointData = $PointData/PointData
-onready var Points = $Points
-onready var Legend = $Legend
-
-var point_node : PackedScene = preload("../Utilities/Point/Point.tscn")
-var FunctionLegend : PackedScene = preload("../Utilities/Legend/FunctionLegend.tscn")
-
-var font_size : float = 16
-var const_height : float = font_size/2*font_size/20
-var const_width : float = font_size/2
-
-var OFFSET : Vector2 = Vector2(0,0)
-
-#-------------------------------------------------------------------------#
-var origin : Vector2
-
-# actual distance between x and y values 
-var x_pass : float
-var y_pass : float
-
-# vertical distance between y consecutive points used for intervals
-var v_dist : float
-var h_dist : float
-
-# quantization, representing the interval in which values will be displayed
-
-
-# define values on x an y axis
-var x_chors : Array
-var y_chors : Array
-
-# actual coordinates of points (in pixel)
-var x_coordinates : Array
-var y_coordinates : Array
-
-# datas contained in file
-var datas : Array
-
-# amount of functions to represent
-var functions : int = 0
-
-
-# database values
-var x_datas : Array
-var y_datas : Array
-
-# labels displayed on chart
-var x_label : String
-
-var x_labels : Array
-var y_labels : Array
-
-var x_margin_min : int = 0
-var y_margin_min : int = 0
-
-# actual values of point, from the database
-var point_values : Array
-
-# actual position of points in pixel
-var point_positions : Array
-
-var legend : Array setget set_legend,get_legend
-
-# ---------------------
-var SIZE : Vector2 = Vector2()
-export (String, FILE, "*.txt, *.csv") var source : String = "" setget set_source
-export (String) var delimiter : String = ";"
-#export (bool) var origin_at_zero : bool = true
-
-export (bool) var are_values_columns : bool = false
-export (int,-1,100) var labels_index : int = 0
-export (int,-1,100) var function_names_index : int = 0
-#export(bool) var show_x_values_as_labels : bool = true
-
-#export (float,1,20,0.5) var column_width : float = 10
-#export (float,0,10,0.5) var column_gap : float = 2
-export (bool) var use_height_as_radius : bool = false
-export (float) var radius : float = 150.0
-
-#export (float,0.1,10.0) var x_decim : float = 5.0
-#export (float,0.1,10.0) var y_decim : float = 5.0
-export (float,0.1,100) var full_scale : float = 1.0
-
-export (point_shapes) var point_shape : int = 0
-export (PoolColorArray) var function_colors = [Color("#1e1e1e")]
-export (Color) var outline_color : Color = Color("#1e1e1e")
-export (Color) var grid_color : Color = Color("#1e1e1e")
-export (Font) var font : Font
-export (Font) var bold_font : Font
-export (Color) var font_color : Color = Color("#1e1e1e")
-
-export (templates_names) var template : int = Chart.templates_names.Default setget apply_template
-#export (bool) var invert_chart : bool = false
-export (float,0,360) var rotation : float = 0
-
-var templates : Dictionary = {}
-
-signal chart_plotted(chart)
-signal point_pressed(point)
-
-
-func _ready():
-	pass
-
-func _plot(source_ : String, delimiter_ : String, are_values_columns_ : bool, x_values_index_ : int, invert_chart_ : bool = false):
-	randomize()
-	
-	load_font()
-	PointData.hide()
-	
-	datas = read_datas(source_,delimiter_)
-	structure_datas(datas,are_values_columns_,x_values_index_)
-	build_chart()
-	count_functions()
-	calculate_pass()
-	calculate_coordinates()
-	calculate_colors()
-	create_legend()
-	emit_signal("chart_plotted")
-
-func plot():
-	randomize()
-	
-	load_font()
-	PointData.hide()
-	
-	if source == "" or source == null:
-		Utilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
-		return
-	datas = read_datas(source,delimiter)
-	structure_datas(datas,are_values_columns,labels_index)
-	build_chart()
-	count_functions()
-	calculate_pass()
-	calculate_coordinates()
-	calculate_colors()
-	create_legend()
-	emit_signal("chart_plotted")
-
-func calculate_colors():
-	if function_colors.empty() or function_colors.size() < functions:
-		for function in functions:
-			function_colors.append(Color("#1e1e1e"))
-
-func load_font():
-	if font != null:
-		font_size = font.get_height()
-		var theme : Theme = Theme.new()
-		theme.set_default_font(font)
-		PointData.set_theme(theme)
-	else:
-		var lbl = Label.new()
-		font = lbl.get_font("")
-		lbl.free()
-	if bold_font != null:
-		PointData.Data.set("custom_fonts/font",bold_font)
-
-func read_datas(source : String, delimiter : String):
-	var file : File = File.new()
-	file.open(source,File.READ)
-	var content : Array
-	while not file.eof_reached():
-		var line : PoolStringArray = file.get_csv_line(delimiter)
-		content.append(line)
-	file.close()
-	for data in content:
-		if data.size() < 2 or data.empty():
-			content.erase(data)
-	return content
+func _get_property_list():
+	return [
+		# Chart Properties
+		{
+			"hint": PROPERTY_HINT_NONE,
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Properties/are_values_columns",
+			"type": TYPE_BOOL
+		},
+		{
+			"hint": PROPERTY_HINT_RANGE,
+			"hint_string": "-1,100,1",
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Properties/labels_index",
+			"type": TYPE_INT
+		},
+		{
+			"hint": PROPERTY_HINT_RANGE,
+			"hint_string": "-1,100,1",
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Properties/function_names_index",
+			"type": TYPE_INT
+		},
+		{
+			"hint": PROPERTY_HINT_NONE,
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Properties/use_height_as_radius",
+			"type": TYPE_BOOL
+		},
+		{
+			"hint": PROPERTY_HINT_RANGE,
+			"hint_string": "0,2000",
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Properties/radius",
+			"type": TYPE_REAL
+		},
+		
+		# Chart Display
+		{
+			"hint": PROPERTY_HINT_RANGE,
+			"hint_string": "0.1,100",
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Display/full_scale",
+			"type": TYPE_REAL
+		},
+		
+		# Chart Style
+		{ 
+			"hint": 24, 
+			"hint_string": "%d/%d:%s"%[TYPE_INT, PROPERTY_HINT_ENUM,
+			PoolStringArray(PointShapes.keys()).join(",")],
+			"name": "Chart_Style/points_shape", 
+			"type": TYPE_ARRAY, 
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE
+		},
+		{
+			"hint": PROPERTY_HINT_NONE,
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Style/function_colors",
+			"type": TYPE_COLOR_ARRAY
+		},
+		{
+			"hint": PROPERTY_HINT_NONE,
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Style/outline_color",
+			"type": TYPE_COLOR
+		},
+		{
+			"hint": PROPERTY_HINT_NONE,
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Style/grid_color",
+			"type": TYPE_COLOR
+		},
+		{
+			"class_name": "Font",
+			"hint": PROPERTY_HINT_RESOURCE_TYPE,
+			"hint_string": "Font",
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Style/font",
+			"type": TYPE_OBJECT
+		},
+		{
+			"class_name": "Font",
+			"hint": PROPERTY_HINT_RESOURCE_TYPE,
+			"hint_string": "Font",
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Style/bold_font",
+			"type": TYPE_OBJECT
+		},
+		{
+			"hint": PROPERTY_HINT_NONE,
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Style/font_color",
+			"type": TYPE_COLOR
+		},
+		{
+			"hint": PROPERTY_HINT_ENUM,
+			"hint_string": PoolStringArray(TemplatesNames.keys()).join(","),
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Style/template",
+			"type": TYPE_INT
+		},
+		{
+			"hint": PROPERTY_HINT_RANGE,
+			"hint_string": "0,360",
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Modifiers/rotation",
+			"type": TYPE_REAL
+		},
+	]
 
 func structure_datas(database : Array, are_values_columns : bool, labels_index : int):
 	# @x_values_index can be either a column or a row relative to x values
@@ -251,8 +192,8 @@ func calculate_coordinates():
 		var scalar_factor : float = (x_chors[chor] as float/x_chors.back() as float)
 		for function in functions:
 			var angle : float =  ((2 * PI * function) / functions) - PI /2 + deg2rad(rotation)
-			var x_coordinate : float = (radius if not use_height_as_radius else SIZE.y/2) * scalar_factor * cos(angle) + origin.x
-			var y_coordinate : float = (radius if not use_height_as_radius else SIZE.y/2) * scalar_factor * sin(angle) + origin.y
+			var x_coordinate : float = (radius if (not use_height_as_radius and radius<SIZE.y/2) else SIZE.y/2) * scalar_factor * cos(angle) + origin.x
+			var y_coordinate : float = (radius if (not use_height_as_radius and radius<SIZE.y/2) else SIZE.y/2) * scalar_factor * sin(angle) + origin.y
 			inner_polyline.append(Vector2(x_coordinate, y_coordinate))
 		inner_polyline.append(inner_polyline[0])
 		radar_polygon.append(inner_polyline)
@@ -263,19 +204,13 @@ func calculate_coordinates():
 		for data in datas.size():
 			var scalar_factor : float = datas[data] /( x_chors.back() as float)
 			var angle : float =  ((2 * PI * data) / datas.size()) - PI/2 + deg2rad(rotation)
-			var x_coordinate : float = (radius if not use_height_as_radius else SIZE.y/2) * scalar_factor * cos(angle) + origin.x
-			var y_coordinate : float = (radius if not use_height_as_radius else SIZE.y/2) * scalar_factor * sin(angle) + origin.y
+			var x_coordinate : float = (radius if (not use_height_as_radius and radius<SIZE.y/2) else SIZE.y/2) * scalar_factor * cos(angle) + origin.x
+			var y_coordinate : float = (radius if (not use_height_as_radius and radius<SIZE.y/2) else SIZE.y/2) * scalar_factor * sin(angle) + origin.y
 			function_positions.append(Vector2(x_coordinate,y_coordinate))
 			function_values.append([x_labels[data], datas[data]])
 		function_positions.append(function_positions[0])
 		point_positions.append(function_positions)
 		point_values.append(function_values)
-
-func redraw():
-	build_chart()
-	calculate_pass()
-	calculate_coordinates()
-	update()
 
 func _draw():
 	if Engine.editor_hint:
@@ -299,7 +234,7 @@ func _draw():
 			point.connect("_mouse_entered",self,"show_data")
 			point.connect("_mouse_exited",self,"hide_data")
 			
-			point.create_point(point_shape, function_colors[_function], 
+			point.create_point(points_shape[_function], function_colors[_function], 
 			Color.white, point_positions[_function][function_point], 
 			point.format_value(point_values[_function][function_point], false, false),
 			y_labels[_function])
@@ -319,59 +254,26 @@ func draw_grid():
 	for label in x_labels.size():
 		var point_array : PoolVector2Array = radar_polygon[radar_polygon.size()-1]
 		draw_line(origin, point_array[label], grid_color, 1, true)
-		draw_string(font, point_array[label] - (Vector2(font.get_string_size(x_labels[label]).x/2,0) if point_array[label].x < origin.x else - Vector2(5,0)), x_labels[label], font_color)
-
-
+		
+		if point_array[label].x != origin.x:
+			draw_string(font, point_array[label] - (Vector2(font.get_string_size(x_labels[label]).x+10,(5 if point_array[label].y <= origin.y else -10)) if point_array[label].x <= origin.x else - Vector2(10,(-5 if point_array[label].y <= origin.y else 10))), x_labels[label], font_color)
+		else:
+			draw_string(font, point_array[label] - (Vector2(font.get_string_size(x_labels[label]).x/2, 10) if point_array[label].y < origin.x else - Vector2(font.get_string_size(x_labels[label]).x/2, 5)), x_labels[label], font_color)
 
 func create_legend():
-	legend.clear()
-	for function in functions:
-		var function_legend = FunctionLegend.instance()
-		var f_name : String = x_labels[function]
-		var legend_font : Font
-		if font != null:
-			legend_font = font
-		if bold_font != null:
-			legend_font = bold_font
-		function_legend.create_legend(f_name,function_colors[function],bold_font,font_color)
-		legend.append(function_legend)
-
-func show_data(point):
-	PointData.update_datas(point)
-	PointData.show()
-
-func hide_data():
-	PointData.hide()
-
-func clear_points():
-	if Points.get_children():
-		for function in Points.get_children():
-			function.queue_free()
-	for legend in Legend.get_children():
-		legend.queue_free()
-
-func set_legend(l : Array):
-	legend = l
-
-func get_legend():
-	return legend
+	pass
+#	legend.clear()
+#	for function in functions:
+#		var function_legend = FunctionLegend.instance()
+#		var f_name : String = x_labels[function]
+#		var legend_font : Font
+#		if font != null:
+#			legend_font = font
+#		if bold_font != null:
+#			legend_font = bold_font
+#		function_legend.create_legend(f_name,function_colors[function],bold_font,font_color)
+#		legend.append(function_legend)
 
 func count_functions():
-	self.functions = x_labels.size()
-
-func apply_template(template_name : int):
-	template = template_name
-	templates = Utilities._load_templates()
-	if template_name!=null:
-		var custom_template = templates.get(templates.keys()[template_name])
-		function_colors = custom_template.function_colors as PoolColorArray
-		outline_color = Color(custom_template.outline_color)
-		grid_color = Color(custom_template.v_lines_color)
-		font_color = Color(custom_template.font_color)
-	property_list_changed_notify()
-
-func _enter_tree():
-	_ready()
-
-func set_source(source_file : String):
-	source = source_file
+	if x_labels.size():
+		functions = x_labels.size()
