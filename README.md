@@ -5,6 +5,8 @@
 Check my **[Discord](https://discord.gg/KnJGY9S)** to stay updated on this repository.  
 *(Recommended since the AssetLibrary is not automatically updated)*  
 
+<img src="addons/easy_charts/icon.png" align="left" width="64" height="64">
+
 # Easy Charts
 A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.
 
