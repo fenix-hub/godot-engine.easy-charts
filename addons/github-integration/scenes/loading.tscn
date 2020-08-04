@@ -1,0 +1,89 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/github-integration/scripts/loading.gd" type="Script" id=1]
+[ext_resource path="res://addons/github-integration/resources/loading/throbber.png" type="Texture" id=2]
+
+[sub_resource type="Shader" id=24]
+code = "shader_type canvas_item;
+render_mode unshaded, blend_disabled;
+
+uniform float speed = 5.0;
+
+vec2 rotateUV(vec2 uv, vec2 pivot, float rotation) {
+    float cosa = cos(rotation);
+    float sina = sin(rotation);
+    uv -= pivot;
+    return vec2(
+        cosa * uv.x - sina * uv.y,
+        cosa * uv.y + sina * uv.x 
+    ) + pivot;
+}
+
+void vertex() {
+   VERTEX = rotateUV(VERTEX, TEXTURE_PIXEL_SIZE+vec2(45,45), TIME * speed);
+}
+
+"
+custom_defines = ""
+
+[sub_resource type="ShaderMaterial" id=25]
+shader = SubResource( 24 )
+shader_param/speed = 0
+
+[node name="loading" type="ColorRect"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.588235 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="loading2" type="TextureRect" parent="."]
+material = SubResource( 25 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -45.0
+margin_top = -45.0
+margin_right = 45.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 45, 45 )
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -237.0
+margin_top = 64.5
+margin_right = 237.0
+margin_bottom = 78.5
+
+[node name="Number" type="Label" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = 59.0662
+margin_right = 20.0
+margin_bottom = 73.0662
+grow_horizontal = 2
+grow_vertical = 2
+text = "..."
+align = 1
+[connection signal="visibility_changed" from="." to="." method="_on_loading_visibility_changed"]

@@ -1,0 +1,13 @@
+[Opened]
+
+sample.bbs="res://addons/file-editor/file.samples/sample.bbs"
+sample.cfg="res://addons/file-editor/file.samples/sample.cfg"
+sample.csv="res://addons/file-editor/file.samples/sample.csv"
+sample.html="res://addons/file-editor/file.samples/sample.html"
+sample.ini="res://addons/file-editor/file.samples/sample.ini"
+sample.md="res://addons/file-editor/file.samples/sample.md"
+sample.txt="res://addons/file-editor/file.samples/sample.txt"
+datas_on_columns.csv="res://addons/easy_charts/file.samples/datas_on_columns.csv"
+radar.csv="res://addons/easy_charts/file.samples/radar.csv"
+godot_engine_italia_jam#2.csv="res://addons/easy_charts/file.samples/godot_engine_italia_jam#2.csv"
+gei_jam#2columns.csv="res://addons/easy_charts/file.samples/gei_jam#2columns.csv"

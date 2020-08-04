@@ -1,0 +1,583 @@
+[gd_scene load_steps=26 format=2]
+
+[ext_resource path="res://addons/github-integration/scripts/NewGist.gd" type="Script" id=1]
+[ext_resource path="res://addons/github-integration/user/placeholder.png" type="Texture" id=2]
+[ext_resource path="res://addons/github-integration/icons/search.png" type="Texture" id=3]
+[ext_resource path="res://addons/github-integration/scripts/UserPanel.gd" type="Script" id=4]
+[ext_resource path="res://addons/github-integration/resources/themes/GitHubTheme-Dark.tres" type="Theme" id=5]
+[ext_resource path="res://addons/github-integration/scenes/NormalBtn.tscn" type="PackedScene" id=6]
+[ext_resource path="res://addons/github-integration/scenes/NewRepo.tscn" type="PackedScene" id=7]
+[ext_resource path="res://addons/github-integration/resources/styles/List-black.tres" type="StyleBox" id=8]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="Image" id=28]
+data = {
+"data": PoolByteArray( 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 175, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 191, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 207, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 207, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 207, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 143, 0, 0, 0, 0, 255, 255, 255, 143, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ),
+"format": "RGBA8",
+"height": 16,
+"mipmaps": false,
+"width": 16
+}
+
+[sub_resource type="ImageTexture" id=19]
+image = SubResource( 28 )
+size = Vector2( 16, 16 )
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="StyleBoxFlat" id=5]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.180392, 0.643137, 0.309804, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.160784, 0.462745, 0.247059, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id=6]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.180392, 0.643137, 0.309804, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.160784, 0.462745, 0.247059, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color( 0.117647, 1, 0, 0.6 )
+shadow_size = 5
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id=7]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.294118, 0.380392, 0.317647, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.164706, 0.278431, 0.196078, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id=8]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.180392, 0.643137, 0.309804, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.160784, 0.462745, 0.247059, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing = false
+
+[sub_resource type="Image" id=29]
+data = {
+"data": PoolByteArray( 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 175, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 191, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 207, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 207, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 207, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 143, 0, 0, 0, 0, 255, 255, 255, 143, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ),
+"format": "RGBA8",
+"height": 16,
+"mipmaps": false,
+"width": 16
+}
+
+[sub_resource type="ImageTexture" id=21]
+image = SubResource( 29 )
+size = Vector2( 16, 16 )
+
+[sub_resource type="Image" id=30]
+data = {
+"data": PoolByteArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 175, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 191, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 32, 255, 255, 255, 191, 255, 255, 255, 16, 255, 255, 255, 16, 255, 255, 255, 191, 255, 255, 255, 16, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 32, 255, 255, 255, 223, 255, 255, 255, 143, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 143, 255, 255, 255, 223, 255, 255, 255, 16, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 207, 255, 255, 255, 191, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 191, 255, 255, 255, 191, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 32, 255, 255, 255, 239, 255, 255, 255, 112, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 112, 255, 255, 255, 223, 255, 255, 255, 32, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 32, 255, 255, 255, 207, 0, 0, 0, 0, 255, 255, 255, 16, 255, 255, 255, 207, 255, 255, 255, 32, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 207, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 207, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ),
+"format": "RGBA8",
+"height": 16,
+"mipmaps": false,
+"width": 16
+}
+
+[sub_resource type="ImageTexture" id=23]
+image = SubResource( 30 )
+size = Vector2( 16, 16 )
+
+[sub_resource type="Image" id=31]
+data = {
+"data": PoolByteArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 175, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 191, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 32, 255, 255, 255, 191, 255, 255, 255, 16, 255, 255, 255, 16, 255, 255, 255, 191, 255, 255, 255, 16, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 32, 255, 255, 255, 223, 255, 255, 255, 143, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 143, 255, 255, 255, 223, 255, 255, 255, 16, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 207, 255, 255, 255, 191, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 191, 255, 255, 255, 191, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 32, 255, 255, 255, 239, 255, 255, 255, 112, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 112, 255, 255, 255, 223, 255, 255, 255, 32, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 32, 255, 255, 255, 207, 0, 0, 0, 0, 255, 255, 255, 16, 255, 255, 255, 207, 255, 255, 255, 32, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 207, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 207, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ),
+"format": "RGBA8",
+"height": 16,
+"mipmaps": false,
+"width": 16
+}
+
+[sub_resource type="ImageTexture" id=25]
+image = SubResource( 31 )
+size = Vector2( 16, 16 )
+
+[sub_resource type="Image" id=32]
+data = {
+"data": PoolByteArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 102, 106, 115, 125, 161, 106, 115, 125, 222, 106, 115, 125, 222, 106, 115, 125, 161, 106, 115, 125, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 203, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 203, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 169, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 85, 106, 115, 125, 23, 106, 115, 125, 23, 106, 115, 125, 85, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 169, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 93, 106, 115, 125, 254, 106, 115, 125, 254, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 181, 106, 115, 125, 254, 106, 115, 125, 78, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 78, 106, 115, 125, 254, 106, 115, 125, 169, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 25, 106, 115, 125, 254, 106, 115, 125, 226, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 154, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 151, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 23, 106, 115, 125, 254, 106, 115, 125, 222, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 208, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 201, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 85, 106, 115, 125, 254, 106, 115, 125, 161, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 48, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 101, 106, 115, 125, 96, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 32, 106, 115, 125, 78, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 203, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 254, 106, 115, 125, 169, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 115, 125, 254, 106, 115, 125, 181, 106, 115, 125, 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ),
+"format": "RGBA8",
+"height": 16,
+"mipmaps": false,
+"width": 16
+}
+
+[sub_resource type="ImageTexture" id=27]
+image = SubResource( 32 )
+size = Vector2( 16, 16 )
+
+[sub_resource type="StyleBoxEmpty" id=17]
+
+[node name="UserPanel" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 5 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="BG" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.141176, 0.160784, 0.180392, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 18.0
+margin_right = -16.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator8" type="HSeparator" parent="Panel"]
+margin_right = 990.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 0, 15 )
+custom_styles/separator = SubResource( 1 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+visible = false
+margin_top = 15.0
+margin_right = 990.0
+margin_bottom = 75.0
+custom_constants/separation = 0
+alignment = 1
+
+[node name="avatar" type="TextureRect" parent="Panel/HBoxContainer"]
+margin_left = 429.0
+margin_right = 489.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+size_flags_horizontal = 5
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="user" type="Label" parent="Panel/HBoxContainer"]
+margin_left = 489.0
+margin_top = 19.0
+margin_right = 561.0
+margin_bottom = 41.0
+size_flags_horizontal = 5
+custom_colors/font_color = Color( 0.133333, 0.356863, 0.94902, 1 )
+custom_colors/font_color_shadow = Color( 0.14902, 0.0705882, 0.47451, 1 )
+text = "username"
+align = 1
+
+[node name="List" type="VBoxContainer" parent="Panel"]
+margin_top = 15.0
+margin_right = 990.0
+margin_bottom = 592.0
+size_flags_vertical = 3
+custom_constants/separation = 4
+
+[node name="RepositoryHeader" type="HBoxContainer" parent="Panel/List"]
+margin_right = 990.0
+margin_bottom = 32.0
+custom_constants/separation = 0
+
+[node name="repos_icon" type="TextureRect" parent="Panel/List/RepositoryHeader"]
+modulate = Color( 0.337255, 0.32549, 0.329412, 1 )
+margin_right = 16.0
+margin_bottom = 32.0
+size_flags_vertical = 9
+texture = SubResource( 19 )
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="Panel/List/RepositoryHeader"]
+margin_left = 16.0
+margin_top = 5.0
+margin_right = 108.0
+margin_bottom = 27.0
+text = "Repositories:"
+
+[node name="repos" type="Label" parent="Panel/List/RepositoryHeader"]
+margin_left = 108.0
+margin_top = 5.0
+margin_right = 132.0
+margin_bottom = 27.0
+size_flags_horizontal = 5
+custom_colors/font_color = Color( 0.184314, 0.909804, 0.486275, 1 )
+text = "51"
+
+[node name="search_icon" type="TextureRect" parent="Panel/List/RepositoryHeader"]
+modulate = Color( 0.415686, 0.45098, 0.490196, 1 )
+margin_left = 766.0
+margin_right = 782.0
+margin_bottom = 32.0
+size_flags_horizontal = 10
+texture = ExtResource( 3 )
+stretch_mode = 6
+
+[node name="VSeparator" type="VSeparator" parent="Panel/List/RepositoryHeader"]
+margin_left = 782.0
+margin_right = 790.0
+margin_bottom = 32.0
+custom_styles/separator = SubResource( 4 )
+custom_constants/separation = 8
+
+[node name="search_repo" type="LineEdit" parent="Panel/List/RepositoryHeader"]
+margin_left = 790.0
+margin_right = 990.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 200, 26 )
+max_length = 60
+expand_to_text_length = true
+clear_button_enabled = true
+placeholder_text = "Find a repository..."
+placeholder_alpha = 0.4
+caret_blink = true
+
+[node name="RepositoryList" type="ScrollContainer" parent="Panel/List"]
+margin_top = 36.0
+margin_right = 990.0
+margin_bottom = 241.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/bg = ExtResource( 8 )
+scroll_horizontal_enabled = false
+
+[node name="Repos" type="VBoxContainer" parent="Panel/List/RepositoryList"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 980.0
+margin_bottom = 195.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="repos_buttons" type="HBoxContainer" parent="Panel/List"]
+margin_top = 245.0
+margin_right = 990.0
+margin_bottom = 277.0
+grow_vertical = 2
+rect_clip_content = true
+custom_constants/separation = 10
+alignment = 1
+
+[node name="repo" type="Button" parent="Panel/List/repos_buttons"]
+margin_left = 426.0
+margin_right = 564.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 120, 0 )
+size_flags_horizontal = 5
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/focus = SubResource( 6 )
+custom_styles/disabled = SubResource( 7 )
+custom_styles/normal = SubResource( 8 )
+custom_colors/font_color_disabled = Color( 0.6, 0.6, 0.6, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
+custom_colors/font_color_pressed = Color( 0.831373, 0.831373, 0.831373, 1 )
+text = "New Repository"
+icon = SubResource( 21 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SEPARATOR" type="HSeparator" parent="Panel/List"]
+margin_top = 281.0
+margin_right = 990.0
+margin_bottom = 296.0
+rect_min_size = Vector2( 0, 15 )
+custom_styles/separator = SubResource( 1 )
+
+[node name="GistHeader" type="HBoxContainer" parent="Panel/List"]
+margin_top = 300.0
+margin_right = 990.0
+margin_bottom = 332.0
+custom_constants/separation = 0
+
+[node name="gists_icon" type="TextureRect" parent="Panel/List/GistHeader"]
+modulate = Color( 0.415686, 0.45098, 0.490196, 1 )
+margin_right = 16.0
+margin_bottom = 32.0
+size_flags_horizontal = 5
+texture = SubResource( 23 )
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="Panel/List/GistHeader"]
+margin_left = 16.0
+margin_top = 5.0
+margin_right = 61.0
+margin_bottom = 27.0
+text = "Gists:"
+
+[node name="gists" type="Label" parent="Panel/List/GistHeader"]
+margin_left = 61.0
+margin_top = 5.0
+margin_right = 76.0
+margin_bottom = 27.0
+size_flags_horizontal = 5
+custom_colors/font_color = Color( 0.184314, 0.909804, 0.486275, 1 )
+text = "c"
+
+[node name="search_icon" type="TextureRect" parent="Panel/List/GistHeader"]
+modulate = Color( 0.415686, 0.45098, 0.490196, 1 )
+margin_left = 766.0
+margin_right = 782.0
+margin_bottom = 32.0
+size_flags_horizontal = 10
+texture = ExtResource( 3 )
+stretch_mode = 6
+
+[node name="VSeparator2" type="VSeparator" parent="Panel/List/GistHeader"]
+margin_left = 782.0
+margin_right = 790.0
+margin_bottom = 32.0
+custom_styles/separator = SubResource( 4 )
+custom_constants/separation = 8
+
+[node name="search_gist" type="LineEdit" parent="Panel/List/GistHeader"]
+margin_left = 790.0
+margin_right = 990.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 200, 26 )
+max_length = 60
+expand_to_text_length = true
+clear_button_enabled = true
+placeholder_text = "Find a gist..."
+placeholder_alpha = 0.4
+caret_blink = true
+
+[node name="GistList" type="ScrollContainer" parent="Panel/List"]
+margin_top = 336.0
+margin_right = 990.0
+margin_bottom = 541.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/bg = ExtResource( 8 )
+scroll_horizontal_enabled = false
+
+[node name="Gists" type="VBoxContainer" parent="Panel/List/GistList"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 980.0
+margin_bottom = 195.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="gist_buttons" type="HBoxContainer" parent="Panel/List"]
+margin_top = 545.0
+margin_right = 990.0
+margin_bottom = 577.0
+custom_constants/separation = 10
+alignment = 1
+
+[node name="gist" type="Button" parent="Panel/List/gist_buttons"]
+margin_left = 435.0
+margin_right = 555.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 120, 0 )
+size_flags_horizontal = 5
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/focus = SubResource( 6 )
+custom_styles/disabled = SubResource( 7 )
+custom_styles/normal = SubResource( 8 )
+custom_colors/font_color_disabled = Color( 0.6, 0.6, 0.6, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
+custom_colors/font_color_pressed = Color( 0.831373, 0.831373, 0.831373, 1 )
+text = "New Gist"
+icon = SubResource( 25 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator7" type="HSeparator" parent="Panel"]
+margin_top = 592.0
+margin_right = 990.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 0, 8 )
+custom_styles/separator = SubResource( 1 )
+
+[node name="ReloadBtn" parent="." instance=ExtResource( 6 )]
+anchor_left = 0.898
+anchor_top = 0.933
+anchor_right = 0.992
+anchor_bottom = 0.987
+margin_left = 0.447998
+margin_top = 0.200012
+margin_right = 0.192078
+margin_bottom = -0.200012
+text = "Reload"
+icon = SubResource( 27 )
+
+[node name="NewGist" type="WindowDialog" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -288.5
+margin_top = -66.0
+margin_right = 288.5
+margin_bottom = 66.0
+popup_exclusive = true
+window_title = "[Create a new Gist]"
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NewGist"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -277.5
+margin_top = -36.0
+margin_right = 277.5
+margin_bottom = 36.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NewGist/VBoxContainer"]
+margin_right = 555.0
+margin_bottom = 32.0
+
+[node name="Label" type="Label" parent="NewGist/VBoxContainer/HBoxContainer"]
+margin_top = 5.0
+margin_right = 275.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Gist Description:"
+
+[node name="description" type="LineEdit" parent="NewGist/VBoxContainer/HBoxContainer"]
+margin_left = 279.0
+margin_right = 555.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="NewGist/VBoxContainer"]
+margin_top = 36.0
+margin_right = 555.0
+margin_bottom = 66.0
+
+[node name="Label" type="Label" parent="NewGist/VBoxContainer/HBoxContainer3"]
+margin_top = 4.0
+margin_right = 275.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+text = "Privacy:"
+
+[node name="privacy" type="OptionButton" parent="NewGist/VBoxContainer/HBoxContainer3"]
+margin_left = 279.0
+margin_right = 555.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+text = "Private"
+items = [ "Private", null, false, 0, null, "Public", null, false, 1, null ]
+selected = 0
+
+[node name="HSeparator" type="HSeparator" parent="NewGist/VBoxContainer"]
+margin_top = 70.0
+margin_right = 555.0
+margin_bottom = 74.0
+custom_styles/separator = SubResource( 17 )
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="NewGist/VBoxContainer"]
+margin_top = 78.0
+margin_right = 555.0
+margin_bottom = 108.0
+custom_constants/separation = 10
+alignment = 1
+
+[node name="Button" type="Button" parent="NewGist/VBoxContainer/HBoxContainer4"]
+margin_left = 72.0
+margin_right = 290.0
+margin_bottom = 30.0
+text = "Create Gist with files in project"
+
+[node name="Button2" type="Button" parent="NewGist/VBoxContainer/HBoxContainer4"]
+margin_left = 300.0
+margin_right = 483.0
+margin_bottom = 30.0
+text = "Create Gist with new files"
+
+[node name="HSeparator8" type="HSeparator" parent="NewGist/VBoxContainer"]
+visible = false
+margin_top = 184.0
+margin_right = 561.0
+margin_bottom = 192.0
+rect_min_size = Vector2( 0, 8 )
+custom_styles/separator = SubResource( 1 )
+
+[node name="error" type="Label" parent="NewGist/VBoxContainer"]
+visible = false
+margin_top = 184.0
+margin_right = 561.0
+margin_bottom = 203.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 1, 0, 0.235294, 1 )
+text = "Error: "
+align = 1
+
+[node name="FileDialog" type="FileDialog" parent="NewGist"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -424.5
+margin_top = -270.0
+margin_right = 424.5
+margin_bottom = 270.0
+window_title = "Open File(s)"
+dialog_text = "Select all files you want to commit in your Gist
+"
+mode = 1
+filters = PoolStringArray( "*.txt ; Plain Text File", "*.rtf ; Rich Text Format File", "*.log ; Log File", "*.md ; MD File", "*.doc ; WordPad Document", "*.doc ; Microsoft Word Document", "*.docm ; Word Open XML Macro-Enabled Document", "*.docx ; Microsoft Word Open XML Document", "*.bbs ; Bulletin Board System Text", "*.dat ; Data File", "*.xml ; XML File", "*.sql ; SQL database file", "*.json ; JavaScript Object Notation File", "*.html ; HyperText Markup Language", "*.csv ; Comma-separated values", "*.cfg ; Configuration File", "*.ini ; Initialization File (same as .cfg Configuration File)", "*.csv ; Comma-separated values File" )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NewRepo" parent="." instance=ExtResource( 7 )]
