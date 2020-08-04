@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/plugin%20version-0.2.8-blue)](https://github.com/fenix-hub/godot-engine.easy-charts)
+[![version](https://img.shields.io/badge/plugin%20version-0.2.9-blue)](https://github.com/fenix-hub/godot-engine.easy-charts)
 [![updates](https://img.shields.io/badge/plugin%20updates-on%20discord-purple)](https://discord.gg/JNrcucg)
 [![paypal](https://img.shields.io/badge/donations-PayPal-cyan)](https://paypal.me/NSantilio?locale.x=it_IT)
 
