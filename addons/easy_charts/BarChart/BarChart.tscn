@@ -25,7 +25,23 @@ the specific categories being compared, and the other axis represents a measured
 Some bar graphs present bars clustered in groups of more than one, showing the 
 values of more than one measured variable."
 }
-function_colors = [ "#1e1e1e", "#1e1e1e", "#1e1e1e", "#1e1e1e" ]
+Chart_Properties/are_values_columns = false
+Chart_Properties/labels_index = 0
+Chart_Properties/show_x_values_as_labels = true
+Chart_Properties/column_width = 2.0
+Chart_Properties/column_gap = 2.0
+Chart_Display/x_decim = 5.0
+Chart_Display/y_decim = 5.0
+Chart_Style/points_shape = [ 0 ]
+Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/font = null
+Chart_Style/bold_font = null
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/template = 0
+Chart_Modifiers/invert_chart = false
 
 [node name="Background" type="ColorRect" parent="."]
 visible = false
@@ -53,10 +69,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ChartName" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 0.0266667
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
 [node name="PointData" parent="." instance=ExtResource( 1 )]
 
 [node name="PointData" parent="PointData" index="0"]
 visible = false
+margin_left = -154.32
+margin_top = -115.171
+margin_right = -154.456
+margin_bottom = -114.371
 theme = SubResource( 1 )
 
 [editable path="PointData"]

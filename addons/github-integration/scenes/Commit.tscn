@@ -1,0 +1,342 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://addons/github-integration/scripts/Commit.gd" type="Script" id=1]
+[ext_resource path="res://addons/github-integration/icons/arrow-left.svg" type="Texture" id=2]
+[ext_resource path="res://addons/github-integration/resources/themes/GitHubTheme-Dark.tres" type="Theme" id=3]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="Shader" id=2]
+code = "shader_type canvas_item;
+render_mode unshaded, blend_disabled;
+
+uniform float speed = 5.0;
+
+vec2 rotateUV(vec2 uv, vec2 pivot, float rotation) {
+    float cosa = cos(rotation);
+    float sina = sin(rotation);
+    uv -= pivot;
+    return vec2(
+        cosa * uv.x - sina * uv.y,
+        cosa * uv.y + sina * uv.x 
+    ) + pivot;
+}
+
+void vertex() {
+   VERTEX = rotateUV(VERTEX, TEXTURE_PIXEL_SIZE+vec2(45,45), TIME * speed);
+}
+
+"
+custom_defines = ""
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+shader_param/speed = 0
+
+[node name="Commit" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BG" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.964706, 0.972549, 0.980392, 1 )
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 16.0
+margin_top = 16.0
+margin_right = -16.0
+margin_bottom = -16.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="close2" type="TextureButton" parent="VBoxContainer2"]
+modulate = Color( 0.27451, 0.262745, 0.266667, 1 )
+margin_right = 32.0
+margin_bottom = 32.0
+size_flags_horizontal = 0
+shortcut_in_tooltip = false
+texture_normal = ExtResource( 2 )
+
+[node name="Label2" type="Label" parent="VBoxContainer2"]
+visible = false
+margin_top = 18.0
+margin_right = 984.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.133333, 0.133333, 0.133333, 1 )
+text = "COMMIT AND PUSH"
+align = 1
+valign = 1
+
+[node name="HSeparator9" type="HSeparator" parent="VBoxContainer2"]
+margin_top = 36.0
+margin_right = 992.0
+margin_bottom = 44.0
+rect_min_size = Vector2( 0, 8 )
+custom_styles/separator = SubResource( 1 )
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer2"]
+margin_top = 48.0
+margin_right = 992.0
+margin_bottom = 78.0
+alignment = 1
+
+[node name="Branch" type="Label" parent="VBoxContainer2/HBoxContainer2"]
+margin_left = 391.0
+margin_top = 4.0
+margin_right = 447.0
+margin_bottom = 26.0
+text = "Branch:"
+align = 2
+
+[node name="branch" type="OptionButton" parent="VBoxContainer2/HBoxContainer2"]
+margin_left = 451.0
+margin_right = 601.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 150, 0 )
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="VBoxContainer2"]
+margin_top = 82.0
+margin_right = 992.0
+margin_bottom = 114.0
+alignment = 1
+
+[node name="Message" type="Label" parent="VBoxContainer2/HBoxContainer7"]
+margin_left = 257.0
+margin_top = 5.0
+margin_right = 380.0
+margin_bottom = 27.0
+text = "Commit Message:"
+align = 2
+
+[node name="message" type="LineEdit" parent="VBoxContainer2/HBoxContainer7"]
+margin_left = 384.0
+margin_right = 734.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 350, 0 )
+size_flags_vertical = 3
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
+margin_top = 118.0
+margin_right = 992.0
+margin_bottom = 140.0
+alignment = 1
+
+[node name="Content" type="Label" parent="VBoxContainer2/HBoxContainer"]
+margin_left = 438.0
+margin_right = 542.0
+margin_bottom = 22.0
+size_flags_vertical = 1
+text = "Committing to:"
+align = 2
+
+[node name="repository" type="Label" parent="VBoxContainer2/HBoxContainer"]
+margin_left = 546.0
+margin_right = 554.0
+margin_bottom = 22.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0.0745098, 0.627451, 0.419608, 1 )
+
+[node name="HSeparator8" type="HSeparator" parent="VBoxContainer2"]
+margin_top = 144.0
+margin_right = 992.0
+margin_bottom = 152.0
+rect_min_size = Vector2( 0, 8 )
+custom_styles/separator = SubResource( 1 )
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer2"]
+margin_top = 156.0
+margin_right = 992.0
+margin_bottom = 178.0
+
+[node name="Label" type="Label" parent="VBoxContainer2/HBoxContainer4"]
+margin_right = 494.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+text = ".gitignore"
+align = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer2/HBoxContainer4"]
+margin_left = 498.0
+margin_right = 992.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+text = "Committing files"
+align = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer2"]
+margin_top = 182.0
+margin_right = 992.0
+margin_bottom = 480.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer2/HBoxContainer3"]
+margin_right = 494.0
+margin_bottom = 298.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="gitignore" type="TextEdit" parent="VBoxContainer2/HBoxContainer3/VBoxContainer2"]
+margin_right = 494.0
+margin_bottom = 264.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+readonly = true
+show_line_numbers = true
+smooth_scrolling = true
+wrap_enabled = true
+
+[node name="girignorebuttons" type="HBoxContainer" parent="VBoxContainer2/HBoxContainer3/VBoxContainer2"]
+margin_top = 268.0
+margin_right = 494.0
+margin_bottom = 298.0
+
+[node name="gitignoreBtn" type="CheckBox" parent="VBoxContainer2/HBoxContainer3/VBoxContainer2/girignorebuttons"]
+margin_right = 114.0
+margin_bottom = 30.0
+text = "Edit .gitignore"
+
+[node name="about_gitignoreBtn" type="Button" parent="VBoxContainer2/HBoxContainer3/VBoxContainer2/girignorebuttons"]
+margin_left = 468.0
+margin_right = 494.0
+margin_bottom = 30.0
+size_flags_horizontal = 10
+custom_colors/font_color = Color( 1, 0, 0.843137, 1 )
+text = "?"
+flat = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2/HBoxContainer3"]
+margin_left = 498.0
+margin_right = 992.0
+margin_bottom = 298.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="uncommitted" type="ItemList" parent="VBoxContainer2/HBoxContainer3/VBoxContainer"]
+margin_right = 494.0
+margin_bottom = 264.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+select_mode = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/HBoxContainer3/VBoxContainer"]
+margin_top = 268.0
+margin_right = 494.0
+margin_bottom = 298.0
+custom_constants/separation = 20
+alignment = 1
+
+[node name="choosefilesBtn" type="Button" parent="VBoxContainer2/HBoxContainer3/VBoxContainer/HBoxContainer"]
+margin_left = 34.0
+margin_right = 127.0
+margin_bottom = 30.0
+size_flags_horizontal = 4
+text = "Select Files"
+
+[node name="choosedirectoryBtn" type="Button" parent="VBoxContainer2/HBoxContainer3/VBoxContainer/HBoxContainer"]
+margin_left = 147.0
+margin_right = 269.0
+margin_bottom = 30.0
+size_flags_horizontal = 4
+text = "Select Directory"
+
+[node name="removefileBtn" type="Button" parent="VBoxContainer2/HBoxContainer3/VBoxContainer/HBoxContainer"]
+margin_left = 289.0
+margin_right = 459.0
+margin_bottom = 30.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+disabled = true
+text = "Remove Files/Directory"
+
+[node name="error" type="Label" parent="VBoxContainer2"]
+visible = false
+margin_top = 536.0
+margin_right = 1004.0
+margin_bottom = 550.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 1, 0, 0.235294, 1 )
+text = "Error: "
+align = 1
+
+[node name="loading2" type="TextureRect" parent="VBoxContainer2"]
+visible = false
+material = SubResource( 3 )
+margin_left = 477.0
+margin_top = 482.0
+margin_right = 527.0
+margin_bottom = 532.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 25, 25 )
+size_flags_horizontal = 4
+size_flags_vertical = 8
+expand = true
+stretch_mode = 6
+
+[node name="HSeparator11" type="HSeparator" parent="VBoxContainer2"]
+margin_top = 484.0
+margin_right = 992.0
+margin_bottom = 492.0
+rect_min_size = Vector2( 0, 8 )
+custom_styles/separator = SubResource( 1 )
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer2"]
+margin_top = 496.0
+margin_right = 992.0
+margin_bottom = 510.0
+
+[node name="HSeparator12" type="HSeparator" parent="VBoxContainer2"]
+margin_top = 514.0
+margin_right = 992.0
+margin_bottom = 522.0
+rect_min_size = Vector2( 0, 8 )
+custom_styles/separator = SubResource( 1 )
+
+[node name="Button" type="Button" parent="VBoxContainer2"]
+margin_left = 429.0
+margin_top = 526.0
+margin_right = 562.0
+margin_bottom = 556.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Commit and Push"
+
+[node name="HSeparator10" type="HSeparator" parent="VBoxContainer2"]
+margin_top = 560.0
+margin_right = 992.0
+margin_bottom = 568.0
+rect_min_size = Vector2( 0, 8 )
+custom_styles/separator = SubResource( 1 )
+
+[node name="ChooseFile" type="FileDialog" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -437.5
+margin_top = -238.0
+margin_right = 437.5
+margin_bottom = 238.0
+window_title = "Open File(s)"
+resizable = true
+mode = 1
+show_hidden_files = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="VBoxContainer2/close2" to="." method="_on_close2_pressed"]
+[connection signal="visibility_changed" from="VBoxContainer2/loading2" to="." method="_on_loading2_visibility_changed"]
+[connection signal="pressed" from="VBoxContainer2/Button" to="." method="_on_Button_pressed"]

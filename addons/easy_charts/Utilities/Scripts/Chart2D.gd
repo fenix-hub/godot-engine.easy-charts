@@ -1,3 +1,4 @@
+tool
 extends Node2D
 class_name Chart2D
 
@@ -6,4 +7,4 @@ enum TemplatesNames { Default, Clean, Gradient, Minimal, Invert }
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+    pass # Replace with function body.

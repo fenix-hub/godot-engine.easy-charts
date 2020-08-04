@@ -21,8 +21,22 @@ uninformative, but various heuristics, such as algorithms that plot data as the 
 total area, can be applied to sort the variables (axes) into relative positions that reveal 
 distinct correlations, trade-offs, and a multitude of other comparative measures."
 }
-function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-grid_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+delimiter = ";"
+Chart_Properties/are_values_columns = false
+Chart_Properties/labels_index = 0
+Chart_Properties/function_names_index = 0
+Chart_Properties/use_height_as_radius = false
+Chart_Properties/radius = 150.0
+Chart_Display/full_scale = 1.0
+Chart_Style/points_shape = [ 0 ]
+Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/outline_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/grid_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/font = null
+Chart_Style/bold_font = null
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/template = 0
+Chart_Modifiers/rotation = 0.0
 
 [node name="Background" type="ColorRect" parent="."]
 visible = false
@@ -50,10 +64,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ChartName" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 0.053
+margin_bottom = 0.199999
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
 [node name="PointData" parent="." instance=ExtResource( 1 )]
 
 [node name="PointData" parent="PointData" index="0"]
 visible = false
+margin_left = -230.138
+margin_top = -125.6
+margin_right = -230.275
+margin_bottom = -124.801
 theme = SubResource( 1 )
 
 [editable path="PointData"]

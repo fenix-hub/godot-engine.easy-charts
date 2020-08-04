@@ -1,0 +1,13 @@
+[gd_scene format=2]
+
+[node name="NormalBtn" type="Button"]
+anchor_right = 0.117
+anchor_bottom = 0.053
+margin_right = 0.191994
+margin_bottom = 0.199999
+custom_colors/font_color_disabled = Color( 0.415686, 0.45098, 0.490196, 1 )
+custom_colors/font_color = Color( 0.415686, 0.45098, 0.490196, 1 )
+text = "normal button"
+__meta__ = {
+"_edit_use_anchors_": false
+}

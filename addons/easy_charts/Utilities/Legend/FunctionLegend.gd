@@ -1,3 +1,4 @@
+tool
 extends VBoxContainer
 
 onready var Function : Label = $Function
@@ -9,25 +10,25 @@ var font_color : Color
 var font : Font
 
 func _ready():
-	Function.set("custom_fonts/font",font)
-	Function.set("custom_colors/font_color",font_color)
-	Function.set_text(function)
-	FunctionColor.set_frame_color(color)
+    Function.set("custom_fonts/font",font)
+    Function.set("custom_colors/font_color",font_color)
+    Function.set_text(function)
+    FunctionColor.set_frame_color(color)
 
 func create_legend(text : String, color : Color, font : Font, font_color : Color):
-	self.function = text
-	self.color = color
-	self.font_color = font_color
-	self.font = font
+    self.function = text
+    self.color = color
+    self.font_color = font_color
+    self.font = font
 
 func set_function( t : String ):
-	function = t
+    function = t
 
 func get_function() -> String:
-	return function
+    return function
 
 func set_function_color( c : Color ):
-	color = c
+    color = c
 
 func get_function_color() -> Color:
-	return color
+    return color

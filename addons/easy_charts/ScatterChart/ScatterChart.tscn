@@ -21,7 +21,21 @@ for a set of data. If the points are coded (color/shape/size), one additional va
 The data are displayed as a collection of points, each having the value of one variable determining the position on 
 the horizontal axis and the value of the other variable determining the position on the vertical axis."
 }
-function_colors = [ "#1e1e1e", "#1e1e1e", "#1e1e1e", "#1e1e1e" ]
+Chart_Properties/are_values_columns = false
+Chart_Properties/labels_index = 0
+Chart_Properties/show_x_values_as_labels = true
+Chart_Display/x_decim = 5.0
+Chart_Display/y_decim = 5.0
+Chart_Style/points_shape = [ 0 ]
+Chart_Style/function_colors = [ "#1e1e1e", "#1e1e1e", "#1e1e1e", "#1e1e1e" ]
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/font = null
+Chart_Style/bold_font = null
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/template = 0
+Chart_Modifiers/invert_chart = false
 
 [node name="Background" type="ColorRect" parent="."]
 visible = false
@@ -49,10 +63,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ChartName" type="Label" parent="."]
+anchor_right = 1.0
+margin_bottom = 14.0
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="PointData" parent="." instance=ExtResource( 1 )]
 
 [node name="PointData" parent="PointData" index="0"]
 visible = false
+margin_left = 252.182
+margin_top = 37.3706
+margin_right = 252.046
+margin_bottom = 38.1706
 theme = SubResource( 1 )
 
 [editable path="PointData"]

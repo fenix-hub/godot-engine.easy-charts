@@ -1,0 +1,298 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://addons/github-integration/scripts/Gist.gd" type="Script" id=1]
+[ext_resource path="res://addons/github-integration/icons/arrow-left.svg" type="Texture" id=2]
+[ext_resource path="res://addons/github-integration/resources/themes/GitHubTheme.tres" type="Theme" id=3]
+[ext_resource path="res://addons/github-integration/scenes/RedBtn.tscn" type="PackedScene" id=4]
+[ext_resource path="res://addons/github-integration/scenes/GreenBtn.tscn" type="PackedScene" id=5]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="Image" id=8]
+data = {
+"data": PoolByteArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 70, 67, 68, 112, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 112, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 112, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 112, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 70, 67, 68, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ),
+"format": "RGBA8",
+"height": 16,
+"mipmaps": false,
+"width": 16
+}
+
+[sub_resource type="ImageTexture" id=3]
+image = SubResource( 8 )
+size = Vector2( 16, 16 )
+
+[sub_resource type="Image" id=9]
+data = {
+"data": PoolByteArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 255, 93, 93, 160, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 159, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 159, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 159, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 240, 255, 93, 93, 48, 255, 93, 93, 48, 255, 93, 93, 240, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 240, 255, 93, 93, 48, 255, 93, 93, 48, 255, 93, 93, 240, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 48, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 48, 255, 93, 93, 240, 255, 93, 93, 240, 255, 93, 93, 48, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 48, 255, 93, 93, 240, 255, 93, 93, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 48, 255, 93, 93, 48, 0, 0, 0, 0, 255, 93, 93, 48, 255, 93, 93, 48, 0, 0, 0, 0, 255, 93, 93, 48, 255, 93, 93, 48, 0, 0, 0, 0, 255, 93, 93, 48, 255, 93, 93, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 48, 255, 93, 93, 239, 255, 93, 93, 239, 255, 93, 93, 48, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 48, 255, 93, 93, 239, 255, 93, 93, 239, 255, 93, 93, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 240, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 239, 255, 93, 93, 48, 255, 93, 93, 48, 255, 93, 93, 239, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 239, 255, 93, 93, 48, 255, 93, 93, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ),
+"format": "RGBA8",
+"height": 16,
+"mipmaps": false,
+"width": 16
+}
+
+[sub_resource type="ImageTexture" id=5]
+image = SubResource( 9 )
+size = Vector2( 16, 16 )
+
+[sub_resource type="StyleBoxEmpty" id=6]
+content_margin_left = 10.0
+content_margin_right = 10.0
+
+[sub_resource type="StyleBoxEmpty" id=7]
+
+[node name="Gist" type="Control"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BG" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.980392, 0.984314, 0.988235, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GistContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 8.0
+margin_right = -10.0
+margin_bottom = -8.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="close" type="TextureButton" parent="GistContainer"]
+modulate = Color( 0.27451, 0.262745, 0.266667, 1 )
+margin_right = 32.0
+margin_bottom = 32.0
+size_flags_horizontal = 0
+texture_normal = ExtResource( 2 )
+
+[node name="gist_name" type="Label" parent="GistContainer"]
+margin_top = 36.0
+margin_right = 1004.0
+margin_bottom = 58.0
+custom_colors/font_color = Color( 0.317647, 0.498039, 0.815686, 1 )
+custom_colors/font_color_shadow = Color( 0.12549, 0.109804, 0.27451, 1 )
+text = "AAAA"
+
+[node name="description" type="HBoxContainer" parent="GistContainer"]
+margin_top = 62.0
+margin_right = 1004.0
+margin_bottom = 62.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+
+[node name="gist_description" type="Label" parent="GistContainer/description"]
+visible = false
+margin_bottom = 14.0
+size_flags_vertical = 5
+valign = 1
+
+[node name="edit_description" type="HBoxContainer" parent="GistContainer/description"]
+visible = false
+margin_right = 1004.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+
+[node name="gist_description2" type="Label" parent="GistContainer/description/edit_description"]
+margin_right = 156.0
+margin_bottom = 24.0
+size_flags_vertical = 7
+text = "Update Gist description:"
+valign = 1
+
+[node name="gist_editdescription" type="LineEdit" parent="GistContainer/description/edit_description"]
+margin_left = 160.0
+margin_right = 1004.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+expand_to_text_length = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator2" type="HSeparator" parent="GistContainer"]
+margin_top = 66.0
+margin_right = 1004.0
+margin_bottom = 70.0
+custom_styles/separator = SubResource( 1 )
+
+[node name="GistEditor" type="HSplitContainer" parent="GistContainer"]
+margin_top = 74.0
+margin_right = 1004.0
+margin_bottom = 542.0
+size_flags_vertical = 3
+
+[node name="ListContainer" type="VBoxContainer" parent="GistContainer/GistEditor"]
+margin_right = 240.0
+margin_bottom = 468.0
+rect_min_size = Vector2( 240, 0 )
+size_flags_vertical = 3
+
+[node name="List" type="ItemList" parent="GistContainer/GistEditor/ListContainer"]
+margin_right = 240.0
+margin_bottom = 468.0
+rect_min_size = Vector2( 240, 0 )
+size_flags_vertical = 3
+
+[node name="ListBar" type="HBoxContainer" parent="GistContainer/GistEditor/ListContainer"]
+visible = false
+margin_left = 27.0
+margin_top = 459.0
+margin_right = 213.0
+margin_bottom = 481.0
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="addfile" type="Button" parent="GistContainer/GistEditor/ListContainer/ListBar"]
+margin_right = 82.0
+margin_bottom = 22.0
+text = "Add File"
+icon = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="deletefile" type="Button" parent="GistContainer/GistEditor/ListContainer/ListBar"]
+margin_left = 86.0
+margin_right = 186.0
+margin_bottom = 22.0
+text = "Delete File"
+icon = SubResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ContentContainer" type="VBoxContainer" parent="GistContainer/GistEditor"]
+margin_left = 248.0
+margin_right = 1004.0
+margin_bottom = 468.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TopBar" type="HBoxContainer" parent="GistContainer/GistEditor/ContentContainer"]
+margin_right = 756.0
+margin_bottom = 30.0
+alignment = 2
+
+[node name="Readonly" type="CheckBox" parent="GistContainer/GistEditor/ContentContainer/TopBar"]
+margin_left = 455.0
+margin_right = 546.0
+margin_bottom = 30.0
+size_flags_horizontal = 9
+pressed = true
+text = "Read Only"
+flat = true
+
+[node name="VSeparator" type="VSeparator" parent="GistContainer/GistEditor/ContentContainer/TopBar"]
+margin_left = 550.0
+margin_right = 560.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 10, 0 )
+custom_styles/separator = SubResource( 6 )
+
+[node name="WrapBtn" type="OptionButton" parent="GistContainer/GistEditor/ContentContainer/TopBar"]
+margin_left = 564.0
+margin_right = 655.0
+margin_bottom = 30.0
+size_flags_horizontal = 8
+text = "No Wrap"
+items = [ "No Wrap", null, false, 0, null, "Soft Wrap", null, false, 1, null ]
+selected = 0
+
+[node name="MapBtn" type="OptionButton" parent="GistContainer/GistEditor/ContentContainer/TopBar"]
+margin_left = 659.0
+margin_right = 756.0
+margin_bottom = 30.0
+size_flags_horizontal = 8
+text = "Hide Map"
+items = [ "Hide Map", null, false, 0, null, "Show Map", null, false, 1, null ]
+selected = 0
+
+[node name="Content" type="TextEdit" parent="GistContainer/GistEditor/ContentContainer"]
+margin_top = 34.0
+margin_right = 756.0
+margin_bottom = 468.0
+rect_clip_content = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "eeeeeee
+errrrrrraesasdaer"
+highlight_current_line = true
+syntax_highlighting = true
+show_line_numbers = true
+caret_blink = true
+
+[node name="GistButtons" type="HBoxContainer" parent="GistContainer"]
+margin_left = 380.0
+margin_top = 546.0
+margin_right = 624.0
+margin_bottom = 576.0
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="commit" parent="GistContainer/GistButtons" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 120.0
+margin_bottom = 30.0
+text = "Commit Gist"
+
+[node name="delete" parent="GistContainer/GistButtons" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 124.0
+margin_right = 244.0
+margin_bottom = 30.0
+text = "DELETE GIST"
+
+[node name="HSeparator" type="HSeparator" parent="GistContainer"]
+margin_top = 580.0
+margin_right = 1004.0
+margin_bottom = 584.0
+custom_styles/separator = SubResource( 7 )
+
+[node name="NewFile" type="AcceptDialog" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -132.0
+margin_top = -32.0
+margin_right = 132.0
+margin_bottom = 32.0
+window_title = "Add new File"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="NewFile"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -46.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="NewFile/HBoxContainer2"]
+margin_top = 5.0
+margin_right = 63.0
+margin_bottom = 19.0
+text = "Filename:"
+
+[node name="filename" type="LineEdit" parent="NewFile/HBoxContainer2"]
+margin_left = 67.0
+margin_right = 248.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
