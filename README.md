@@ -1,9 +1,12 @@
-[![version](https://img.shields.io/badge/plugin%20version-0.2.9-blue)](https://github.com/fenix-hub/godot-engine.easy-charts)
-[![updates](https://img.shields.io/badge/plugin%20updates-on%20discord-purple)](https://discord.gg/JNrcucg)
-[![paypal](https://img.shields.io/badge/donations-PayPal-cyan)](https://paypal.me/NSantilio?locale.x=it_IT)
+*Want to stay updated or having an issue?*  
+<a href="https://discord.gg/KnJGY9S">
+  <img src="https://github.com/fenix-hub/ColoredBadges/blob/master/svg/social/discord.svg" alt="react" style="vertical-align:top; margin:6px 4px">
+</a>
 
-Check my **[Discord](https://discord.gg/KnJGY9S)** to stay updated on this repository.  
-*(Recommended since the AssetLibrary is not automatically updated)*  
+*You can support me here*  
+<a href="https://paypal.me/NSantilio?locale.x=it_IT">
+  <img src="https://github.com/fenix-hub/ColoredBadges/blob/master/svg/financial/paypal.svg" alt="react" style="vertical-align:top; margin:6px 4px">
+</a>
 
 <img src="addons/easy_charts/icon.png" align="left" width="64" height="64">
 
@@ -11,7 +14,7 @@ Check my **[Discord](https://discord.gg/KnJGY9S)** to stay updated on this repos
 A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.
 
 Author: *"Nicolo (fenix) Santilio"*  
-Version: *0.2.8*  
+Version: *0.2.9*  
 Wiki: *[wip]*  
 Godot Version: *3.2stable*  
 
