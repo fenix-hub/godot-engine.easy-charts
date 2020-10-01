@@ -3,14 +3,14 @@ extends Chart2D
 
 """
 [Linechart2D] - General purpose node for Line Charts
-A line chart or line plot or line graph or curve chart is a type of chart which 
-displays information as a series of data points called 'markers' 
+A line chart or line plot or line graph or curve chart is a type of chart which
+displays information as a series of data points called 'markers'
 connected by straight line segments.
-It is a basic type of chart common in many fields. It is similar to a scatter plot 
-except that the measurement points are ordered (typically by their x-axis value) 
-and joined with straight line segments. 
-A line chart is often used to visualize a trend in data over intervals of time – 
-a time series – thus the line is often drawn chronologically. 
+It is a basic type of chart common in many fields. It is similar to a scatter plot
+except that the measurement points are ordered (typically by their x-axis value)
+and joined with straight line segments.
+A line chart is often used to visualize a trend in data over intervals of time –
+a time series – thus the line is often drawn chronologically.
 In these cases they are known as run charts.
 / source : Wikipedia /
 """
@@ -36,7 +36,7 @@ var OFFSET : Vector2 = Vector2(0,0)
 #-------------------------------------------------------------------------#
 var origin : Vector2
 
-# actual distance between x and y values 
+# actual distance between x and y values
 var x_pass : float
 var y_pass : float
 
@@ -123,6 +123,7 @@ func _ready():
 
 func _get_children():
 	OutlinesTween = $OutlinesTween
+	FunctionsTween = $FunctionsTween
 	Functions = $Functions
 	GridTween = $GridTween
 	PointData = $PointData/PointData
@@ -139,7 +140,7 @@ func _set_size(size : Vector2):
 		Outlines.set_point_position(2,Vector2(SIZE.x,origin.y))
 		Outlines.set_point_position(3,origin)
 		Outlines.set_point_position(4,Vector2(origin.x,0))
-		
+
 		Grid.get_node("VLine").set_point_position(0,Vector2((OFFSET.x+SIZE.x)/2,0))
 		Grid.get_node("VLine").set_point_position(1,Vector2((OFFSET.x+SIZE.x)/2,origin.y))
 		Grid.get_node("HLine").set_point_position(0,Vector2(origin.x,origin.y/2))
@@ -165,12 +166,12 @@ func load_font():
 
 func _plot(source_ : String, delimiter_ : String, are_values_columns_ : bool, x_values_index_ : int):
 	randomize()
-	
+
 	clear()
-	
+
 	load_font()
 	PointData.hide()
-	
+
 	datas = read_datas(source_,delimiter_)
 	count_functions()
 	structure_datas(datas,are_values_columns_,x_values_index_)
@@ -179,18 +180,18 @@ func _plot(source_ : String, delimiter_ : String, are_values_columns_ : bool, x_
 	calculate_coordinates()
 	calculate_colors()
 	draw_chart()
-	
+
 	create_legend()
 	emit_signal("chart_plotted", self)
 
 func plot():
 	randomize()
-	
+
 	clear()
-	
+
 	load_font()
 	PointData.hide()
-	
+
 	if source == "" or source == null:
 		Utilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
 		return
@@ -202,7 +203,7 @@ func plot():
 	calculate_coordinates()
 	calculate_colors()
 	draw_chart()
-	
+
 	create_legend()
 	emit_signal("chart_plotted", self)
 
@@ -279,7 +280,7 @@ func draw_function(f_index : int, function : Array):
 	var line : Line2D = Line2D.new()
 	var backline : Line2D = Line2D.new()
 	construct_line(line,backline,f_index,function)
-	var pointv : Point 
+	var pointv : Point
 	for point in function.size():
 		pointv = point_node.instance()
 		Functions.add_child(pointv)
@@ -358,7 +359,7 @@ func structure_datas(database : Array, are_values_columns : bool, x_values_index
 			for data in y_datas:
 				for value in data.size():
 					data[value] = data[value] as float
-	
+
 	# draw y labels
 	var to_order : Array
 	var to_order_min : Array
@@ -371,7 +372,7 @@ func structure_datas(database : Array, are_values_columns : bool, x_values_index
 		var margin_min = ordered_cluster[0]
 		to_order.append(margin_max)
 		to_order_min.append(margin_min)
-	
+
 	to_order.sort()
 	to_order_min.sort()
 	var margin = to_order.pop_back()
@@ -385,12 +386,12 @@ func structure_datas(database : Array, are_values_columns : bool, x_values_index
 		multi+=1
 		p = (v_dist*multi) + ((y_margin_min) if not origin_at_zero else 0)
 		y_chors.append(p as String)
-	
+
 	# draw x_labels
 	if not show_x_values_as_labels:
 		to_order.clear()
 		to_order = x_datas as PoolIntArray
-		
+
 		to_order.sort()
 		margin = to_order.pop_back()
 		if not origin_at_zero:
@@ -415,7 +416,7 @@ func calculate_pass():
 			x_chors = x_datas as PoolStringArray
 		else:
 			x_chors = x_labels
-	
+
 	# calculate distance in pixel between 2 consecutive values/datas
 	x_pass = (SIZE.x - OFFSET.x) / (x_chors.size()-1)
 	y_pass = origin.y / (y_chors.size()-1)
@@ -425,7 +426,7 @@ func calculate_coordinates():
 	y_coordinates.clear()
 	point_values.clear()
 	point_positions.clear()
-	
+
 	if invert_chart:
 		for column in y_datas[0].size():
 			var single_coordinates : Array
@@ -444,7 +445,7 @@ func calculate_coordinates():
 				else:
 					single_coordinates.append((cluster[value] - y_margin_min)*y_pass/v_dist)
 			y_coordinates.append(single_coordinates)
-	
+
 	if show_x_values_as_labels:
 		for x in x_datas.size():
 			x_coordinates.append(x_pass*x)
@@ -457,11 +458,11 @@ func calculate_coordinates():
 					x_coordinates.append(x_datas[x]*x_pass/h_dist)
 			else:
 				x_coordinates.append((x_datas[x] - x_margin_min)*x_pass/h_dist)
-	
+
 	for f in functions:
 		point_values.append([])
 		point_positions.append([])
-	
+
 	if invert_chart:
 		for function in y_coordinates.size():
 			for function_value in y_coordinates[function].size():
@@ -553,7 +554,7 @@ func apply_template(template_name : int):
 		box_color = Color(custom_template.outline_color)
 		font_color = Color(custom_template.font_color)
 	property_list_changed_notify()
-	
+
 	if Engine.editor_hint:
 		_get_children()
 		Outlines.set_default_color(box_color)
