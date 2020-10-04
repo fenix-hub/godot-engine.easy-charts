@@ -115,11 +115,14 @@ var templates: Dictionary = {}
 signal chart_plotted(chart)
 signal point_pressed(point)
 
+
 func _point_plotted():
     pass
 
+
 func _ready():
     _get_children()
+
 
 func _get_children():
     OutlinesTween = $OutlinesTween
@@ -129,6 +132,7 @@ func _get_children():
     PointData = $PointData/PointData
     Outlines = $Outlines
     Grid = $Grid
+
 
 func _set_size(size: Vector2):
     SIZE = size
@@ -146,10 +150,12 @@ func _set_size(size: Vector2):
         Grid.get_node("HLine").set_point_position(0, Vector2(origin.x, origin.y / 2))
         Grid.get_node("HLine").set_point_position(1, Vector2(SIZE.x, origin.y / 2))
 
+
 func clear():
     Outlines.points = []
     Grid.get_node("HLine").queue_free()
     Grid.get_node("VLine").queue_free()
+
 
 func load_font():
     if font != null:
@@ -163,6 +169,7 @@ func load_font():
         lbl.free()
     if bold_font != null:
         PointData.Data.set("custom_fonts/font",bold_font)
+
 
 func _plot(source_: String, delimiter_: String, are_values_columns_: bool, x_values_index_: int):
     randomize()
@@ -183,6 +190,7 @@ func _plot(source_: String, delimiter_: String, are_values_columns_: bool, x_val
 
     create_legend()
     emit_signal("chart_plotted", self)
+
 
 func plot():
     randomize()
@@ -207,16 +215,19 @@ func plot():
     create_legend()
     emit_signal("chart_plotted", self)
 
+
 func calculate_colors():
     if function_colors.empty() or function_colors.size() < functions:
         for function in functions:
             function_colors.append(Color("#1e1e1e"))
+
 
 func draw_chart():
     draw_outlines()
     draw_v_grid()
     draw_h_grid()
     draw_functions()
+
 
 func draw_outlines():
     if boxed:
@@ -263,6 +274,7 @@ func draw_outlines():
     OutlinesTween.start()
     yield(OutlinesTween, "tween_all_completed")
 
+
 func draw_v_grid():
     for p in x_chors.size():
         var point: Vector2 = origin + Vector2((p) * x_pass, 0)
@@ -281,6 +293,7 @@ func draw_v_grid():
                 Tween.EASE_OUT)
         GridTween.start()
         yield(GridTween,"tween_all_completed")
+
 
 func draw_h_grid():
     for p in y_chors.size():
@@ -311,9 +324,11 @@ func add_label(point: Vector2, text: String):
         lbl.rect_position = point
         lbl.set_text(text)
 
+
 func draw_functions():
     for function in point_positions.size():
         draw_function(function, point_positions[function])
+
 
 func draw_function(f_index: int, function: Array):
     var line: Line2D = Line2D.new()
@@ -360,6 +375,7 @@ func construct_line(line: Line2D, backline: Line2D, f_index: int, function: Arra
     line.antialiased = true
     Functions.add_child(line)
 
+
 func read_datas(source: String, delimiter: String):
     var file: File = File.new()
     file.open(source, File.READ)
@@ -372,6 +388,7 @@ func read_datas(source: String, delimiter: String):
         if data.size() < 2:
             content.erase(data)
     return content
+
 
 func structure_datas(database: Array, are_values_columns: bool, x_values_index: int):
     # @x_values_index can be either a column or a row relative to x values
@@ -458,8 +475,10 @@ func structure_datas(database: Array, are_values_columns: bool, x_values_index: 
             p = (h_dist * multi) + (x_margin_min if not origin_at_zero else 0)
             x_labels.append(p as String)
 
+
 func build_chart():
     origin = Vector2(OFFSET.x, SIZE.y - OFFSET.y)
+
 
 func calculate_pass():
     if invert_chart:
@@ -473,6 +492,7 @@ func calculate_pass():
     # calculate distance in pixel between 2 consecutive values/datas
     x_pass = (SIZE.x - OFFSET.x) / (x_chors.size() - 1)
     y_pass = origin.y / (y_chors.size() - 1)
+
 
 func calculate_coordinates():
     x_coordinates.clear()
@@ -545,6 +565,7 @@ func calculate_coordinates():
                         x_coordinates[y] + origin.x,
                         origin.y - y_coordinates[cluster][y]))
 
+
 func redraw():
     build_chart()
     calculate_pass()
@@ -556,8 +577,10 @@ func show_data(point):
     PointData.update_datas(point)
     PointData.show()
 
+
 func hide_data():
     PointData.hide()
+
 
 func clear_points():
     function_colors.clear()
@@ -565,17 +588,21 @@ func clear_points():
         for function in Functions.get_children():
             function.queue_free()
 
+
 func set_legend(l: Array):
     legend = l
 
+
 func get_legend():
     return legend
+
 
 func invert_chart():
     invert_chart = !invert_chart
     count_functions()
     redraw()
     create_legend()
+
 
 func count_functions():
     if are_values_columns:
@@ -588,6 +615,7 @@ func count_functions():
             functions = datas[0].size() - 1
         else:
             functions = datas.size() - 1
+
 
 func create_legend():
     legend.clear()
@@ -605,6 +633,7 @@ func create_legend():
             legend_font = bold_font
         function_legend.create_legend(f_name, function_colors[function], bold_font, font_color)
         legend.append(function_legend)
+
 
 func apply_template(template_name: int):
     template = template_name
@@ -624,8 +653,10 @@ func apply_template(template_name: int):
         Grid.get_node("VLine").set_default_color(v_lines_color)
         Grid.get_node("HLine").set_default_color(h_lines_color)
 
+
 func _enter_tree():
     _ready()
+
 
 # Signal Repeaters
 func point_pressed(point: Point) -> Point:
