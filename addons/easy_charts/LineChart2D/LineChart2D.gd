@@ -14,6 +14,42 @@ extends Chart2D
 # Source: Wikipedia
 
 
+signal chart_plotted(chart)
+signal point_pressed(point)
+
+
+const OFFSET: Vector2 = Vector2(0,0)
+
+
+export (Vector2) var SIZE: Vector2 = Vector2() setget _set_size
+export (String, FILE, "*.txt, *.csv") var source: String = ""
+export (String) var delimiter: String = ";"
+export (bool) var origin_at_zero: bool = true
+
+export (bool) var are_values_columns: bool = false
+export (int, 0, 100) var x_values_index: int = 0
+export(bool) var show_x_values_as_labels: bool = true
+
+#export (float,1,20,0.5) var column_width: float = 10
+#export (float,0,10,0.5) var column_gap: float = 2
+
+export (float, 0.1, 10.0) var x_decim: float = 5.0
+export (float, 0.1, 10.0) var y_decim: float = 5.0
+export (PointShapes) var point_shape: int = 0
+export (PoolColorArray) var function_colors = [Color("#1e1e1e")]
+export (Color) var v_lines_color: Color = Color("#cacaca")
+export (Color) var h_lines_color: Color = Color("#cacaca")
+
+export (bool) var boxed: bool = true
+export (Color) var box_color: Color = Color("#1e1e1e")
+export (Font) var font: Font
+export (Font) var bold_font: Font
+export (Color) var font_color: Color = Color("#1e1e1e")
+export (TemplatesNames) var template: int = Chart.TemplatesNames.Default setget apply_template
+export (float, 0.1, 1) var drawing_duration: float = 0.5
+export (bool) var invert_chart: bool = false
+
+
 var OutlinesTween: Tween
 var FunctionsTween: Tween
 var Functions: Node2D
@@ -29,9 +65,6 @@ var font_size: float = 16
 var const_height: float = font_size / 2 * font_size / 20
 var const_width: float = font_size / 2
 
-var OFFSET: Vector2 = Vector2(0,0)
-
-#-------------------------------------------------------------------------#
 var origin: Vector2
 
 # actual distance between x and y values
@@ -77,41 +110,9 @@ var point_values: Array
 # actual position of points in pixel
 var point_positions: Array
 
-var legend: Array setget set_legend,get_legend
-
-# ---------------------
-export (Vector2) var SIZE: Vector2 = Vector2() setget _set_size
-export (String, FILE, "*.txt, *.csv") var source: String = ""
-export (String) var delimiter: String = ";"
-export (bool) var origin_at_zero: bool = true
-
-export (bool) var are_values_columns: bool = false
-export (int, 0, 100) var x_values_index: int = 0
-export(bool) var show_x_values_as_labels: bool = true
-
-#export (float,1,20,0.5) var column_width: float = 10
-#export (float,0,10,0.5) var column_gap: float = 2
-
-export (float, 0.1, 10.0) var x_decim: float = 5.0
-export (float, 0.1, 10.0) var y_decim: float = 5.0
-export (PointShapes) var point_shape: int = 0
-export (PoolColorArray) var function_colors = [Color("#1e1e1e")]
-export (Color) var v_lines_color: Color = Color("#cacaca")
-export (Color) var h_lines_color: Color = Color("#cacaca")
-
-export (bool) var boxed: bool = true
-export (Color) var box_color: Color = Color("#1e1e1e")
-export (Font) var font: Font
-export (Font) var bold_font: Font
-export (Color) var font_color: Color = Color("#1e1e1e")
-export (TemplatesNames) var template: int = Chart.TemplatesNames.Default setget apply_template
-export (float, 0.1, 1) var drawing_duration: float = 0.5
-export (bool) var invert_chart: bool = false
+var legend: Array setget set_legend, get_legend
 
 var templates: Dictionary = {}
-
-signal chart_plotted(chart)
-signal point_pressed(point)
 
 
 func _point_plotted():
