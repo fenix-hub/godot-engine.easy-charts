@@ -244,18 +244,18 @@ func draw_outlines():
         OutlinesTween.interpolate_method(
                 Outlines,
                 "add_point",
-                Vector2(SIZE.x,0),
+                Vector2(SIZE.x, 0),
                 Vector2(SIZE.x, origin.y),
                 drawing_duration * 0.5,
                 Tween.TRANS_QUINT,
                 Tween.EASE_OUT)
         OutlinesTween.start()
-        yield(OutlinesTween,"tween_all_completed")
+        yield(OutlinesTween, "tween_all_completed")
 
     OutlinesTween.interpolate_method(
             Outlines,
             "add_point",
-            Vector2(SIZE.x,origin.y),
+            Vector2(SIZE.x, origin.y),
             origin,
             drawing_duration * 0.5,
             Tween.TRANS_QUINT,
@@ -301,12 +301,12 @@ func draw_h_grid():
         Grid.add_child(h_grid)
         h_grid.set_width(1)
         h_grid.set_default_color(h_lines_color)
-        add_label(point-Vector2(y_chors[p].length() * const_width + font_size, font_size / 2), y_chors[p])
+        add_label(point - Vector2(y_chors[p].length() * const_width + font_size, font_size / 2), y_chors[p])
         GridTween.interpolate_method(
                 h_grid,
                 "add_point",
                 point,
-                Vector2(SIZE.x,point.y),
+                Vector2(SIZE.x, point.y),
                 drawing_duration / (y_chors.size()),
                 Tween.TRANS_EXPO,
                 Tween.EASE_OUT)
