@@ -171,7 +171,7 @@ func load_font():
         PointData.Data.set("custom_fonts/font",bold_font)
 
 
-func _plot(source_: String, delimiter_: String, are_values_columns_: bool, x_values_index_: int):
+func _plot(source: String, delimiter: String, are_values_columns: bool, x_values_index: int):
     randomize()
 
     clear()
@@ -179,9 +179,9 @@ func _plot(source_: String, delimiter_: String, are_values_columns_: bool, x_val
     load_font()
     PointData.hide()
 
-    datas = read_datas(source_,delimiter_)
+    datas = read_datas(source, delimiter)
     count_functions()
-    structure_datas(datas, are_values_columns_, x_values_index_)
+    structure_datas(datas, are_values_columns, x_values_index)
     build_chart()
     calculate_pass()
     calculate_coordinates()
