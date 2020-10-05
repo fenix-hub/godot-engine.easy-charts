@@ -1,19 +1,18 @@
 tool
 extends Chart
 
-"""
-[Linechart] - General purpose node for Line Charts
-A line chart or line plot or line graph or curve chart is a type of chart which 
-displays information as a series of data points called 'markers' 
-connected by straight line segments.
-It is a basic type of chart common in many fields. It is similar to a scatter plot 
-except that the measurement points are ordered (typically by their x-axis value) 
-and joined with straight line segments. 
-A line chart is often used to visualize a trend in data over intervals of time – 
-a time series – thus the line is often drawn chronologically. 
-In these cases they are known as run charts.
-/ source : Wikipedia /
-"""
+# [Linechart] - General purpose node for Line Charts
+# A line chart or line plot or line graph or curve chart is a type of chart which
+# displays information as a series of data points called 'markers'
+# connected by straight line segments.
+# It is a basic type of chart common in many fields. It is similar to a scatter plot
+# except that the measurement points are ordered (typically by their x-axis value)
+# and joined with straight line segments.
+# A line chart is often used to visualize a trend in data over intervals of time –
+# a time series – thus the line is often drawn chronologically.
+# In these cases they are known as run charts.
+# Source: Wikipedia
+
 
 # ---------------------
 
@@ -39,7 +38,7 @@ func _get_property_list():
             "name": "Chart_Properties/show_x_values_as_labels",
             "type": TYPE_BOOL
         },
-        
+
         # Chart Display
         {
             "hint": PROPERTY_HINT_RANGE,
@@ -55,14 +54,14 @@ func _get_property_list():
             "name": "Chart_Display/y_decim",
             "type": TYPE_REAL
         },
-        
+
         # Chart Style
-        { 
-            "hint": 24, 
+        {
+            "hint": 24,
             "hint_string": "%d/%d:%s"%[TYPE_INT, PROPERTY_HINT_ENUM,
             PoolStringArray(PointShapes.keys()).join(",")],
-            "name": "Chart_Style/points_shape", 
-            "type": TYPE_ARRAY, 
+            "name": "Chart_Style/points_shape",
+            "type": TYPE_ARRAY,
             "usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE
         },
         {
@@ -118,7 +117,7 @@ func _get_property_list():
             "name": "Chart_Style/template",
             "type": TYPE_INT
         },
-        
+
         # Chart Modifiers
         {
             "hint": PROPERTY_HINT_NONE,
@@ -167,7 +166,7 @@ func structure_datas(database : Array, are_values_columns : bool, x_values_index
             for data in y_datas:
                 for value in data.size():
                     data[value] = data[value] as float
-    
+
     # draw y labels
     var to_order : Array
     var to_order_min : Array
@@ -180,7 +179,7 @@ func structure_datas(database : Array, are_values_columns : bool, x_values_index
         var margin_min = ordered_cluster[0]
         to_order.append(margin_max)
         to_order_min.append(margin_min)
-    
+
     to_order.sort()
     to_order_min.sort()
     var margin = to_order.pop_back()
@@ -194,12 +193,12 @@ func structure_datas(database : Array, are_values_columns : bool, x_values_index
         multi+=1
         p = (v_dist*multi) + ((y_margin_min) if not origin_at_zero else 0)
         y_chors.append(p as String)
-    
+
     # draw x_labels
     if not show_x_values_as_labels:
         to_order.clear()
         to_order = x_datas as PoolIntArray
-        
+
         to_order.sort()
         margin = to_order.pop_back()
         if not origin_at_zero:
@@ -225,7 +224,7 @@ func calculate_pass():
             x_chors = x_datas as PoolStringArray
         else:
             x_chors = x_labels
-    
+
     # calculate distance in pixel between 2 consecutive values/datas
     x_pass = (SIZE.x - OFFSET.x) / (x_chors.size()-1)
     y_pass = origin.y / (y_chors.size()-1)
@@ -235,7 +234,7 @@ func calculate_coordinates():
     y_coordinates.clear()
     point_values.clear()
     point_positions.clear()
-    
+
     if invert_chart:
         for column in y_datas[0].size():
             var single_coordinates : Array
@@ -254,7 +253,7 @@ func calculate_coordinates():
                 else:
                     single_coordinates.append((cluster[value] - y_margin_min)*y_pass/v_dist)
             y_coordinates.append(single_coordinates)
-    
+
     if show_x_values_as_labels:
         for x in x_datas.size():
             x_coordinates.append(x_pass*x)
@@ -267,11 +266,11 @@ func calculate_coordinates():
                     x_coordinates.append(x_datas[x]*x_pass/h_dist)
             else:
                 x_coordinates.append((x_datas[x] - x_margin_min)*x_pass/h_dist)
-    
+
     for f in functions:
         point_values.append([])
         point_positions.append([])
-    
+
     if invert_chart:
         for function in y_coordinates.size():
             for function_value in y_coordinates[function].size():
@@ -293,32 +292,32 @@ func calculate_coordinates():
 
 func _draw():
     clear_points()
-    
+
     draw_grid()
     draw_chart_outlines()
-    
+
     var defined_colors : bool = false
     if function_colors.size():
         defined_colors = true
-    
+
     for _function in point_values.size():
         var PointContainer : Control = Control.new()
         Points.add_child(PointContainer)
-        
+
         for function_point in point_values[_function].size():
             var point : Point = point_node.instance()
             point.connect("_point_pressed",self,"point_pressed")
             point.connect("_mouse_entered",self,"show_data")
             point.connect("_mouse_exited",self,"hide_data")
-            
-            point.create_point(points_shape[_function], function_colors[function_point if invert_chart else _function], 
-            Color.white, point_positions[_function][function_point], 
-            point.format_value(point_values[_function][function_point], false, false), 
+
+            point.create_point(points_shape[_function], function_colors[function_point if invert_chart else _function],
+            Color.white, point_positions[_function][function_point],
+            point.format_value(point_values[_function][function_point], false, false),
             y_labels[function_point if invert_chart else _function] as String)
-            
+
             PointContainer.add_child(point)
             if function_point > 0:
-                draw_line(point_positions[_function][function_point-1], point_positions[_function][function_point], 
+                draw_line(point_positions[_function][function_point-1], point_positions[_function][function_point],
                 function_colors[function_point if invert_chart else _function], 2, false)
 
 func draw_grid():
@@ -330,7 +329,7 @@ func draw_grid():
         # ascisse
         draw_line(point-Vector2(0,5),point,v_lines_color,1,true)
         draw_string(font,point+Vector2(-const_width/2*x_chors[p].length(),font_size+const_height),x_chors[p],font_color)
-    
+
     # ordinate
     for p in y_chors.size():
         var point : Vector2 = origin-Vector2(0,(p)*y_pass)
