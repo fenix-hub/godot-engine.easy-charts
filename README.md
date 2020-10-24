@@ -3,11 +3,6 @@
   <img src="https://github.com/fenix-hub/ColoredBadges/blob/master/svg/social/discord.svg" alt="react" style="vertical-align:top; margin:6px 4px">
 </a>
 
-*You can support me here*  
-<a href="https://paypal.me/NSantilio?locale.x=it_IT">
-  <img src="https://github.com/fenix-hub/ColoredBadges/blob/master/svg/financial/paypal.svg" alt="react" style="vertical-align:top; margin:6px 4px">
-</a>
-
 <img src="addons/easy_charts/icon.png" align="left" width="64" height="64">
 
 # Easy Charts
