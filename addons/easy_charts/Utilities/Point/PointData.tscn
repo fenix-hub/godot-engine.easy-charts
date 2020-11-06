@@ -24,8 +24,10 @@ corner_detail = 20
 [node name="PointData" type="PanelContainer" parent="."]
 anchor_right = 0.0694688
 anchor_bottom = 0.067
-margin_right = -0.136002
-margin_bottom = 0.799999
+margin_left = -256.805
+margin_top = -36.1267
+margin_right = -256.941
+margin_bottom = -35.3267
 grow_horizontal = 2
 mouse_filter = 2
 custom_styles/panel = SubResource( 1 )

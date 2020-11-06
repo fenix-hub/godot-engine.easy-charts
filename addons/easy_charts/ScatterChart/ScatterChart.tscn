@@ -27,7 +27,7 @@ Chart_Properties/show_x_values_as_labels = true
 Chart_Display/x_decim = 5.0
 Chart_Display/y_decim = 5.0
 Chart_Style/points_shape = [ 0 ]
-Chart_Style/function_colors = [ "#1e1e1e", "#1e1e1e", "#1e1e1e", "#1e1e1e" ]
+Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
 Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
@@ -76,10 +76,10 @@ __meta__ = {
 
 [node name="PointData" parent="PointData" index="0"]
 visible = false
-margin_left = 252.182
-margin_top = 37.3706
-margin_right = 252.046
-margin_bottom = 38.1706
+margin_left = -19.0
+margin_top = -63.0
+margin_right = -19.136
+margin_bottom = -62.2
 theme = SubResource( 1 )
 
 [editable path="PointData"]

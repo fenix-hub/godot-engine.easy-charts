@@ -9,6 +9,7 @@ signal point_pressed(point)
 onready var PointData = $PointData/PointData
 onready var Points = $Points
 onready var Legend = $Legend
+onready var ChartName : Label = $ChartName
 
 # Scenes and Reosurces ......................
 var point_node : PackedScene = preload("../Point/Point.tscn")
@@ -256,25 +257,6 @@ func _ready():
 	templates = Utilities._load_templates()
 
 # .......................... Shared Functions and virtuals ........................
-
-#func _plot(source_ : String, delimiter_ : String, are_values_columns_ : bool, x_values_index_ : int, invert_chart_ : bool = false):
-#	randomize()
-#
-#	load_font()
-#	PointData.hide()
-#
-#	datas = read_datas(source_,delimiter_)
-#	structure_datas(datas,are_values_columns_,x_values_index_)
-#	build_chart()
-#	count_functions()
-#	calculate_pass()
-#	calculate_coordinates()
-#	calculate_colors()
-#	set_shapes()
-#	create_legend()
-#	emit_signal("chart_plotted")
-
-
 func plot():
 	load_font()
 	PointData.hide()
@@ -284,7 +266,27 @@ func plot():
 		return
 	
 	datas = read_datas(source)
-	structure_datas(datas,are_values_columns,labels_index)
+	structure_datas(datas.duplicate(true),are_values_columns,labels_index)
+	build_chart()
+	count_functions()
+	calculate_pass()
+	calculate_coordinates()
+	calculate_colors()
+	set_shapes()
+	create_legend()
+	emit_signal("chart_plotted",self)
+	connect("item_rect_changed", self, "redraw")
+
+func plot_from_csv(csv_file : String, _delimiter : String = delimiter):
+	load_font()
+	PointData.hide()
+	
+	if csv_file == "" or csv_file == null:
+		Utilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
+		return
+	
+	datas = read_datas(csv_file, _delimiter)
+	structure_datas(datas.duplicate(true),are_values_columns,labels_index)
 	build_chart()
 	count_functions()
 	calculate_pass()
@@ -294,12 +296,51 @@ func plot():
 	create_legend()
 	emit_signal("chart_plotted",self)
 
+func plot_from_array(array : Array) -> void:
+	load_font()
+	PointData.hide()
+	
+	if array.empty():
+		Utilities._print_message("Can't plot a chart without an empty Array.",1)
+		return
+	
+	datas = array
+	structure_datas(datas.duplicate(true),are_values_columns,labels_index)
+	build_chart()
+	count_functions()
+	calculate_pass()
+	calculate_coordinates()
+	calculate_colors()
+	set_shapes()
+	create_legend()
+	emit_signal("chart_plotted",self)
+
+func update_plot_data(array : Array) -> void:
+	if array.empty():
+		Utilities._print_message("Can't plot a chart without an empty Array.",1)
+		return
+	
+	datas.append(array)
+	structure_datas(datas.duplicate(true),are_values_columns,labels_index)
+	redraw()
+	count_functions()
+	calculate_colors()
+	set_shapes()
+	create_legend()
+	emit_signal("chart_plotted",self)
+	
+	update()
+
+func plot_placeholder() -> void:
+	pass
+
 func load_font():
 	if font != null:
 		font_size = font.get_height()
 		var theme : Theme = Theme.new()
 		theme.set_default_font(font)
-		PointData.set_theme(theme)
+		set_theme(theme)
+		
 	else:
 		var lbl = Label.new()
 		font = lbl.get_font("")
@@ -308,21 +349,20 @@ func load_font():
 		PointData.Data.set("custom_fonts/font",bold_font)
 
 func calculate_colors():
-	if function_colors.empty() or function_colors.size() < functions:
-		for function in functions:
-			function_colors.append(Color("#1e1e1e"))
+	if function_colors.size() <= functions:
+		for function in range(functions - function_colors.size() + 1): function_colors.append(Color(randf(),randf(), randf()))
 
 func set_shapes():
 	if points_shape.empty() or points_shape.size() < functions:
 		for function in functions:
 			points_shape.append(PointShapes.Dot)
 
-func read_datas(source : String):
+func read_datas(source : String, _delimiter : String = delimiter):
 	var file : File = File.new()
 	file.open(source,File.READ)
 	var content : Array
 	while not file.eof_reached():
-		var line : PoolStringArray = file.get_csv_line(delimiter)
+		var line : PoolStringArray = file.get_csv_line(_delimiter)
 		content.append(line)
 	file.close()
 	for data in content:
@@ -355,24 +395,41 @@ func redraw():
 	calculate_coordinates()
 	update()
 
+func clean_variables():
+	x_datas.clear()
+	y_datas.clear()
+	x_label = ""
+	x_labels.clear()
+	y_labels.clear()
+
 # .................. VIRTUAL FUNCTIONS .........................
-func calculate_pass():
-	pass
-
-func calculate_coordinates():
-	pass
-
 func structure_datas(database : Array, are_values_columns : bool, labels_index : int):
 	pass
 
 func build_chart():
 	pass
 
+func calculate_pass():
+	pass
+
+func calculate_coordinates():
+	pass
+
 func function_colors():
 	pass
 
 func create_legend():
-	pass
+	legend.clear()
+	for function in functions:
+		var function_legend = FunctionLegend.instance()
+		var f_name : String = y_labels[function]
+		var legend_font : Font
+		if font != null:
+			legend_font = font
+		if bold_font != null:
+			legend_font = bold_font
+		function_legend.create_legend(f_name,function_colors[function],bold_font,font_color)
+		legend.append(function_legend)
 
 # ........................... Shared Setters & Getters ..............................
 func apply_template(template_name : int):
@@ -409,7 +466,7 @@ func set_chart_colors(f_colors : Array, o_color : Color, b_color : Color, g_colo
 	v_lines_color = v_lines
 
 # !!! API v2
-func set_chart_fonts(normal_font : Font, bold_font : Font, f_color : Color):
+func set_chart_fonts(normal_font : Font, bold_font : Font, f_color : Color = Color.white):
 	font = normal_font
 	self.bold_font = bold_font
 	font_color = f_color
@@ -542,3 +599,7 @@ func show_data(point : Point):
 
 func hide_data():
 	PointData.hide()
+
+func show_slice_data(slice : Slice):
+	PointData.update_slice_datas(slice)
+	PointData.show()
