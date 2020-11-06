@@ -144,6 +144,7 @@ This library offers a set of charts for each main Godot Node:
 - Parliament Chart
 
 ### Some Examples    
+![example_Piechart](imgs/real_time_piechart.gif)
 ![exampleradar](imgs/radar.png)
 ![example01](imgs/scatter.gif)
 ![example02](imgs/example02.png)
