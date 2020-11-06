@@ -9,7 +9,7 @@
 A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.
 
 Author: *"Nicolo (fenix) Santilio"*  
-Version: *0.3.1*  
+Version: *0.4.1*  
 Wiki: *[wip]*  
 Godot Version: *3.2stable*  
 

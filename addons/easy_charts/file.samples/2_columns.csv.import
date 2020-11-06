@@ -1,0 +1,10 @@
+[remap]
+
+importer="csv"
+type="TextFile"
+
+[deps]
+
+source_file="res://addons/easy_charts/file.samples/2_columns.csv"
+[params]
+
