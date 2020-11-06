@@ -86,7 +86,7 @@ var function_names_index : int = 0			setget set_function_names_index#, get_funct
 
 # for radar
 var use_height_as_radius : bool = false		setget set_use_height_as_radius
-var radius : float = 150.0					setget _set_radius
+var radius : float = 150.0					setget _set_radius,get_radius
 
 # for columns
 var column_width : float = 10				setget set_column_width
@@ -457,7 +457,7 @@ func set_radius(use_height : bool = false, f : float = 0):
 	radius = f
 
 # !!! API v2
-func set_chart_colors(f_colors : Array, o_color : Color, b_color : Color, g_color : Color, h_lines : Color, v_lines : Color):
+func set_chart_colors(f_colors : PoolColorArray, o_color : Color, b_color : Color, g_color : Color, h_lines : Color, v_lines : Color):
 	function_colors = f_colors
 	outline_color = o_color
 	box_color = b_color
@@ -498,6 +498,10 @@ func set_use_height_as_radius(b : bool):
 
 func _set_radius(r : float):
 	radius = r
+
+func get_radius() -> float:
+	if use_height_as_radius: return get_size().y/2
+	else: return radius
 
 # ! API
 func set_column_width(f : float):

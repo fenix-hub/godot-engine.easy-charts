@@ -9,7 +9,7 @@
 A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.
 
 Author: *"Nicolo (fenix) Santilio"*  
-Version: *0.4.1*  
+Version: *0.4.2*  
 Wiki: *[wip]*  
 Godot Version: *3.2stable*  
 
@@ -72,8 +72,19 @@ You can get this result:
 | Function | Description |
 | ------------- | ------------- |
 |`plot()`|Plot the selected chart with in editor properties|
-|`_plot(source : String, delimiter : String, are_values_columns : bool, x_values : int, invert_xy : bool = false)`|Plot the selected chart with hard coded properties|
+|`plot_from_csv(csv_file : String, _delimiter : String = delimiter)`|Plot the selected chart defining the source and delimiter from code|
+|`plot_from_array(array : Array)`|Plot the selected chart giving an Array of values as a source|
+|`update_plot_data(array : Array)`|Update plot data giving an additional entry to the source|
 |`get_legend()`|Get the legend of the current chart. Returns an **Array** containing control nodes, which can be added as children |
+|*API v2*|*additional functions to define chart's properties from code. Hardcoded properties will overwrite the ones given from editor*|
+|`set_chart_name(ch_name : String)`|Set the displayed name of the chart|
+|`set_source(source_file : String)`|Set the source of the chart to plot|
+|`set_delimiter(delimiter : String)`|Set the delimiter to read data from a CSV file|
+|`set_indexes(lb : int = 0, function_names : int = 0)`|Set the optional indexes of chart's data|
+|`set_radius(use_height : bool = false, f : float = 0)`|Set the radius of the chart, if it is required. If `use_height` is true, the height of the chart will be used.|
+|`set_chart_colors(f_colors : PoolColorArray, o_color : Color, b_color : Color, g_color : Color, h_lines : Color, v_lines : Color)`|Set the colors of the chart| 
+|`set_chart_fonts(normal_font : Font, bold_font : Font, f_color : Color = Color.white)`|Set fonts  and font's color for the chart|
+|`set_source(source_file : String)`|Set the source of the chart to plot|
 
 | Signals | Description |
 | ------------- | ------------- |
@@ -122,11 +133,11 @@ This library offers a set of charts for each main Godot Node:
 - LineChart [Control, 2D, wip 3D]
 - BarChart  [Control, 2D, wipr 3D]
 - ScatterChart [wip Control, wip 2D, 3D]
+- Piechart [Control]
 - RadarChart [Control]
 
 *Work in progress*:
 - Area Chart
-- Pie Chart
 - Donut Chart
 - Radar Chart
 - Bubble Chart
