@@ -21,7 +21,6 @@ uninformative, but various heuristics, such as algorithms that plot data as the 
 total area, can be applied to sort the variables (axes) into relative positions that reveal 
 distinct correlations, trade-offs, and a multitude of other comparative measures."
 }
-delimiter = ";"
 Chart_Properties/are_values_columns = false
 Chart_Properties/labels_index = 0
 Chart_Properties/function_names_index = 0
@@ -78,10 +77,10 @@ __meta__ = {
 
 [node name="PointData" parent="PointData" index="0"]
 visible = false
-margin_left = -230.138
-margin_top = -125.6
-margin_right = -230.275
-margin_bottom = -124.801
+margin_left = 64.178
+margin_top = -142.43
+margin_right = 64.041
+margin_bottom = -141.631
 theme = SubResource( 1 )
 
 [editable path="PointData"]

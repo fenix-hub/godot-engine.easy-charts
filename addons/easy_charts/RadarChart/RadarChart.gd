@@ -1,5 +1,6 @@
 tool
 extends Chart
+class_name RadarChart
 
 """
 [RadarChart] - General purpose node for Radar Charts

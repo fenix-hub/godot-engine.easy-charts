@@ -82,10 +82,10 @@ __meta__ = {
 
 [node name="PointData" parent="PointData" index="0"]
 visible = false
-margin_left = -223.769
-margin_top = -45.5654
-margin_right = -223.906
-margin_bottom = -44.7655
+margin_left = 41.5506
+margin_top = -149.501
+margin_right = 41.4136
+margin_bottom = -148.701
 theme = SubResource( 1 )
 
 [editable path="PointData"]

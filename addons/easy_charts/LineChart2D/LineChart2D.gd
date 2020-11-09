@@ -1,5 +1,6 @@
 tool
 extends Chart2D
+class_name LineChart2D
 
 # [Linechart2D] - General purpose node for Line Charts
 # A line chart or line plot or line graph or curve chart is a type of chart which

@@ -42,4 +42,11 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0 )
 
 [node name="PointData" parent="." instance=ExtResource( 2 )]
 
+[node name="PointData" parent="PointData" index="0"]
+visible = false
+margin_left = 47.2074
+margin_top = -150.915
+margin_right = 47.0714
+margin_bottom = -150.115
+
 [editable path="PointData"]

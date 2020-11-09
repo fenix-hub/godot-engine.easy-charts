@@ -1,5 +1,6 @@
 tool
 extends Chart
+class_name PieChart
 
 var should_draw : bool = false
 var area_angles : Array 
@@ -176,9 +177,15 @@ func calculate_coordinates():
 func calculate_circle_arc_polygon(center : Vector2, radius : float, angle_from : float, angle_to : float, color : Color) -> PoolVector2Array:
 	var nb_points : int = 32
 	var points_arc : PoolVector2Array = PoolVector2Array()
+#	var chord_angle : float = ((angle_to - angle_from)/2)+angle_from
+#	angle_from += 0.2
+#	angle_to -= 0.2
+#	var displacement : Vector2 = Vector2(cos(deg2rad(chord_angle)), sin(deg2rad(chord_angle-180))).normalized()*10
+#	print(displacement)
+#	center += displacement
+#	radius+=displacement.length()
 	points_arc.push_back(center)
 	var colors : PoolColorArray = PoolColorArray([color])
-	
 	for i in range(nb_points + 1):
 		var angle_point = deg2rad(angle_from + i * (angle_to - angle_from) / nb_points - 90)
 		points_arc.push_back(center + Vector2(cos(angle_point), sin(angle_point)) * radius)

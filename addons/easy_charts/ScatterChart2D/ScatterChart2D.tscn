@@ -46,5 +46,9 @@ default_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="PointData" parent="PointData" index="0"]
 visible = false
+margin_left = 71.2491
+margin_top = -146.673
+margin_right = 71.1131
+margin_bottom = -145.873
 
 [editable path="PointData"]

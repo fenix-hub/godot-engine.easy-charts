@@ -1,8 +1,10 @@
 extends Control
 class_name Chart
 
+# Classes
+
 # Signals ..................................
-signal chart_plotted(chart)
+signal chart_plotted(chart) # emit when a chart is plotted (static) or updated (dynamic)
 signal point_pressed(point)
 
 # Onready Vars ............................
@@ -13,7 +15,7 @@ onready var ChartName : Label = $ChartName
 
 # Scenes and Reosurces ......................
 var point_node : PackedScene = preload("../Point/Point.tscn")
-var FunctionLegend : PackedScene = preload("../Legend/FunctionLegend.tscn")
+var LegendElement : PackedScene = preload("../Legend/FunctionLegend.tscn")
 
 # Enums .....................................
 enum PointShapes { Dot, Triangle, Square, Cross }
@@ -315,6 +317,8 @@ func plot_from_array(array : Array) -> void:
 	create_legend()
 	emit_signal("chart_plotted",self)
 
+# Append new data (in array format) to the already plotted data.
+# All data are stored.
 func update_plot_data(array : Array) -> void:
 	if array.empty():
 		Utilities._print_message("Can't plot a chart without an empty Array.",1)
@@ -421,7 +425,7 @@ func function_colors():
 func create_legend():
 	legend.clear()
 	for function in functions:
-		var function_legend = FunctionLegend.instance()
+		var function_legend : LegendElement = LegendElement.instance()
 		var f_name : String = y_labels[function]
 		var legend_font : Font
 		if font != null:
@@ -590,7 +594,7 @@ func set_invert_chart(b : bool):
 func set_legend(l : Array):
 	legend = l
 
-func get_legend():
+func get_legend() -> Array:
 	return legend
 
 # ............................. Shared Signals ..............................
