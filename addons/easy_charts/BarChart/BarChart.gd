@@ -1,5 +1,6 @@
 tool
 extends Chart
+class_name BarChart
 
 """
 [BarChart] - General purpose node for Bar Charts
@@ -374,7 +375,7 @@ func draw_chart_outlines():
 func create_legend():
 		legend.clear()
 		for function in functions:
-				var function_legend = FunctionLegend.instance()
+				var function_legend = LegendElement.instance()
 				var f_name : String
 				if invert_chart:
 						f_name = x_datas[function] as String

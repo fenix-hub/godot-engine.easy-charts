@@ -1,5 +1,6 @@
 tool
 extends Chart
+class_name ScatterChart
 
 """
 [ScatterChart] - General purpose node for Scatter Charts

@@ -1,5 +1,6 @@
 tool
 extends Spatial
+class_name ScatterChart3D
 
 """
 [ScatterChart] - General purpose node for Scatter Charts

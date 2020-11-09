@@ -54,9 +54,9 @@ __meta__ = {
 
 [node name="PointData" parent="PointData" index="0"]
 visible = false
-margin_left = -148.407
-margin_top = -156.174
-margin_right = -148.543
-margin_bottom = -155.375
+margin_left = -449.181
+margin_top = -266.881
+margin_right = -449.318
+margin_bottom = -266.082
 
 [editable path="PointData"]

@@ -1,5 +1,6 @@
 tool
 extends Chart2D
+class_name BarChart2D
 
 """
 [BarChart2D] - General purpose node for Bar Charts
