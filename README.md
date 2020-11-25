@@ -10,7 +10,7 @@ A library of Charts plotted in Control, 2D and 3D nodes to visualize general pur
 
 Author: *"Nicolo (fenix) Santilio"*  
 Version: *0.4.5*  
-Wiki: *[wip]*  
+Wiki: *[wip](https://github.com/fenix-hub/godot-engine.easy-charts/wiki)*  
 Godot Version: *3.2stable*  
 
 ## What is this?
