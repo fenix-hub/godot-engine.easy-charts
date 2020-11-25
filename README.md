@@ -28,7 +28,8 @@ If you need to plot a chart with some values in it and just take a screenshot, o
 
 ## How does it work?
 *Easy Charts* contains a collection of nodes for each main node in Godot: Control Nodes, 2D Nodes and 3D Spatials.  
-_tutorials and exmaple will be added in the wiki..._
+
+**_tutorials and exmaple will be added in the wiki..._**
 
 # Available Charts and when to use them    
 This library offers a set of charts for each main Godot Node:   
