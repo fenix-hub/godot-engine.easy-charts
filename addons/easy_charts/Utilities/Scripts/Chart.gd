@@ -2,6 +2,7 @@ extends Control
 class_name Chart
 
 # Classes
+enum TYPES { Line, Bar, Scatter, Radar, Pie }
 
 # Signals ..................................
 signal chart_plotted(chart) # emit when a chart is plotted (static) or updated (dynamic)
@@ -19,7 +20,6 @@ var LegendElement : PackedScene = preload("../Legend/FunctionLegend.tscn")
 
 # Enums .....................................
 enum PointShapes { Dot, Triangle, Square, Cross }
-enum TemplatesNames { Default, Clean, Gradient, Minimal, Invert }
 
 # Shared Variables .........................
 var SIZE : Vector2 = Vector2()
@@ -46,8 +46,8 @@ var y_chors : Array
 var x_coordinates : Array
 var y_coordinates : Array
 
-# datas contained in file
-var datas : Array
+# data contained in file
+var data : Array
 
 # amount of functions to represent
 var functions : int = 0
@@ -109,11 +109,16 @@ var font : Font									setget set_font
 var bold_font : Font							setget set_bold_font
 var font_color : Color = Color("#1e1e1e")		setget set_font_color
 
-var template : int = TemplatesNames.Default		setget set_template
+var template : int = 0		setget set_template
 
 # modifiers
 var rotation : float = 0						setget set_rotation
 var invert_chart : bool = false					setget set_invert_chart
+
+static func instance(chart_type : int):
+	var chart_t : String = Utilities.get_chart_type(chart_type)
+	var chart : String = "res://addons/easy_charts/%s/%s.tscn" % [chart_t, chart_t]
+	return load(chart).instance()
 
 # .......................... Properties Manager ....................................
 func _get(property):
@@ -267,13 +272,13 @@ func plot():
 		Utilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
 		return
 	
-	datas = read_datas(source)
-	structure_datas(datas.duplicate(true),are_values_columns,labels_index)
+	data = read_datas(source)
+	structure_datas(data.duplicate(true),are_values_columns,labels_index)
 	build_chart()
 	count_functions()
 	calculate_pass()
-	calculate_coordinates()
 	calculate_colors()
+	calculate_coordinates()
 	set_shapes()
 	create_legend()
 	emit_signal("chart_plotted",self)
@@ -287,13 +292,13 @@ func plot_from_csv(csv_file : String, _delimiter : String = delimiter):
 		Utilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
 		return
 	
-	datas = read_datas(csv_file, _delimiter)
-	structure_datas(datas.duplicate(true),are_values_columns,labels_index)
+	data = read_datas(csv_file, _delimiter)
+	structure_datas(data.duplicate(true),are_values_columns,labels_index)
 	build_chart()
 	count_functions()
 	calculate_pass()
-	calculate_coordinates()
 	calculate_colors()
+	calculate_coordinates()
 	set_shapes()
 	create_legend()
 	emit_signal("chart_plotted",self)
@@ -306,13 +311,32 @@ func plot_from_array(array : Array) -> void:
 		Utilities._print_message("Can't plot a chart without an empty Array.",1)
 		return
 	
-	datas = array
-	structure_datas(datas.duplicate(true),are_values_columns,labels_index)
+	data = array
+	structure_datas(data.duplicate(true),are_values_columns,labels_index)
 	build_chart()
 	count_functions()
 	calculate_pass()
-	calculate_coordinates()
 	calculate_colors()
+	calculate_coordinates()
+	set_shapes()
+	create_legend()
+	emit_signal("chart_plotted",self)
+
+func plot_from_dataframe(dataframe : DataFrame) -> void:
+	load_font()
+	PointData.hide()
+	
+	data = dataframe.get_dataset()
+	if data.empty():
+		Utilities._print_message("Can't plot a chart without an empty Array.",1)
+		return
+	
+	structure_datas(data.duplicate(true),are_values_columns,labels_index)
+	build_chart()
+	count_functions()
+	calculate_pass()
+	calculate_colors()
+	calculate_coordinates()
 	set_shapes()
 	create_legend()
 	emit_signal("chart_plotted",self)
@@ -324,8 +348,8 @@ func update_plot_data(array : Array) -> void:
 		Utilities._print_message("Can't plot a chart without an empty Array.",1)
 		return
 	
-	datas.append(array)
-	structure_datas(datas.duplicate(true),are_values_columns,labels_index)
+	data.append(array)
+	structure_datas(data.duplicate(true),are_values_columns,labels_index)
 	redraw()
 	count_functions()
 	calculate_colors()
@@ -377,14 +401,14 @@ func read_datas(source : String, _delimiter : String = delimiter):
 func count_functions():
 	if are_values_columns:
 		if not invert_chart:
-			functions = datas[0].size()-1
+			functions = data[0].size()-1
 		else:
-			functions = datas.size()-1
+			functions = data.size()-1
 	else:
 		if invert_chart:
-			functions = datas[0].size()-1
+			functions = x_datas.size()
 		else:
-				functions = datas.size()-1
+				functions = y_datas.size()
 
 func clear_points():
 	if $Points.get_children():
