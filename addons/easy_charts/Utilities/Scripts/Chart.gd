@@ -282,7 +282,6 @@ func plot():
 	set_shapes()
 	create_legend()
 	emit_signal("chart_plotted",self)
-	connect("item_rect_changed", self, "redraw")
 
 func plot_from_csv(csv_file : String, _delimiter : String = delimiter):
 	load_font()
@@ -321,6 +320,8 @@ func plot_from_array(array : Array) -> void:
 	set_shapes()
 	create_legend()
 	emit_signal("chart_plotted",self)
+	
+	if not is_connected("item_rect_changed",self, "redraw"): connect("item_rect_changed", self, "redraw")
 
 func plot_from_dataframe(dataframe : DataFrame) -> void:
 	load_font()
