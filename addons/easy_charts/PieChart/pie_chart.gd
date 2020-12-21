@@ -68,7 +68,7 @@ func _get_property_list():
 		},
 		{
 			"hint": PROPERTY_HINT_ENUM,
-			"hint_string": PoolStringArray(TemplatesNames.keys()).join(","),
+			"hint_string": PoolStringArray(Utilities.templates.keys()).join(","),
 			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 			"name": "Chart_Style/template",
 			"type": TYPE_INT
@@ -91,7 +91,7 @@ func _ready():
 	pass
 
 func plot_placeholder() -> void:
-	datas = [
+	data = [
 		["United States",46],
 		["Great Britain",27],
 		["China",26],
@@ -106,7 +106,7 @@ func plot_placeholder() -> void:
 		Color.green,
 		Color.blue
 	]
-	plot_from_array(datas)
+	plot_from_array(data)
 
 func structure_datas(database: Array, are_values_columns: bool, x_values_index: int):
 	# @x_values_index can be either a column or a row relative to x values
@@ -213,7 +213,7 @@ var mouse_on_slice : bool = false
 func _input(event):
 	if event is InputEventMouseMotion:
 		for area_idx in range(areas.size()):
-			if Geometry.is_point_in_polygon(event.global_position, areas[area_idx]):
+			if Geometry.is_point_in_polygon(event.global_position - rect_position, areas[area_idx]):
 				mouse_on_slice = true
 				mouse_on_area = area_idx
 				show_slice_data(slices[area_idx])
