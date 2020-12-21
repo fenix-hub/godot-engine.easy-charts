@@ -12,7 +12,7 @@ var function : String setget set_function, get_function
 var mouse_entered : bool = false
 
 enum SHAPES {
-		DOT, TRIANGLE, SQUARE, CROSS
+	Dot, Triangle, Square, Cross
 }
 
 var shape : int = 0 setget set_shape, get_shape
@@ -31,20 +31,23 @@ func _draw():
 	draw_point(5,color)
 
 func draw_point(size : float, color : Color):
+	var factor : float
 	match shape:
-		SHAPES.DOT:
+		SHAPES.Dot:
 			draw_circle(OFFSET, size, color)
-		SHAPES.TRIANGLE:
+		SHAPES.Triangle:
 			size+=6
+			factor = 2
 			draw_colored_polygon([
-					OFFSET-Vector2(0,size/2), OFFSET+Vector2(1,1)*size/2, OFFSET-Vector2(1,-1)*size/2
+					OFFSET-Vector2(0,size/factor), OFFSET+Vector2(1,1)*size/factor, OFFSET-Vector2(1,-1)*size/factor
 			], color,[],null,null,false)
-		SHAPES.SQUARE:
+		SHAPES.Square:
 			size+=4
+			factor = 2
 			draw_colored_polygon([
-					OFFSET-Vector2(1,1)*size/2, OFFSET-Vector2(-1,1)*size/2, OFFSET+Vector2(1,1)*size/2, OFFSET-Vector2(1,-1)*size/2
+					OFFSET-Vector2(1,1)*size/factor, OFFSET-Vector2(-1,1)*size/factor, OFFSET+Vector2(1,1)*size/factor, OFFSET-Vector2(1,-1)*size/factor
 			], color,[],null,null,false)
-		SHAPES.CROSS:
+		SHAPES.Cross:
 			size+=2
 			draw_line(OFFSET-Vector2(size,0), OFFSET+Vector2(size,0), color, size-5, true)
 			draw_line(OFFSET-Vector2(0,size), OFFSET+Vector2(0,size), color, size-5, true)

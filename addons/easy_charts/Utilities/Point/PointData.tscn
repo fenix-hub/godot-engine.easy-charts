@@ -19,15 +19,16 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 corner_detail = 20
 
-[node name="PointData" type="CanvasLayer"]
+[node name="CanvasLayer" type="CanvasLayer"]
 
 [node name="PointData" type="PanelContainer" parent="."]
+visible = false
 anchor_right = 0.0694688
 anchor_bottom = 0.067
-margin_left = -256.805
-margin_top = -36.1267
-margin_right = -256.941
-margin_bottom = -35.3267
+margin_left = 79.7858
+margin_top = -250.75
+margin_right = 79.6496
+margin_bottom = -249.95
 grow_horizontal = 2
 mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
