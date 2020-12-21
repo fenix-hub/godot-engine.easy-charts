@@ -48,7 +48,7 @@ func _get_property_list():
 		},
 		{
 			"hint": PROPERTY_HINT_RANGE,
-			"hint_string": "0.1,10",
+			"hint_string": "0.1,100",
 			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 			"name": "Chart_Display/y_decim",
 			"type": TYPE_REAL
@@ -114,7 +114,7 @@ func _get_property_list():
 		},
 		{
 			"hint": PROPERTY_HINT_ENUM,
-			"hint_string": PoolStringArray(TemplatesNames.keys()).join(","),
+			"hint_string": PoolStringArray(Utilities.templates.keys()).join(","),
 			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 			"name": "Chart_Style/template",
 			"type": TYPE_INT
@@ -142,7 +142,7 @@ func structure_datas(database: Array, are_values_columns: bool, x_values_index: 
 					if x_data.is_valid_float() or x_data.is_valid_integer():
 						x_datas.append(x_data as float)
 					else:
-						x_datas.append(x_data.replace(",", ".") as float)
+						x_datas.append(x_data)
 				else:
 					if row != 0:
 						var y_data = database[row][column]
@@ -167,7 +167,7 @@ func structure_datas(database: Array, are_values_columns: bool, x_values_index: 
 		for data in y_datas:
 			for value in data.size():
 				data[value] = data[value] as float
-
+	
 	# draw y labels
 	var to_order: Array
 	var to_order_min: Array
@@ -175,7 +175,6 @@ func structure_datas(database: Array, are_values_columns: bool, x_values_index: 
 		# define x_chors and y_chors
 		var ordered_cluster = y_datas[cluster] as Array
 		ordered_cluster.sort()
-		ordered_cluster = PoolIntArray(ordered_cluster)
 		var margin_max = ordered_cluster[ordered_cluster.size() - 1]
 		var margin_min = ordered_cluster[0]
 		to_order.append(margin_max)
@@ -186,7 +185,7 @@ func structure_datas(database: Array, are_values_columns: bool, x_values_index: 
 	var margin = to_order.pop_back()
 	if not origin_at_zero:
 		y_margin_min = to_order_min.pop_front()
-	v_dist = y_decim * pow(10.0, str(margin).length() - 2)
+	v_dist = y_decim * pow(10.0, (str(margin).length() - 2 if typeof(margin) == TYPE_INT else str(margin).length() - 4 ))
 	var multi = 0
 	var p = (v_dist * multi) + ((y_margin_min) if not origin_at_zero else 0)
 	y_chors.append(p as String)
@@ -221,15 +220,15 @@ func build_chart():
 
 func calculate_pass():
 	if invert_chart:
-		x_chors = y_labels as PoolStringArray
+		x_chors = y_labels.duplicate(true) as PoolStringArray
 	else:
 		if show_x_values_as_labels:
-			x_chors = x_datas as PoolStringArray
+			x_chors = x_datas.duplicate(true) as PoolStringArray
 		else:
-			x_chors = x_labels
+			x_chors = x_labels.duplicate(true)
 
 	# calculate distance in pixel between 2 consecutive values/datas
-	x_pass = (SIZE.x - OFFSET.x) / (x_chors.size() - 1)
+	x_pass = (SIZE.x - OFFSET.x) / (x_chors.size()-1 if x_chors.size()>1 else x_chors.size() )
 	y_pass = origin.y / (y_chors.size() - 1)
 
 
@@ -271,7 +270,7 @@ func calculate_coordinates():
 			else:
 				x_coordinates.append((x_datas[x] - x_margin_min) * x_pass / h_dist)
 
-	for f in functions:
+	for f in range(0,functions):
 		point_values.append([])
 		point_positions.append([])
 
