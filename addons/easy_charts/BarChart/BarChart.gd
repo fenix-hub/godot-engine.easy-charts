@@ -129,7 +129,7 @@ func _get_property_list():
 				},
 				{
 						"hint": PROPERTY_HINT_ENUM,
-						"hint_string": PoolStringArray(TemplatesNames.keys()).join(","),
+						"hint_string": PoolStringArray(Utilities.templatess.keys()).join(","),
 						"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 						"name": "Chart_Style/template",
 						"type": TYPE_INT

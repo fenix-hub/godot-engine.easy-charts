@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/easy_charts/Utilities/Point/PointData.tscn" type="PackedScene" id=1]
-[ext_resource path="res://addons/easy_charts/RadarChart/RadarChart.gd" type="Script" id=2]
+[ext_resource path="res://addons/easy_charts/RadarChart/radar_chart.gd" type="Script" id=2]
 
 [sub_resource type="Theme" id=1]
 
@@ -77,10 +77,10 @@ __meta__ = {
 
 [node name="PointData" parent="PointData" index="0"]
 visible = false
-margin_left = 64.178
-margin_top = -142.43
-margin_right = 64.041
-margin_bottom = -141.631
+margin_left = -448.644
+margin_top = 721.085
+margin_right = -448.781
+margin_bottom = 721.884
 theme = SubResource( 1 )
 
 [editable path="PointData"]
