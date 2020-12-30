@@ -14,7 +14,7 @@ static func random_float_range(size : Vector2, from : float, to : float, _seed :
 	return Matrix.new(array)
 
 # Generates a Matrix giving an Array (Array must by Array[Array])
-static func from_array(array : Array) -> Matrix:
+static func from_array(array : Array = []) -> Matrix:
 	var matrix : Array = []
 	matrix.append(array)
 	return Matrix.new(matrix)

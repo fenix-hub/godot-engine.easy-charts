@@ -21,7 +21,13 @@ func _to_string() -> String:
 	return string
 
 func insert_row(row : Array, index : int = _matrix.size()) -> void:
+	assert(row.size() == _matrix[0].size(), "error: the row size must match matrix row size")
 	_matrix.insert(index, row)
+
+func insert_column(column : Array, index : int = _matrix[0].size()) -> void:
+	assert(column.size() == _matrix.size(), "error: the column size must match matrix column size")
+	for row_idx in column.size():
+		_matrix[row_idx].insert(index, column[row_idx])
 
 func to_array() -> Array:
 	return _matrix.duplicate()

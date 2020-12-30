@@ -9,7 +9,7 @@
 A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.
 
 Author: *"Nicolo (fenix) Santilio"*  
-Version: *0.4.6*  
+Version: *0.5.0*  
 Wiki: *[wip](https://github.com/fenix-hub/godot-engine.easy-charts/wiki)*  
 Godot Version: *3.2stable*  
 
@@ -27,9 +27,8 @@ If you need to plot a chart with some values in it and just take a screenshot, o
 
 
 ## How does it work?
-*Easy Charts* contains a collection of nodes for each main node in Godot: Control Nodes, 2D Nodes and 3D Spatials.  
-
-**_tutorials and exmaples will be added in the wiki..._**
+There is a [WIKI](https://github.com/fenix-hub/godot-engine.easy-charts/wiki) with some tutorials, even if it is a work in progress.  
+I'll make some videos as soon as possible.
 
 # Available Charts and when to use them    
 This library offers a set of charts for each main Godot Node:   
