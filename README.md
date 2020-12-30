@@ -29,7 +29,7 @@ If you need to plot a chart with some values in it and just take a screenshot, o
 ## How does it work?
 There is a [WIKI](https://github.com/fenix-hub/godot-engine.easy-charts/wiki) with some tutorials, even if it is a work in progress.  
 I'll make some videos as soon as possible.
-  
+
 # Available Charts and when to use them    
 This library offers a set of charts for each main Godot Node:   
 - **Control Nodes:** "Control Charts" are fast Charts that can be plotted in a Control space, such as UIs or Control user interactable areas. They offer basic Control properties, such as Margins, size inheritance and control. No animations, no real time changes, just charts.   
