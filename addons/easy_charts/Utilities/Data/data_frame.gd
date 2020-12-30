@@ -34,6 +34,21 @@ func build_dataframe_from_matrix(data_matrix : Matrix, index : PoolStringArray, 
 	var data : Array = data_matrix.to_array()
 	return build_dataframe(data, index, header)
 
+func insert_column(header_n : String, column : Array, index : int = _dataframe[0].size()) -> void:
+	assert(column.size()+1 == _dataframe.size(), "error: the column size must match the dataframe column size")
+	_header.insert(index, header_n)
+	_data_matrix.insert_column(column, index-1)
+	self._dataframe = build_dataframe_from_matrix(_data_matrix, _index, _header)
+
+func insert_row(index_n : String, row : Array, index : int = _dataframe.size()) -> void:
+	assert(row.size()+1 == _dataframe[0].size(), "error: the row size must match the dataframe row size")
+	_index.insert(index-1, index_n)
+	_data_matrix.insert_row(row, index-1)
+	self._dataframe = build_dataframe_from_matrix(_data_matrix, _index, _header)
+
+func get_matrix() -> Matrix:
+	return _data_matrix
+
 func get_dataframe() -> Array:
 	return _dataframe
 
@@ -43,13 +58,14 @@ func get_dataset() -> Array:
 func get_index() -> PoolStringArray:
 	return _index
 
+
 func _to_string() -> String:
 	var last_string_len : int
 	for row in _dataframe:
 		for column in row:
 			var string_len : int = str(column).length()
 			last_string_len = string_len if string_len > last_string_len else last_string_len
-	var string : String = "\n"
+	var string : String = ""
 	for row_i in _dataframe.size():
 		for column_i in _dataframe[row_i].size():
 			string+="%*s" % [last_string_len+1, _dataframe[row_i][column_i]]
