@@ -154,14 +154,14 @@ func _get_property_list():
 	]
 
 
-func structure_datas(database: Array, are_values_columns: bool, x_values_index: int):
-	# @x_values_index can be either a column or a row relative to x values
-	self.are_values_columns = are_values_columns
+func structure_datas(database: Array):
+	# @labels_index can be either a column or a row relative to x values
+	are_values_columns = (invert_chart != are_values_columns)
 	if are_values_columns:
 		for row in database.size():
 			var t_vals: Array
 			for column in database[row].size():
-				if column == x_values_index:
+				if column == labels_index:
 					var x_data = database[row][column]
 					if x_data.is_valid_float() or x_data.is_valid_integer():
 						x_datas.append(x_data as float)
@@ -181,7 +181,7 @@ func structure_datas(database: Array, are_values_columns: bool, x_values_index: 
 		x_label = str(x_datas.pop_front())
 	else:
 		for row in database.size():
-			if row == x_values_index:
+			if row == labels_index:
 				x_datas = (database[row])
 				x_label = x_datas.pop_front() as String
 			else:
@@ -244,13 +244,10 @@ func build_chart():
 
 
 func calculate_pass():
-	if invert_chart:
-		x_chors = y_labels.duplicate(true) as PoolStringArray
+	if show_x_values_as_labels:
+		x_chors = x_datas.duplicate(true) as PoolStringArray
 	else:
-		if show_x_values_as_labels:
-			x_chors = x_datas.duplicate(true) as PoolStringArray
-		else:
-			x_chors = x_labels.duplicate(true)
+		x_chors = x_labels.duplicate(true)
 
 	# calculate distance in pixel between 2 consecutive values/datas
 	x_pass = (SIZE.x - OFFSET.x) / (x_chors.size()-1 if x_chors.size()>1 else x_chors.size() )
@@ -262,25 +259,15 @@ func calculate_coordinates():
 	y_coordinates.clear()
 	point_values.clear()
 	point_positions.clear()
-
-	if invert_chart:
-		for column in y_datas[0].size():
-			var single_coordinates: Array
-			for row in y_datas:
-				if origin_at_zero:
-					single_coordinates.append((row[column] * y_pass) / v_dist)
-				else:
-					single_coordinates.append((row[column] - y_margin_min) * y_pass / v_dist)
-			y_coordinates.append(single_coordinates)
-	else:
-		for cluster in y_datas:
-			var single_coordinates: Array
-			for value in cluster.size():
-				if origin_at_zero:
-					single_coordinates.append((cluster[value] * y_pass) / v_dist)
-				else:
-					single_coordinates.append((cluster[value] - y_margin_min) * y_pass / v_dist)
-			y_coordinates.append(single_coordinates)
+	
+	for cluster in y_datas:
+		var single_coordinates: Array
+		for value in cluster.size():
+			if origin_at_zero:
+				single_coordinates.append((cluster[value] * y_pass) / v_dist)
+			else:
+				single_coordinates.append((cluster[value] - y_margin_min) * y_pass / v_dist)
+		y_coordinates.append(single_coordinates)
 
 	if show_x_values_as_labels:
 		for x in x_datas.size():
@@ -288,10 +275,7 @@ func calculate_coordinates():
 	else:
 		for x in x_datas.size():
 			if origin_at_zero:
-				if invert_chart:
-					x_coordinates.append(x_pass * x)
-				else:
-					x_coordinates.append(x_datas[x] * x_pass / h_dist)
+				x_coordinates.append(x_datas[x] * x_pass / h_dist)
 			else:
 				x_coordinates.append((x_datas[x] - x_margin_min) * x_pass / h_dist)
 
@@ -299,33 +283,17 @@ func calculate_coordinates():
 		point_values.append([])
 		point_positions.append([])
 
-	if invert_chart:
-		for function in y_coordinates.size():
-			for function_value in y_coordinates[function].size():
-				if are_values_columns:
-					point_positions[function_value].append(Vector2(
-							x_coordinates[function] + origin.x,
-							origin.y - y_coordinates[function][function_value]))
-					point_values[function_value].append(
-							[x_datas[function_value], y_datas[function_value][function]])
-				else:
-					point_positions[function].append(Vector2(
-							x_coordinates[function_value] + origin.x,
-							origin.y - y_coordinates[function][function_value]))
-					point_values[function].append(
-							[x_datas[function_value], y_datas[function_value][function]])
-	else:
-		for cluster in y_coordinates.size():
-			for y in y_coordinates[cluster].size():
-				if are_values_columns:
-					point_values[y].append([x_datas[cluster], y_datas[cluster][y]])
-					point_positions[y].append(Vector2(
-							x_coordinates[cluster] + origin.x, origin.y - y_coordinates[cluster][y]))
-				else:
-					point_values[cluster].append([x_datas[y], y_datas[cluster][y]])
-					point_positions[cluster].append(Vector2(
-							x_coordinates[y] + origin.x,
-							origin.y - y_coordinates[cluster][y]))
+	for cluster in y_coordinates.size():
+		for y in y_coordinates[cluster].size():
+			if are_values_columns:
+				point_values[y].append([x_datas[cluster], y_datas[cluster][y]])
+				point_positions[y].append(Vector2(
+						x_coordinates[cluster] + origin.x, origin.y - y_coordinates[cluster][y]))
+			else:
+				point_values[cluster].append([x_datas[y], y_datas[cluster][y]])
+				point_positions[cluster].append(Vector2(
+						x_coordinates[y] + origin.x,
+						origin.y - y_coordinates[cluster][y]))
 
 func _draw():
 	clear_points()
@@ -346,14 +314,14 @@ func _draw():
 			point.connect("_point_pressed", self, "point_pressed")
 			point.connect("_mouse_entered", self, "show_data")
 			point.connect("_mouse_exited", self, "hide_data")
-			point.create_point(points_shape[_function],function_colors[function_point if invert_chart else _function],Color.white,point_positions[_function][function_point],point.format_value(point_values[_function][function_point], false, false),y_labels[function_point if invert_chart else _function] as String)
+			point.create_point(points_shape[_function],function_colors[_function],Color.white,point_positions[_function][function_point],point.format_value(point_values[_function][function_point], false, false),y_labels[_function] as String)
 
 			Points.add_child(point)
 			if function_point > 0:
 				draw_line(
 						point_positions[_function][function_point - 1],
 						point_positions[_function][function_point],
-						function_colors[function_point if invert_chart else _function],
+						function_colors[_function],
 						2,
 						false)
 	draw_treshold()

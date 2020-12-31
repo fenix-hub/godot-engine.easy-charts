@@ -320,7 +320,7 @@ func plot():
 	
 	
 	data = read_datas(source)
-	structure_datas(slice_data(),are_values_columns,labels_index)
+	structure_datas(slice_data())
 	build_chart()
 	count_functions()
 	calculate_pass()
@@ -339,7 +339,7 @@ func plot_from_csv(csv_file : String, _delimiter : String = delimiter):
 		return
 	
 	data = read_datas(csv_file, _delimiter)
-	structure_datas(slice_data(),are_values_columns,labels_index)
+	structure_datas(slice_data())
 	build_chart()
 	count_functions()
 	calculate_pass()
@@ -360,7 +360,7 @@ func plot_from_array(array : Array) -> void:
 		return
 	
 	data = array.duplicate()
-	structure_datas(slice_data(), are_values_columns,labels_index)
+	structure_datas(slice_data())
 	build_chart()
 	count_functions()
 	calculate_pass()
@@ -385,7 +385,7 @@ func plot_from_dataframe(dataframe : DataFrame) -> void:
 		Utilities._print_message("Can't plot a chart with an empty Array.",1)
 		return
 	
-	structure_datas(slice_data(),are_values_columns,labels_index)
+	structure_datas(slice_data())
 	build_chart()
 	count_functions()
 	calculate_pass()
@@ -405,7 +405,7 @@ func update_plot_data(array : Array) -> void:
 		return
 	
 	data.append(array)
-	structure_datas(slice_data(),are_values_columns,labels_index)
+	structure_datas(slice_data())
 	redraw()
 	count_functions()
 	calculate_colors()
@@ -463,16 +463,8 @@ func read_datas(source : String, _delimiter : String = delimiter):
 	return content
 
 func count_functions():
-	if are_values_columns:
-		if not invert_chart:
-			functions = data[0].size()-1
-		else:
-			functions = data.size()-1
-	else:
-		if invert_chart:
-			functions = x_datas.size()
-		else:
-				functions = y_datas.size()
+	if are_values_columns: functions = data[0].size()-1
+	else: functions = y_datas.size()
 
 func clear_points():
 	if $Points.get_children():
@@ -497,7 +489,7 @@ func clean_variables():
 	y_labels.clear()
 
 # .................. VIRTUAL FUNCTIONS .........................
-func structure_datas(database : Array, are_values_columns : bool, labels_index : int):
+func structure_datas(database : Array):
 	pass
 
 func build_chart():
@@ -520,7 +512,7 @@ func create_legend():
 		else:
 			function_legend = LegendElement.instance()
 			legend.append(function_legend)
-		var f_name : String = y_labels[function]
+		var f_name : String = y_labels[function] if not are_values_columns else str(x_datas[function])
 		var legend_font : Font
 		if font != null:
 			legend_font = font
