@@ -1,8 +1,10 @@
-*Want to stay updated or having an issue?*  
-<a href="https://discord.gg/KnJGY9S">
-  <img src="https://github.com/fenix-hub/ColoredBadges/blob/master/svg/social/discord.svg" alt="react" style="vertical-align:top; margin:6px 4px">
+
+<a href="https://discord.gg/KnJGY9S" align="right">
+<img src="https://github.com/fenix-hub/ColoredBadges/blob/master/svg/social/discord.svg" alt="react" style="vertical-align:top; margin:6px 4px">
 </a>
+
 <img src="addons/easy_charts/icon.png" align="left" width="64" height="64">
+
 # Easy Charts
 A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.
 Author: *"Nicolo (fenix) Santilio"*  
