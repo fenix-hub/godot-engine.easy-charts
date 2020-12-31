@@ -1,7 +1,8 @@
-
-<a href="https://discord.gg/KnJGY9S" align="right">
+<p align="right">
+<a href="https://discord.gg/KnJGY9S">
 <img src="https://github.com/fenix-hub/ColoredBadges/blob/master/svg/social/discord.svg" alt="react" style="vertical-align:top; margin:6px 4px">
 </a>
+</p>
 
 <img src="addons/easy_charts/icon.png" align="left" width="64" height="64">
 
