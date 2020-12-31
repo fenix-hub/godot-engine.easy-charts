@@ -125,11 +125,10 @@ func _get_property_list():
 				},
 		]
 
-func structure_datas(database : Array, are_values_columns : bool, labels_index : int):
+func structure_datas(database : Array):
 	# @x_values_index can be either a column or a row relative to x values
 	# @y_values can be either a column or a row relative to y values
-	self.labels_index = labels_index
-	self.are_values_columns = are_values_columns
+	are_values_columns = invert_chart != are_values_columns
 	match are_values_columns:
 		true:
 			for row in database.size():

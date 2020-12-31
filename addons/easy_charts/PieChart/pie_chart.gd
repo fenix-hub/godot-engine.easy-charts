@@ -108,15 +108,15 @@ func plot_placeholder() -> void:
 	]
 	plot_from_array(data)
 
-func structure_datas(database: Array, are_values_columns: bool, x_values_index: int):
-	# @x_values_index can be either a column or a row relative to x values
+func structure_datas(database: Array):
+	# @labels_index can be either a column or a row relative to x values
 	clean_variables()
-	self.are_values_columns = are_values_columns
+	are_values_columns = invert_chart != are_values_columns
 	if are_values_columns:
 		for row in database.size():
 			var t_vals: Array
 			for column in database[row].size():
-				if column == x_values_index:
+				if column == labels_index:
 					var x_data = database[row][column]
 					if x_data.is_valid_float() or x_data.is_valid_integer():
 						x_datas.append(x_data as float)
@@ -136,7 +136,7 @@ func structure_datas(database: Array, are_values_columns: bool, x_values_index: 
 		x_label = str(x_datas.pop_front())
 	else:
 		for row in database.size():
-			if row == x_values_index:
+			if row == labels_index:
 				x_datas = (database[row])
 				x_label = x_datas.pop_front() as String
 			else:

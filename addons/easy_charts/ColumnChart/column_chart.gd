@@ -1,9 +1,9 @@
 tool
 extends Chart
-class_name BarChart
+class_name ColumnChart
 
 """
-[BarChart] - General purpose node for Bar Charts
+[ColumnChart] - General purpose node for Column Charts
 
 A bar chart or bar graph is a chart or graph that presents categorical data with 
 rectangular bars with heights or lengths proportional to the values that they represent. 
@@ -25,7 +25,7 @@ func _get_property_list():
 				{
 					"hint": PROPERTY_HINT_NONE,
 					"usage": PROPERTY_USAGE_CATEGORY,
-					"name": "BarChart",
+					"name": "ColumnChart",
 					"type": TYPE_STRING
 				},
 				{
@@ -160,14 +160,14 @@ func build_chart():
 		SIZE = get_size()
 		origin = Vector2(OFFSET.x,SIZE.y-OFFSET.y)
 
-func structure_datas(database : Array, are_values_columns : bool, x_values_index : int):
-	# @x_values_index can be either a column or a row relative to x values
-	self.are_values_columns = are_values_columns
+func structure_datas(database : Array):
+	# @labels_index can be either a column or a row relative to x values
+	are_values_columns = (invert_chart != are_values_columns)
 	if are_values_columns:
 		for row in database.size():
 			var t_vals: Array
 			for column in database[row].size():
-				if column == x_values_index:
+				if column == labels_index:
 					var x_data = database[row][column]
 					if x_data.is_valid_float() or x_data.is_valid_integer():
 						x_datas.append(x_data as float)
@@ -187,7 +187,7 @@ func structure_datas(database : Array, are_values_columns : bool, x_values_index
 		x_label = str(x_datas.pop_front())
 	else:
 		for row in database.size():
-			if row == x_values_index:
+			if row == labels_index:
 				x_datas = (database[row])
 				x_label = x_datas.pop_front() as String
 			else:
@@ -246,19 +246,16 @@ func structure_datas(database : Array, are_values_columns : bool, x_values_index
 
 
 func calculate_pass():
-	if invert_chart:
-		x_chors = y_labels as PoolStringArray
+	if show_x_values_as_labels:
+		x_chors = x_datas as PoolStringArray
 	else:
-		if show_x_values_as_labels:
-			x_chors = x_datas as PoolStringArray
-		else:
-			x_chors = x_labels
+		x_chors = x_labels
 	
 	# calculate distance in pixel between 2 consecutive values/datas
 	if not are_values_columns:
-		x_pass = (SIZE.x - OFFSET.x*2 - (column_width) * ( y_datas.size() if not invert_chart else y_datas[0].size()+1 )  - column_gap - column_width/2) / ((x_chors.size()-1) if x_chors.size()!=1 else 1)
+		x_pass = (SIZE.x - OFFSET.x*2 - (column_width) * ( y_datas.size())  - column_gap - column_width/2) / ((x_chors.size()-1) if x_chors.size()!=1 else 1)
 	else:
-		x_pass = (SIZE.x - OFFSET.x*2 - (column_width) * ( y_datas.size() if invert_chart else y_datas[0].size()+1 )  - column_gap - column_width/2) / (x_chors.size()-1)
+		x_pass = (SIZE.x - OFFSET.x*2 - (column_width) * ( y_datas[0].size()+1 )  - column_gap - column_width/2) / (x_chors.size()-1)
 	y_pass = (origin.y - ChartName.get_rect().size.y*2) / (y_chors.size() - 1)
 
 func calculate_coordinates():
@@ -266,25 +263,15 @@ func calculate_coordinates():
 	y_coordinates.clear()
 	point_values.clear()
 	point_positions.clear()
-	
-	if invert_chart:
-		for column in y_datas[0].size():
-			var single_coordinates : Array
-			for row in y_datas:
-				if origin_at_zero:
-					single_coordinates.append((row[column]*y_pass)/v_dist)
-				else:
-					single_coordinates.append((row[column] - y_margin_min)*y_pass/v_dist)
-			y_coordinates.append(single_coordinates)
-	else:
-		for cluster in y_datas:
-			var single_coordinates : Array
-			for value in cluster.size():
-				if origin_at_zero:
-					single_coordinates.append((cluster[value]*y_pass)/v_dist)
-				else:
-					single_coordinates.append((cluster[value] - y_margin_min)*y_pass/v_dist)
-			y_coordinates.append(single_coordinates)
+
+	for cluster in y_datas:
+		var single_coordinates : Array
+		for value in cluster.size():
+			if origin_at_zero:
+				single_coordinates.append((cluster[value]*y_pass)/v_dist)
+			else:
+				single_coordinates.append((cluster[value] - y_margin_min)*y_pass/v_dist)
+		y_coordinates.append(single_coordinates)
 	
 	if show_x_values_as_labels:
 		for x in x_datas.size():
@@ -292,10 +279,7 @@ func calculate_coordinates():
 	else:
 		for x in x_datas.size():
 			if origin_at_zero:
-				if not invert_chart:
-					x_coordinates.append(x_pass*x)
-				else:
-					x_coordinates.append(x*x_pass/h_dist)
+				x_coordinates.append(x_pass*x)
 			else:
 				x_coordinates.append((x_datas[x] - x_margin_min)*x_pass/h_dist)
 	
@@ -303,24 +287,14 @@ func calculate_coordinates():
 		point_values.append([])
 		point_positions.append([])
 	
-	if invert_chart:
-		for function in y_coordinates.size():
-			for function_value in y_coordinates[function].size():
-				if are_values_columns:
-					point_values[function].append([x_datas[function_value],y_datas[function_value][function]])
-					point_positions[function].append(Vector2(OFFSET.x/2 + column_width/2 + (column_width + column_gap)*function + x_coordinates[function_value]+origin.x,origin.y-y_coordinates[function][function_value]))
-				else:
-					point_positions[function].append(Vector2(OFFSET.x/2 + column_width/2 + (column_width + column_gap)*function + x_coordinates[function_value]+origin.x,origin.y-y_coordinates[function][function_value]))
-					point_values[function].append([x_datas[function_value],y_datas[function_value][function]])
-	else:
-		for cluster in y_coordinates.size():
-			for y in y_coordinates[cluster].size():
-				if are_values_columns:
-					point_positions[y].append(Vector2(OFFSET.x/2 + column_width/2 + (column_width + column_gap)*y + x_coordinates[cluster] + origin.x, origin.y-y_coordinates[cluster][y]))
-					point_values[y].append([x_datas[cluster],y_datas[cluster][y]])
-				else:
-					point_values[cluster].append([x_datas[y],y_datas[cluster][y]])
-					point_positions[cluster].append(Vector2(OFFSET.x/2 + column_width/2 + (column_width + column_gap)*cluster + x_coordinates[y]+origin.x,origin.y-y_coordinates[cluster][y]))
+	for cluster in y_coordinates.size():
+		for y in y_coordinates[cluster].size():
+			if are_values_columns:
+				point_positions[y].append(Vector2(OFFSET.x/2 + column_width/2 + (column_width + column_gap)*y + x_coordinates[cluster] + origin.x, origin.y-y_coordinates[cluster][y]))
+				point_values[y].append([x_datas[cluster],y_datas[cluster][y]])
+			else:
+				point_values[cluster].append([x_datas[y],y_datas[cluster][y]])
+				point_positions[cluster].append(Vector2(OFFSET.x/2 + column_width/2 + (column_width + column_gap)*cluster + x_coordinates[y]+origin.x,origin.y-y_coordinates[cluster][y]))
 
 func _draw():
 	clear_points()
@@ -342,10 +316,10 @@ func _draw():
 			point.connect("_mouse_entered",self,"show_data")
 			point.connect("_mouse_exited",self,"hide_data")
 			
-			point.create_point(points_shape[_function], function_colors[function_point if invert_chart else _function], 
+			point.create_point(points_shape[_function], function_colors[_function], 
 			Color.white, point_positions[_function][function_point] + Vector2(0,7), 
 			point.format_value(point_values[_function][function_point], false, false), 
-			y_labels[function_point if invert_chart else _function] as String)
+			y_labels[_function] as String)
 			PointContainer.add_child(point)
 			point.rect_size.y = origin.y - point_positions[_function][function_point].y
 			draw_line( Vector2(point_positions[_function][function_point].x, origin.y),
@@ -362,9 +336,9 @@ func draw_grid():
 		draw_line(point-Vector2(0,5),point,v_lines_color,1,true)
 		var calculated_gap : float
 		if not are_values_columns:
-			calculated_gap = ( y_datas.size() if not invert_chart else y_datas[0].size()+1 ) 
+			calculated_gap = ( y_datas.size() ) 
 		else:
-			calculated_gap = ( y_datas.size() if invert_chart else y_datas[0].size()+1 ) 
+			calculated_gap = ( y_datas[0].size()+1 ) 
 		draw_string(
 			font,
 			point + Vector2(-const_width/2*x_chors[p].length() + (column_width + column_gap) * functions, font_size),
