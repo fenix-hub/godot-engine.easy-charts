@@ -2,9 +2,9 @@ tool
 extends Node2D
 
 var LineChart = preload("LineChart2D/LineChart2D.tscn")
-var ColumnChart = preload("BarChart2D/BarChart2D.tscn")
+var ColumnChart = preload("ColumnChart2D/ColumnChart2D.tscn")
 
-export (String,"None","LineChart2D","BarChart2D") var chart_type : String setget set_type,get_type
+export (String,"None","LineChart2D","ColumnChart2D") var chart_type : String setget set_type,get_type
 var chart : Node2D setget set_chart,get_chart
 
 # Called when the node enters the scene tree for the first time.

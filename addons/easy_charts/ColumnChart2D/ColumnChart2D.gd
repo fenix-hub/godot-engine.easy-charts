@@ -1,9 +1,9 @@
 tool
 extends Chart2D
-class_name BarChart2D
+class_name ColumnChart2D
 
 """
-[BarChart2D] - General purpose node for Bar Charts
+[ColumnChart2D] - General purpose node for Bar Charts
 
 A bar chart or bar graph is a chart or graph that presents categorical data with 
 rectangular bars with heights or lengths proportional to the values that they represent. 

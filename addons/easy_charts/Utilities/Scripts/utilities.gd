@@ -5,7 +5,7 @@ var plugin_name : String = "Easy Charts"
 var templates : Dictionary = {}
 var chart_types : Dictionary = {
 	0:"LineChart",
-	1:"BarChart",
+	1:"ColumnChart",
 	2:"ScatterChart",
 	3:"RadarChart",
 	4:"PieChart"

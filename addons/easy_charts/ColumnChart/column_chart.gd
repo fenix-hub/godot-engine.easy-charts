@@ -1,9 +1,9 @@
 tool
 extends Chart
-class_name BarChart
+class_name ColumnChart
 
 """
-[BarChart] - General purpose node for Bar Charts
+[ColumnChart] - General purpose node for Column Charts
 
 A bar chart or bar graph is a chart or graph that presents categorical data with 
 rectangular bars with heights or lengths proportional to the values that they represent. 
@@ -25,7 +25,7 @@ func _get_property_list():
 				{
 					"hint": PROPERTY_HINT_NONE,
 					"usage": PROPERTY_USAGE_CATEGORY,
-					"name": "BarChart",
+					"name": "ColumnChart",
 					"type": TYPE_STRING
 				},
 				{
