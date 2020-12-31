@@ -26,14 +26,14 @@ I'll make some videos as soon as possible.
 This library offers a set of charts for each main Godot Node:   
 - **Control Nodes:** "Control Charts" are fast Charts that can be plotted in a Control space, such as UIs or Control user interactable areas. They offer basic Control properties, such as Margins, size inheritance and control. No animations, no real time changes, just charts.   
 - **2D Nodes:** "2D Charts" are a set of Charts which can be Used in 2D spaces. They offer additional tools, such as animations and real time changes in editor. They can be used to implement more aesthetic charts in 2D contexts.   
-- **[wip] 3D Nodes:** "3D Charts" are a set of Charts which can be Used in both 2D and 3D spaces. They offer the possibility to plot 3D datasets, which are common in machine learning contexts or just data analysis. A Camera Control will also be available, which can be used to move around the chart.
-*Available Charts*:  
+- **[wip] 3D Nodes:** "3D Charts" are a set of Charts which can be Used in both 2D and 3D spaces. They offer the possibility to plot 3D datasets, which are common in machine learning contexts or just data analysis. A Camera Control will also be available, which can be used to move around the chart.  
+### Available Charts
 - LineChart [Control, 2D, wip 3D]
 - ColumnChart  [Control, 2D, wipr 3D]
 - ScatterChart [wip Control, wip 2D, 3D]
 - Piechart [Control]
 - RadarChart [Control]
-*Work in progress*:
+### WIP Charts
 - Area Chart
 - Donut Chart
 - Bubble Chart
