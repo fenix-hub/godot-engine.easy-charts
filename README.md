@@ -1,7 +1,8 @@
-*Want to stay updated or having an issue?*  
+<p align="right">
 <a href="https://discord.gg/KnJGY9S">
-  <img src="https://github.com/fenix-hub/ColoredBadges/blob/master/svg/social/discord.svg" alt="react" style="vertical-align:top; margin:6px 4px">
+<img src="https://github.com/fenix-hub/ColoredBadges/blob/master/svg/social/discord.svg" alt="react" style="vertical-align:top; margin:6px 4px">
 </a>
+</p>
 <img src="addons/easy_charts/icon.png" align="left" width="64" height="64">
 # Easy Charts
 A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.
@@ -21,7 +22,7 @@ If you need to plot a chart with some values in it and just take a screenshot, o
 [*Microsoft Workplace Analytics*](https://www.microsoft.com/microsoft-365/partners/workplaceanalytics)   
 ## How does it work?
 There is a [WIKI](https://github.com/fenix-hub/godot-engine.easy-charts/wiki) with some tutorials, even if it is a work in progress.  
-I'll make some videos as soon as possible.
+I'll make some videos as soon as possible.  
 # Available Charts and when to use them    
 This library offers a set of charts for each main Godot Node:   
 - **Control Nodes:** "Control Charts" are fast Charts that can be plotted in a Control space, such as UIs or Control user interactable areas. They offer basic Control properties, such as Margins, size inheritance and control. No animations, no real time changes, just charts.   
