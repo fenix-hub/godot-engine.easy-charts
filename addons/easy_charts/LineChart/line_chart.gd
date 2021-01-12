@@ -163,14 +163,14 @@ func structure_datas(database: Array):
 			for column in database[row].size():
 				if column == labels_index:
 					var x_data = database[row][column]
-					if x_data.is_valid_float() or x_data.is_valid_integer():
+					if typeof(x_data) == TYPE_INT  or typeof(x_data) == TYPE_REAL:
 						x_datas.append(x_data as float)
 					else:
 						x_datas.append(x_data)
 				else:
 					if row != 0:
 						var y_data = database[row][column]
-						if y_data.is_valid_float() or y_data.is_valid_integer():
+						if typeof(y_data) == TYPE_INT  or typeof(y_data) == TYPE_REAL:
 							t_vals.append(y_data as float)
 						else:
 							t_vals.append(y_data.replace(",", ".") as float)
