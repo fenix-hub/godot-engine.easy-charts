@@ -359,7 +359,7 @@ func plot_from_array(array : Array) -> void:
 		Utilities._print_message("Can't plot a chart with an empty Array.",1)
 		return
 	
-	data = array.duplicate()
+	data = array.duplicate(true)
 	structure_datas(slice_data())
 	build_chart()
 	count_functions()
