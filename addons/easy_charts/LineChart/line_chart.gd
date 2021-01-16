@@ -217,26 +217,8 @@ func structure_datas(database: Array):
 		multi += 1
 		p = (v_dist * multi) + ((y_margin_min) if not origin_at_zero else 0)
 		y_chors.append(p as String)
-
-	# draw x_labels
-	if not show_x_values_as_labels:
-		to_order.clear()
-		to_order = x_datas.duplicate() as PoolIntArray
-		to_order.sort()
-		margin = to_order.pop_back()
-		if not origin_at_zero:
-			x_margin_min = to_order.pop_front()
-		h_dist = x_decim * pow(10.0, str(margin).length() - 2)
-		multi = 0
-		p = (h_dist * multi) + ((x_margin_min) if not origin_at_zero else 0)
-		x_labels.append(p as String)
-		while p < margin:
-			multi += 1
-			p = (h_dist * multi) + ((x_margin_min) if not origin_at_zero else 0)
-			x_labels.append(p as String)
-	
 	OFFSET.x = (str(margin).length()) * font_size
-	OFFSET.y = font_size * 2
+	OFFSET.y = (font_size * 2) - 4
 
 func build_chart():
 	SIZE = get_size() - Vector2(OFFSET.x,0)
@@ -244,11 +226,9 @@ func build_chart():
 
 
 func calculate_pass():
-	if show_x_values_as_labels:
-		x_chors = x_datas.duplicate(true) as PoolStringArray
-	else:
-		x_chors = x_labels.duplicate(true)
-
+	x_chors = x_datas.duplicate(true) as PoolStringArray
+	
+	
 	# calculate distance in pixel between 2 consecutive values/datas
 	x_pass = (SIZE.x - OFFSET.x) / (x_chors.size()-1 if x_chors.size()>1 else x_chors.size() )
 	y_pass = (origin.y - ChartName.get_rect().size.y*2) / (y_chors.size() - 1)
@@ -268,16 +248,9 @@ func calculate_coordinates():
 			else:
 				single_coordinates.append((cluster[value] - y_margin_min) * y_pass / v_dist)
 		y_coordinates.append(single_coordinates)
-
-	if show_x_values_as_labels:
-		for x in x_datas.size():
-			x_coordinates.append(x_pass * x)
-	else:
-		for x in x_datas.size():
-			if origin_at_zero:
-				x_coordinates.append(x_datas[x] * x_pass / h_dist)
-			else:
-				x_coordinates.append((x_datas[x] - x_margin_min) * x_pass / h_dist)
+	
+	for x in x_datas.size():
+		x_coordinates.append(x_pass * x)
 
 	for f in range(0,functions):
 		point_values.append([])
@@ -331,15 +304,24 @@ func draw_grid():
 	for p in x_chors.size():
 		var point: Vector2 = origin + Vector2((p) * x_pass, 0)
 		# v grid
-		draw_line(point, point - Vector2(0, SIZE.y - OFFSET.y), v_lines_color, 0.2, true)
+		draw_line(point, point - Vector2(0, SIZE.y - OFFSET.y*2), v_lines_color, 0.2, true)
 		# ascisse
 		draw_line(point - Vector2(0, 5), point, v_lines_color, 1, true)
+		if show_x_values_as_labels : pass 
+		else: continue
 		draw_string(
 				font,
 				point + Vector2(-const_width / 2 * x_chors[p].length(), font_size + const_height),
 				x_chors[p],
 				font_color)
-
+	
+	if not show_x_values_as_labels : 
+		draw_string(
+				font,
+				Vector2((SIZE.x - origin.x)/2 + ((x_label.length() * font_size) / 2), SIZE.y - font_size/2),
+				x_label,
+				font_color)
+	
 	# ordinate
 	for p in y_chors.size():
 		var point: Vector2 = origin - Vector2(0, (p) * y_pass)
@@ -354,10 +336,10 @@ func draw_grid():
 				font_color)
 
 func draw_chart_outlines():
-	draw_line(origin, SIZE - Vector2(0, OFFSET.y), box_color, 1, true)
-	draw_line(origin, Vector2(OFFSET.x, 0), box_color, 1, true)
-	draw_line(Vector2(OFFSET.x, 0), Vector2(SIZE.x, 0), box_color, 1, true)
-	draw_line(Vector2(SIZE.x, 0), SIZE - Vector2(0, OFFSET.y), box_color, 1, true)
+	draw_line(origin, SIZE - Vector2(0, OFFSET.y), box_color, 1.2, true)
+	draw_line(origin, Vector2(OFFSET.x, OFFSET.y), box_color, 1.2, true)
+	draw_line(Vector2(OFFSET.x, OFFSET.y), Vector2(SIZE.x, OFFSET.y), box_color, 1.2, true)
+	draw_line(Vector2(SIZE.x, OFFSET.y), SIZE - Vector2(0, OFFSET.y), box_color, 1.2, true)
 
 func draw_treshold():
 	if v_dist != 0:

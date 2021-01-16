@@ -7,7 +7,7 @@
 <img src="addons/easy_charts/icon.png" align="left" width="64" height="64">
 
 # Easy Charts
-A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.
+A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.  
 Author: *"Nicolo (fenix) Santilio"*  
 Version: *0.5.6*  
 Wiki: *[wip](https://github.com/fenix-hub/godot-engine.easy-charts/wiki)*  
