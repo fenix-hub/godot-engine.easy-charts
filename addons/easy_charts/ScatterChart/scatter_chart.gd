@@ -131,86 +131,84 @@ func structure_datas(database : Array):
 		# @labels_index can be either a column or a row relative to x values
 		# @y_values can be either a column or a row relative to y values
 		are_values_columns = invert_chart != are_values_columns
-		match are_values_columns:
-				true:
-						for row in database.size():
-								var t_vals : Array
-								for column in database[row].size():
-										if column == labels_index:
-												var x_data = database[row][column]
-												if x_data.is_valid_float() or x_data.is_valid_integer():
-														x_datas.append(x_data as float)
-												else:
-														x_datas.append(x_data.replace(",",".") as float)
-										else:
-												if row != 0:
-														var y_data = database[row][column]
-														if y_data.is_valid_float() or y_data.is_valid_integer():
-																t_vals.append(y_data as float)
-														else:
-																t_vals.append(y_data.replace(",",".") as float)
-												else:
-														y_labels.append(str(database[row][column]))
-								if not t_vals.empty():
-										y_datas.append(t_vals)
-						x_label = str(x_datas.pop_front())
-				false:
-						for row in database.size():
-								if row == labels_index:
-										x_datas = (database[row])
-										x_label = x_datas.pop_front() as String
-								else:
-										var values = database[row] as Array
-										y_labels.append(values.pop_front() as String)
-										y_datas.append(values)
-						for data in y_datas:
-								for value in data.size():
-										data[value] = data[value] as float
+		if are_values_columns:
+			for row in database.size():
+				var t_vals : Array
+				for column in database[row].size():
+					if column == labels_index:
+						var x_data = database[row][column]
+						if typeof(x_data) == TYPE_INT  or typeof(x_data) == TYPE_REAL:
+							x_datas.append(x_data as float)
+						else:
+							x_datas.append(x_data.replace(",", ".") as float)
+					else:
+						if row != 0:
+							var y_data = database[row][column]
+							if typeof(y_data) == TYPE_INT  or typeof(y_data) == TYPE_REAL:
+								t_vals.append(y_data as float)
+							else:
+								t_vals.append(y_data.replace(",",".") as float)
+						else:
+							y_labels.append(str(database[row][column]))
+				if not t_vals.empty():
+						y_datas.append(t_vals)
+			x_label = str(x_datas.pop_front())
+		else:
+			for row in database.size():
+				if row == labels_index:
+					x_datas = (database[row])
+					x_label = x_datas.pop_front() as String
+				else:
+					var values = database[row] as Array
+					y_labels.append(values.pop_front() as String)
+					y_datas.append(values)
+			for data in y_datas:
+				for value in data.size():
+					data[value] = data[value] as float
 		
 		# draw y labels
 		var to_order : Array
 		var to_order_min : Array
 		for cluster in y_datas.size():
-				# define x_chors and y_chors
-				var ordered_cluster = y_datas[cluster] as Array
-				ordered_cluster.sort()
-				ordered_cluster = PoolIntArray(ordered_cluster)
-				var margin_max = ordered_cluster[ordered_cluster.size()-1]
-				var margin_min = ordered_cluster[0]
-				to_order.append(margin_max)
-				to_order_min.append(margin_min)
+			# define x_chors and y_chors
+			var ordered_cluster = y_datas[cluster].duplicate() as Array
+			ordered_cluster.sort()
+			var margin_max = ordered_cluster[-1]
+			var margin_min = ordered_cluster[0]
+			to_order.append(margin_max)
+			to_order_min.append(margin_min)
 		
 		to_order.sort()
 		to_order_min.sort()
 		var margin = to_order.pop_back()
 		if not origin_at_zero:
-				y_margin_min = to_order_min.pop_front()
+			y_margin_min = to_order_min.pop_front()
 		v_dist = y_decim * pow(10.0,str(margin).length()-2)
 		var multi = 0
-		var p = (v_dist*multi) + ((y_margin_min) if not origin_at_zero else 0)
+		var p = (v_dist * multi) + ((y_margin_min) if not origin_at_zero else 0)
 		y_chors.append(p as String)
 		while p < margin:
-				multi+=1
-				p = (v_dist*multi) + ((y_margin_min) if not origin_at_zero else 0)
-				y_chors.append(p as String)
+			multi+=1
+			p = (v_dist * multi) + ((y_margin_min) if not origin_at_zero else 0)
+			y_chors.append(p as String)
 		
 		# draw x_labels
 		if not show_x_values_as_labels:
-				to_order.clear()
-				to_order = x_datas as PoolIntArray
-				
-				to_order.sort()
-				margin = to_order.pop_back()
-				if not origin_at_zero:
-						x_margin_min = to_order.pop_front()
-				h_dist = x_decim * pow(10.0,str(margin).length()-2)
-				multi = 0
-				p = (h_dist*multi) + ((x_margin_min) if not origin_at_zero else 0)
-				x_labels.append(p as String)
-				while p < margin:
-						multi+=1
-						p = (h_dist*multi) + ((x_margin_min) if not origin_at_zero else 0)
-						x_labels.append(p as String)
+			to_order.clear()
+			to_order = x_datas as PoolIntArray
+			
+			to_order.sort()
+			margin = to_order.pop_back()
+			if not origin_at_zero:
+				x_margin_min = to_order.pop_front()
+			h_dist = x_decim * pow(10.0,str(margin).length()-2)
+			multi = 0
+			p = (h_dist*multi) + ((x_margin_min) if not origin_at_zero else 0)
+			x_labels.append(p as String)
+			while p < margin:
+					multi+=1
+					p = (h_dist*multi) + ((x_margin_min) if not origin_at_zero else 0)
+					x_labels.append(p as String)
 
 func build_chart():
 	SIZE = get_size()

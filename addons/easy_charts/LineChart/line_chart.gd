@@ -166,7 +166,7 @@ func structure_datas(database: Array):
 					if typeof(x_data) == TYPE_INT  or typeof(x_data) == TYPE_REAL:
 						x_datas.append(x_data as float)
 					else:
-						x_datas.append(x_data)
+						x_datas.append(x_data.replace(",", ".") as float)
 				else:
 					if row != 0:
 						var y_data = database[row][column]
@@ -199,7 +199,7 @@ func structure_datas(database: Array):
 		# define x_chors and y_chors
 		var ordered_cluster = y_datas[cluster].duplicate() as Array
 		ordered_cluster.sort()
-		var margin_max = ordered_cluster[ordered_cluster.size() - 1]
+		var margin_max = ordered_cluster[-1]
 		var margin_min = ordered_cluster[0]
 		to_order.append(margin_max)
 		to_order_min.append(margin_min)
