@@ -92,6 +92,7 @@ var radius : float = 150.0					setget _set_radius,get_radius
 var column_width : float = 10				setget set_column_width
 var column_gap : float = 2					setget set_column_gap
 
+# Calculations of decim and its relation with number of tics: https://www.desmos.com/calculator/jeiceaswiy
 var full_scale : float = 1.0				setget set_full_scale
 var x_decim : float = 5.0					setget set_x_decim
 var y_decim : float = 1.0					setget set_y_decim

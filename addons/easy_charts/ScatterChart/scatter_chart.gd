@@ -178,7 +178,7 @@ func structure_datas(database : Array):
 
 	var y_margin_max = to_order.max()
 	y_margin_min = to_order_min.min() if not origin_at_zero else 0
-	v_dist = y_decim * pow(10.0,str(y_margin_max).length() - 2)
+	v_dist = y_decim * pow(10.0, str(y_margin_max).split(".")[0].length() - 1)
 	var multi = 0
 	var p = (v_dist * multi) + y_margin_min
 	y_chors.append(p as String)
@@ -193,7 +193,7 @@ func structure_datas(database : Array):
 	var x_margin_max = to_order.max()
 	x_margin_min = to_order.min() if not origin_at_zero else 0
 	if not show_x_values_as_labels:
-		h_dist = x_decim * pow(10.0, str(x_margin_max).length() - 2)
+		h_dist = x_decim * pow(10.0, str(x_margin_max).split(".")[0].length() - 1)
 		multi = 0
 		p = (h_dist * multi) + x_margin_min
 		x_labels.append(p as String)
@@ -228,10 +228,7 @@ func calculate_coordinates():
 	for cluster in y_datas:
 		var single_coordinates : Array
 		for value in cluster.size():
-			if origin_at_zero:
-				single_coordinates.append((cluster[value]*y_pass)/v_dist)
-			else:
-				single_coordinates.append((cluster[value] - y_margin_min)*y_pass/v_dist)
+			single_coordinates.append((cluster[value] - y_margin_min) * y_pass / v_dist)
 		y_coordinates.append(single_coordinates)
 	
 	if show_x_values_as_labels:
@@ -239,10 +236,7 @@ func calculate_coordinates():
 			x_coordinates.append(x_pass*x)
 	else:
 		for x in x_datas.size():
-			if origin_at_zero:
-				x_coordinates.append(x_datas[x]*x_pass/h_dist)
-			else:
-				x_coordinates.append((x_datas[x] - x_margin_min)*x_pass/h_dist)
+			x_coordinates.append((x_datas[x] - x_margin_min) * x_pass / h_dist)
 	
 	for f in functions:
 		point_values.append([])
@@ -251,11 +245,11 @@ func calculate_coordinates():
 	for cluster in y_coordinates.size():
 		for y in y_coordinates[cluster].size():
 			if are_values_columns:
-				point_values[y].append([x_datas[cluster],y_datas[cluster][y]])
-				point_positions[y].append(Vector2(x_coordinates[cluster]+origin.x,origin.y-y_coordinates[cluster][y]))
+				point_values[y].append([x_datas[cluster], y_datas[cluster][y]])
+				point_positions[y].append(Vector2(x_coordinates[cluster] + origin.x, origin.y - y_coordinates[cluster][y]))
 			else:
-				point_values[cluster].append([x_datas[y],y_datas[cluster][y]])
-				point_positions[cluster].append(Vector2(x_coordinates[y]+origin.x,origin.y-y_coordinates[cluster][y]))
+				point_values[cluster].append([x_datas[y], y_datas[cluster][y]])
+				point_positions[cluster].append(Vector2(x_coordinates[y] + origin.x, origin.y - y_coordinates[cluster][y]))
 
 func _draw():
 	clear_points()
