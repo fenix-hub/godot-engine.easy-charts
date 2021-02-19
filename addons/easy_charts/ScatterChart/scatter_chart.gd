@@ -165,54 +165,49 @@ func structure_datas(database : Array):
 			for data in y_datas:
 				for value in data.size():
 					data[value] = data[value] as float
-		
+
 		# draw y labels
 		var to_order : Array
 		var to_order_min : Array
 		for cluster in y_datas.size():
 			# define x_chors and y_chors
-			var ordered_cluster = y_datas[cluster].duplicate() as Array
-			ordered_cluster.sort()
-			var margin_max = ordered_cluster[-1]
-			var margin_min = ordered_cluster[0]
+			var margin_max = y_datas[cluster].max()
+			var margin_min = y_datas[cluster].min()
 			to_order.append(margin_max)
 			to_order_min.append(margin_min)
-		
-		to_order.sort()
-		to_order_min.sort()
-		var margin = to_order.pop_back()
-		if not origin_at_zero:
-			y_margin_min = to_order_min.pop_front()
-		v_dist = y_decim * pow(10.0,str(margin).length()-2)
+
+		var y_margin_max = to_order.max()
+		y_margin_min = to_order_min.min() if not origin_at_zero else 0
+		v_dist = y_decim * pow(10.0,str(y_margin_max).length() - 2)
 		var multi = 0
-		var p = (v_dist * multi) + ((y_margin_min) if not origin_at_zero else 0)
+		var p = (v_dist * multi) + y_margin_min
 		y_chors.append(p as String)
-		while p < margin:
-			multi+=1
-			p = (v_dist * multi) + ((y_margin_min) if not origin_at_zero else 0)
+		while p < y_margin_max:
+			multi += 1
+			p = (v_dist * multi) + y_margin_min
 			y_chors.append(p as String)
 		
 		# draw x_labels
+		to_order.clear()
+		to_order = x_datas
+		var x_margin_max = to_order.max()
+		x_margin_min = to_order.min() if not origin_at_zero else 0
 		if not show_x_values_as_labels:
-			to_order.clear()
-			to_order = x_datas as PoolIntArray
-			
-			to_order.sort()
-			margin = to_order.pop_back()
-			if not origin_at_zero:
-				x_margin_min = to_order.pop_front()
-			h_dist = x_decim * pow(10.0,str(margin).length()-2)
+			h_dist = x_decim * pow(10.0, str(x_margin_max).length() - 2)
 			multi = 0
-			p = (h_dist*multi) + ((x_margin_min) if not origin_at_zero else 0)
+			p = (h_dist * multi) + x_margin_min
 			x_labels.append(p as String)
-			while p < margin:
-					multi+=1
-					p = (h_dist*multi) + ((x_margin_min) if not origin_at_zero else 0)
-					x_labels.append(p as String)
+			while p < x_margin_max:
+				multi += 1
+				p = (h_dist * multi) + x_margin_min
+				x_labels.append(p as String)
+
+		OFFSET.x = str(y_margin_max).length() * font_size
+		OFFSET.y = font_size * 2
 
 func build_chart():
 	SIZE = get_size()
-	origin = Vector2(OFFSET.x,SIZE.y-OFFSET.y)
+	origin = Vector2(OFFSET.x, SIZE.y - OFFSET.y)
 
 func calculate_pass():
 	if show_x_values_as_labels:
@@ -221,8 +216,8 @@ func calculate_pass():
 		x_chors = x_labels
 	
 	# calculate distance in pixel between 2 consecutive values/datas
-	x_pass = (SIZE.x - OFFSET.x) / (x_chors.size()-1)
-	y_pass = origin.y / (y_chors.size()-1)
+	x_pass = (SIZE.x - OFFSET.x) / (x_chors.size() - 1 if x_chors.size() > 1 else x_chors.size())
+	y_pass = origin.y / (y_chors.size() - 1)
 
 func calculate_coordinates():
 	x_coordinates.clear()
@@ -264,7 +259,6 @@ func calculate_coordinates():
 
 func _draw():
 	clear_points()
-	
 	draw_grid()
 	draw_chart_outlines()
 	
