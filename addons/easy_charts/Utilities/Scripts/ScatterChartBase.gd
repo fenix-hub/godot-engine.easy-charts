@@ -142,10 +142,6 @@ var property_list = [
 	]
 
 
-func _get_property_list():
-	return property_list
-
-
 func structure_datas(database : Array):
 	# @labels_index can be either a column or a row relative to x values
 	# @y_values can be either a column or a row relative to y values

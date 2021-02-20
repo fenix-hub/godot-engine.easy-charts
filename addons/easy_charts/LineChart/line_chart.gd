@@ -15,6 +15,11 @@ class_name LineChart
 # Source: Wikipedia
 
 
+func _get_property_list():
+ property_list[0].name = "LineChart"
+ return property_list
+
+
 func _draw():
 	clear_points()
 	draw_grid()

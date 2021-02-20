@@ -17,6 +17,11 @@ the horizontal axis and the value of the other variable determining the position
 # ---------------------
 
 
+func _get_property_list():
+ property_list[0].name = "ScatterChart"
+ return property_list
+
+
 func _draw():
 	clear_points()
 	draw_grid()
