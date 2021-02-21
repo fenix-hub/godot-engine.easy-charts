@@ -1,6 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://addons/easy_charts/Utilities/Point/PointData.gd" type="Script" id=1]
+[ext_resource path="res://addons/easy_charts/Utilities/Point/point_data.gd" type="Script" id=1]
+
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 10.0

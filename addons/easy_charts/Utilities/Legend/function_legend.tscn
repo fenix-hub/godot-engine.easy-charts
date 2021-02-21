@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://addons/easy_charts/Utilities/Legend/FunctionLegend.gd" type="Script" id=2]
+[ext_resource path="res://addons/easy_charts/Utilities/Legend/function_legend.gd" type="Script" id=2]
+
 
 [node name="FunctionLegend" type="VBoxContainer"]
 margin_right = 80.0
