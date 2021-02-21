@@ -24,7 +24,8 @@ If you need to plot a chart with some values in it and just take a screenshot, o
 ![wa](imgs/workplace_analytics.png)   
 [*Microsoft Workplace Analytics*](https://www.microsoft.com/microsoft-365/partners/workplaceanalytics)  
 
-## Contributors
+
+## Collaborators
 A huge thanks to
 - [Marco](https://github.com/eddex)  
 - [Jorge](https://github.com/JFerrerBeired)  
