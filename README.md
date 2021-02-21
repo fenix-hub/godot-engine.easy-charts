@@ -23,7 +23,14 @@ If you need to plot a chart with some values in it and just take a screenshot, o
 [*Startup Company*](https://store.steampowered.com/app/606800/Startup_Company/)   
 ![wa](imgs/workplace_analytics.png)   
 [*Microsoft Workplace Analytics*](https://www.microsoft.com/microsoft-365/partners/workplaceanalytics)  
-  
+
+## Contributors
+A huge thanks to
+- [Marco](https://github.com/eddex)
+- [Jorge](https://github.com/JFerrerBeired)
+For contributing to this project.
+I cannot pay the free time they spent on this addon with their contribution, but thanks to them for adding new features and refactoring.
+
 ## How does it work?
 There is a [WIKI](https://github.com/fenix-hub/godot-engine.easy-charts/wiki) with some tutorials, even if it is a work in progress.  
 I'll make some videos as soon as possible.  
