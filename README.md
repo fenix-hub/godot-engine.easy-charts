@@ -26,9 +26,9 @@ If you need to plot a chart with some values in it and just take a screenshot, o
 
 ## Contributors
 A huge thanks to
-- [Marco](https://github.com/eddex)
-- [Jorge](https://github.com/JFerrerBeired)
-For contributing to this project.
+- [Marco](https://github.com/eddex)  
+- [Jorge](https://github.com/JFerrerBeired)  
+For contributing to this project.  
 I cannot pay the free time they spent on this addon with their contribution, but thanks to them for adding new features and refactoring.
 
 ## How does it work?
