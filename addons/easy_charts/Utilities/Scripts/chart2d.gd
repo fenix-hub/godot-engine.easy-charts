@@ -51,8 +51,8 @@ var PointData: PointData
 var Outlines: Line2D
 var Grid: Node2D
 
-var point_node: PackedScene = preload("../Point/Point.tscn")
-var FunctionLegend: PackedScene = preload("../Legend/FunctionLegend.tscn")
+var point_node: PackedScene = preload("../Point/point.tscn")
+var FunctionLegend: PackedScene = preload("../Legend/function_legend.tscn")
 
 var font_size: float = 16
 var const_height: float = font_size / 2 * font_size / 20

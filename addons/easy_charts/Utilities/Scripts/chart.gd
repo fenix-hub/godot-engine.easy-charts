@@ -15,8 +15,8 @@ onready var Legend = $Legend
 onready var ChartName : Label = $ChartName
 
 # Scenes and Reosurces ......................
-var point_node : PackedScene = preload("../Point/Point.tscn")
-var LegendElement : PackedScene = preload("../Legend/FunctionLegend.tscn")
+var point_node : PackedScene = preload("../Point/point.tscn")
+var LegendElement : PackedScene = preload("../Legend/function_legend.tscn")
 
 # Enums .....................................
 enum PointShapes { Dot, Triangle, Square, Cross }
