@@ -6,6 +6,15 @@ class_name ScatterChartBase
 # of points in a two-variable space. It handles basic data structure and grid 
 # layout and leaves to child classes the more specific behaviour.
 
+var identifiers : Array
+
+#Stored in the form of [[min_func1, min_func2, min_func3, ...], [max_func1, max_func2, ...]]
+var x_domain := [[], []]
+var y_domain := [[], []]
+
+var x_range
+var y_range
+
 var property_list = [
 	# Chart Properties
 	{
@@ -142,6 +151,22 @@ var property_list = [
 	]
 
 
+func plot_function(x:Array, y:Array, id=""):
+	pass
+
+
+func update_function(x:Array, y:Array, id=""):
+	pass
+
+
+func delete_function(id):
+	pass
+
+
+func generate_identifier():
+	return "f%d" % (identifiers.size() + 1)
+
+
 func structure_datas(database : Array):
 	# @labels_index can be either a column or a row relative to x values
 	# @y_values can be either a column or a row relative to y values
@@ -181,18 +206,27 @@ func structure_datas(database : Array):
 			for value in data.size():
 				data[value] = data[value] as float
 
-	# draw y labels
-	var to_order : Array
-	var to_order_min : Array
-	for cluster in y_datas.size():
-		# define x_chors and y_chors
-		var margin_max = y_datas[cluster].max()
-		var margin_min = y_datas[cluster].min()
-		to_order.append(margin_max)
-		to_order_min.append(margin_min)
 
-	var y_margin_max = to_order.max()
-	y_margin_min = to_order_min.min() if not origin_at_zero else 0
+func calculate_range(id):
+	# Calculate the domain of the given function in the x and y axis
+	# and updates the range value
+	
+	var function = identifiers.find(id)
+	
+	y_domain[0][function] = y_datas[function].min()
+	y_domain[1][function] = y_datas[function].max()
+	
+	x_domain[0][function] = x_datas[function].min()
+	x_domain[1][function] = x_datas[function].max()
+	
+	# Chose the min/max from each function
+	y_range = [y_domain[0].min() if not origin_at_zero else 0, y_domain[1].max()]
+	x_range = [x_domain[0].min() if not origin_at_zero else 0, x_domain[1].max()]
+
+
+func calculate_tics():
+	y_margin_min = y_range[0]
+	var y_margin_max = y_range[1]
 	v_dist = y_decim * pow(10.0, str(y_margin_max).split(".")[0].length() - 1)
 	var multi = 0
 	var p = (v_dist * multi) + y_margin_min
@@ -202,11 +236,8 @@ func structure_datas(database : Array):
 		p = (v_dist * multi) + y_margin_min
 		y_chors.append(p as String)
 	
-	# draw x_labels
-	to_order.clear()
-	to_order = x_datas
-	var x_margin_max = to_order.max()
-	x_margin_min = to_order.min() if not origin_at_zero else 0
+	x_margin_min = x_range[0]
+	var x_margin_max = x_range[1]
 	if not show_x_values_as_labels:
 		h_dist = x_decim * pow(10.0, str(x_margin_max).split(".")[0].length() - 1)
 		multi = 0
@@ -216,87 +247,72 @@ func structure_datas(database : Array):
 			multi += 1
 			p = (h_dist * multi) + x_margin_min
 			x_labels.append(p as String)
-
-	OFFSET.x = str(y_margin_max).length() * font_size
-	OFFSET.y = font_size * 2
+	
+	if not show_x_values_as_labels:
+		x_chors = x_labels
+	else:
+		for function in identifiers.size():
+			for value in x_datas[function]:
+				if not x_chors.has(value as String): #Don't append repeated values
+					x_chors.append(value as String)
 
 
 func build_chart():
 	SIZE = get_size() - Vector2(OFFSET.x, 0)
 	origin = Vector2(OFFSET.x, SIZE.y - OFFSET.y)
+	
+	OFFSET.x = str(y_range[1]).length() * font_size
+	OFFSET.y = font_size * 2
 
 
 func calculate_pass():
-	if show_x_values_as_labels:
-		x_chors = x_datas.duplicate(true) as PoolStringArray
-	else:
-		x_chors = x_labels
-	
-	# calculate distance in pixel between 2 consecutive values/datas
+	# Calculate distance in pixel between 2 consecutive values/datas
 	x_pass = (SIZE.x - OFFSET.x) / (x_chors.size() - 1 if x_chors.size() > 1 else x_chors.size())
 	y_pass = (origin.y - ChartName.get_rect().size.y * 2) / (y_chors.size() - 1)
 
 
 func calculate_coordinates():
-	x_coordinates.clear()
-	y_coordinates.clear()
 	point_values.clear()
 	point_positions.clear()
+	point_values.resize(identifiers.size())
+	point_positions.resize(identifiers.size())
 	
-	for cluster in y_datas:
-		var single_coordinates : Array
-		for value in cluster.size():
-			single_coordinates.append((cluster[value] - y_margin_min) * y_pass / v_dist)
-		y_coordinates.append(single_coordinates)
+	for function in identifiers.size():
+		for val in function.size():
+			var value_x = (x_datas[function][val] - x_margin_min) * x_pass / h_dist
+			var value_y = (y_datas[function][val] - y_margin_min) * y_pass / v_dist
 	
-	if show_x_values_as_labels:
-		for x in x_datas.size():
-			x_coordinates.append(x_pass * x)
-	else:
-		for x in x_datas.size():
-			x_coordinates.append((x_datas[x] - x_margin_min) * x_pass / h_dist)
-	
-	for f in functions:
-		point_values.append([])
-		point_positions.append([])
-	
-	for cluster in y_coordinates.size():
-		for y in y_coordinates[cluster].size():
-			if are_values_columns:
-				point_values[y].append([x_datas[cluster], y_datas[cluster][y]])
-				point_positions[y].append(Vector2(x_coordinates[cluster] + origin.x,
-												  origin.y - y_coordinates[cluster][y]))
-			else:
-				point_values[cluster].append([x_datas[y], y_datas[cluster][y]])
-				point_positions[cluster].append(Vector2(x_coordinates[y] + origin.x,
-														origin.y - y_coordinates[cluster][y]))
+			point_values[function].append([x_datas[function][val], y_datas[function][val]])
+			point_positions[function].append(Vector2(value_x + origin.x, origin.y - value_y))
 
 
 func draw_grid():
 	# ascisse
 	for p in x_chors.size():
-		var point : Vector2 = origin+Vector2((p)*x_pass,0)
+		var point : Vector2 = origin + Vector2(p * x_pass, 0)
 		# v grid
-		draw_line(point,point-Vector2(0,SIZE.y-OFFSET.y),v_lines_color,0.2,true)
+		draw_line(point, -Vector2(0, SIZE.y - OFFSET.y), v_lines_color, 0.2, true)
 		# ascisse
-		draw_line(point-Vector2(0,5),point,v_lines_color,1,true)
-		draw_string(font,point+Vector2(-const_width/2*x_chors[p].length(),font_size+const_height),x_chors[p],font_color)
+		draw_line(point - Vector2(0, 5), point, v_lines_color, 1, true)
+		draw_string(font, point + Vector2(-const_width/2 * x_chors[p].length(), 
+				font_size + const_height), x_chors[p], font_color)
 	
 	# ordinate
 	for p in y_chors.size():
-		var point : Vector2 = origin-Vector2(0,(p)*y_pass)
+		var point : Vector2 = origin - Vector2(0, p * y_pass)
 		# h grid
-		draw_line(point,point+Vector2(SIZE.x-OFFSET.x,0),h_lines_color,0.2,true)
+		draw_line(point, point + Vector2(SIZE.x - OFFSET.x, 0), h_lines_color, 0.2, true)
 		# ordinate
-		draw_line(point,point+Vector2(5,0),h_lines_color,1,true)
-		draw_string(font,point-Vector2(y_chors[p].length()*const_width+font_size,-const_height),y_chors[p],font_color)
+		draw_line(point, point + Vector2(5, 0), h_lines_color, 1, true)
+		draw_string(font, point - Vector2(y_chors[p].length() * const_width +
+				font_size, -const_height), y_chors[p], font_color)
 
 
 func draw_chart_outlines():
-	draw_line(origin,SIZE-Vector2(0,OFFSET.y),box_color,1,true)
-	draw_line(origin,Vector2(OFFSET.x,0),box_color,1,true)
-	draw_line(Vector2(OFFSET.x,0),Vector2(SIZE.x,0),box_color,1,true)
-	draw_line(Vector2(SIZE.x,0),SIZE-Vector2(0,OFFSET.y),box_color,1,true)
+	draw_line(origin, SIZE-Vector2(0, OFFSET.y), box_color, 1, true)
+	draw_line(origin, Vector2(OFFSET.x, 0), box_color, 1, true)
+	draw_line(Vector2(OFFSET.x, 0), Vector2(SIZE.x, 0), box_color, 1, true)
+	draw_line(Vector2(SIZE.x, 0), SIZE - Vector2(0, OFFSET.y), box_color, 1, true)
 
 
 func draw_points():
@@ -304,20 +320,20 @@ func draw_points():
 	if function_colors.size():
 		defined_colors = true
 	
-	for _function in point_values.size():
+	for function in point_values.size():
 		var PointContainer : Control = Control.new()
 		Points.add_child(PointContainer)
 		
-		for function_point in point_values[_function].size():
+		for function_point in point_values[function].size():
 			var point : Point = point_node.instance()
 			point.connect("_point_pressed",self,"point_pressed")
 			point.connect("_mouse_entered",self,"show_data")
 			point.connect("_mouse_exited",self,"hide_data")
 			
-			point.create_point(points_shape[_function], function_colors[_function], 
-			Color.white, point_positions[_function][function_point], 
-			point.format_value(point_values[_function][function_point], false, false), 
-			y_labels[_function] as String)
+			point.create_point(points_shape[function], function_colors[function], 
+			Color.white, point_positions[function][function_point], 
+			point.format_value(point_values[function][function_point], false, false), 
+			y_labels[function] as String)
 			
 			PointContainer.add_child(point)
 
