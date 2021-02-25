@@ -171,41 +171,69 @@ func structure_datas(database : Array):
 	# @labels_index can be either a column or a row relative to x values
 	# @y_values can be either a column or a row relative to y values
 	are_values_columns = invert_chart != are_values_columns
+	var x_values := []
+	
 	if are_values_columns:
+		var y_values := []
+		var y_columns = database[0].size()
+		if range(database.size()).has(labels_index): # x column is present
+			y_columns -= 1
+		else:
+			x_values = range(database.size()) #If no x column is given, a generic one is generated
+			x_values.push_front("")
+		
+		for _i in y_columns: #Resize to number of y columns	
+			y_values.append([])
+		
 		for row in database.size():
-			var t_vals : Array
+			var y_column = 0
 			for column in database[row].size():
 				if column == labels_index:
 					var x_data = database[row][column]
 					if typeof(x_data) == TYPE_INT  or typeof(x_data) == TYPE_REAL:
-						x_datas.append(x_data as float)
+						x_values.append(x_data as float)
 					else:
-						x_datas.append(x_data.replace(",", ".") as float)
+						x_values.append(x_data.replace(",", ".") as float)
 				else:
 					if row != 0:
 						var y_data = database[row][column]
 						if typeof(y_data) == TYPE_INT  or typeof(y_data) == TYPE_REAL:
-							t_vals.append(y_data as float)
+							y_values[y_column].append(y_data as float)
 						else:
-							t_vals.append(y_data.replace(",",".") as float)
+							y_values[y_column].append(y_data.replace(",",".") as float)
 					else:
-						y_labels.append(str(database[row][column]))
-			if not t_vals.empty():
-					y_datas.append(t_vals)
-		x_label = str(x_datas.pop_front())
+						identifiers.append(str(database[row][column]))
+					y_column += 1
+					
+		x_label = str(x_values.pop_front())
+		for function in y_values.size():
+			y_datas.append(y_values[function])
+			x_datas.append(x_values)
 	else:
-		for row in database.size():
-			if row == labels_index:
-				x_datas = (database[row])
-				x_label = x_datas.pop_front() as String
-			else:
-				var values = database[row] as Array
-				y_labels.append(values.pop_front() as String)
-				y_datas.append(values)
-		for data in y_datas:
-			for value in data.size():
-				data[value] = data[value] as float
+		var database_size = range(database.size())
+		if database_size.has(labels_index):
+			x_values = database[labels_index]
+			x_label = x_values.pop_front() as String
+			database_size.erase(labels_index) #Remove x row from the iterator
+			
+		for row in database_size:
+			var y_values = database[row] as Array
+			identifiers.append(y_values.pop_front() as String)
+			
+			for val in y_values.size():
+					y_values[val] = y_values[val] as float
+			
+			y_datas.append(y_values)
+			x_datas.append(x_values if not x_values.empty() else range(y_values.size()))
 
+	for function in identifiers:
+		y_domain[0].append(null)
+		y_domain[1].append(null)
+		x_domain[0].append(null)
+		x_domain[1].append(null)
+		calculate_range(function)
+	
+	calculate_tics()
 
 func calculate_range(id):
 	# Calculate the domain of the given function in the x and y axis
@@ -258,11 +286,13 @@ func calculate_tics():
 
 
 func build_chart():
+	OFFSET.x = str(y_range[1]).length() * font_size
+	OFFSET.y = font_size * 2
+	
 	SIZE = get_size() - Vector2(OFFSET.x, 0)
 	origin = Vector2(OFFSET.x, SIZE.y - OFFSET.y)
 	
-	OFFSET.x = str(y_range[1]).length() * font_size
-	OFFSET.y = font_size * 2
+	
 
 
 func calculate_pass():
@@ -274,11 +304,13 @@ func calculate_pass():
 func calculate_coordinates():
 	point_values.clear()
 	point_positions.clear()
-	point_values.resize(identifiers.size())
-	point_positions.resize(identifiers.size())
+	
+	for _i in identifiers.size():
+		point_values.append([])
+		point_positions.append([])
 	
 	for function in identifiers.size():
-		for val in function.size():
+		for val in x_datas[function].size():
 			var value_x = (x_datas[function][val] - x_margin_min) * x_pass / h_dist
 			var value_y = (y_datas[function][val] - y_margin_min) * y_pass / v_dist
 	
@@ -291,7 +323,7 @@ func draw_grid():
 	for p in x_chors.size():
 		var point : Vector2 = origin + Vector2(p * x_pass, 0)
 		# v grid
-		draw_line(point, -Vector2(0, SIZE.y - OFFSET.y), v_lines_color, 0.2, true)
+		draw_line(point, point - Vector2(0, SIZE.y - OFFSET.y), v_lines_color, 0.2, true)
 		# ascisse
 		draw_line(point - Vector2(0, 5), point, v_lines_color, 1, true)
 		draw_string(font, point + Vector2(-const_width/2 * x_chors[p].length(), 
@@ -333,7 +365,7 @@ func draw_points():
 			point.create_point(points_shape[function], function_colors[function], 
 			Color.white, point_positions[function][function_point], 
 			point.format_value(point_values[function][function_point], false, false), 
-			y_labels[function] as String)
+			identifiers[function])
 			
 			PointContainer.add_child(point)
 
