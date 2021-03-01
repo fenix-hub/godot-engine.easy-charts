@@ -6,8 +6,6 @@ class_name ScatterChartBase
 # of points in a two-variable space. It handles basic data structure and grid 
 # layout and leaves to child classes the more specific behaviour.
 
-var identifiers : Array
-
 #Stored in the form of [[min_func1, min_func2, min_func3, ...], [max_func1, max_func2, ...]]
 var x_domain := [[], []]
 var y_domain := [[], []]
@@ -151,20 +149,95 @@ var property_list = [
 	]
 
 
+
+func plot():
+	# Overwrites the method on Chart to make a reusable piece to be used internally
+	# to do all calculations needed to replot.
+	calculate_tics()
+	build_chart()
+	count_functions()
+	calculate_pass()
+	calculate_colors()
+	calculate_coordinates()
+	set_shapes()
+	create_legend()
+	emit_signal("chart_plotted",self)
+	
+	if not is_connected("item_rect_changed",self, "redraw"): connect("item_rect_changed", self, "redraw")
+
+
 func plot_function(x:Array, y:Array, id=""):
-	pass
+	# Add a function to the chart. If no identifier (label) is given a generic one
+	# is generated.
+	# FIXME: Because of the way the outdated count_functions works,
+	# it has to be called with are_values_columns = false. Maybe just create 
+	# scatter_chart_base own method for the moment??
+	are_values_columns = false
+	load_font()
+	PointData.hide()
+	
+	if x.empty() or y.empty():
+		Utilities._print_message("Can't plot a chart with an empty Array.",1)
+		return
+	elif x.size() != y.size():
+		Utilities._print_message("Can't plot a chart with x and y having different number of elements.",1)
+		return
+	
+	id = generate_identifier() if id.empty() else id
+	
+	if y_labels.has(id):
+		Utilities._print_message("The identifier %s is already used. Please use a different one." % id,1)
+		return
+	
+	y_domain[0].append(null)
+	y_domain[1].append(null)
+	x_domain[0].append(null)
+	x_domain[1].append(null)
+	
+	x_datas.append(x)
+	y_datas.append(y)
+	y_labels.append(id)
+	
+	calculate_range(id)
+	plot()
+	
 
 
 func update_function(x:Array, y:Array, id=""):
-	pass
+	var function = y_labels.find(id)
+	
+	if function == -1: #Not found
+		Utilities._print_message("The identifier %s does not exist." % id,1)
+		return
+	
+	x_datas[function] = x
+	y_datas[function] = y
+	
+	calculate_range(id)
+	plot()
 
 
 func delete_function(id):
-	pass
-
+	var function = y_labels.find(id)
+	
+	if function == -1: #Not found
+		Utilities._print_message("The identifier %s does not exist." % id,1)
+		return
+	
+	y_labels.remove(function)
+	x_datas.remove(function)
+	y_datas.remove(function)
+	y_domain[0].remove(function)
+	y_domain[1].remove(function)
+	x_domain[0].remove(function)
+	x_domain[1].remove(function)
+	
+	plot()
+	
 
 func generate_identifier():
-	return "f%d" % (identifiers.size() + 1)
+	#TODO: Check if the identifier generated already exist (given by the user)
+	return "f%d" % (y_labels.size() + 1)
 
 
 func structure_datas(database : Array):
@@ -202,7 +275,7 @@ func structure_datas(database : Array):
 						else:
 							y_values[y_column].append(y_data.replace(",",".") as float)
 					else:
-						identifiers.append(str(database[row][column]))
+						y_labels.append(str(database[row][column]))
 					y_column += 1
 					
 		x_label = str(x_values.pop_front())
@@ -218,15 +291,15 @@ func structure_datas(database : Array):
 			
 		for row in database_size:
 			var y_values = database[row] as Array
-			identifiers.append(y_values.pop_front() as String)
+			y_labels.append(y_values.pop_front() as String)
 			
 			for val in y_values.size():
-					y_values[val] = y_values[val] as float
+				y_values[val] = y_values[val] as float
 			
 			y_datas.append(y_values)
 			x_datas.append(x_values if not x_values.empty() else range(y_values.size()))
 
-	for function in identifiers:
+	for function in y_labels:
 		y_domain[0].append(null)
 		y_domain[1].append(null)
 		x_domain[0].append(null)
@@ -239,20 +312,23 @@ func calculate_range(id):
 	# Calculate the domain of the given function in the x and y axis
 	# and updates the range value
 	
-	var function = identifiers.find(id)
+	var function = y_labels.find(id)
 	
 	y_domain[0][function] = y_datas[function].min()
 	y_domain[1][function] = y_datas[function].max()
 	
 	x_domain[0][function] = x_datas[function].min()
 	x_domain[1][function] = x_datas[function].max()
-	
-	# Chose the min/max from each function
-	y_range = [y_domain[0].min() if not origin_at_zero else 0, y_domain[1].max()]
-	x_range = [x_domain[0].min() if not origin_at_zero else 0, x_domain[1].max()]
 
 
 func calculate_tics():
+	y_chors.clear()
+	x_chors.clear()
+	
+	# Chose the min/max from all functions
+	y_range = [y_domain[0].min() if not origin_at_zero else 0, y_domain[1].max()]
+	x_range = [x_domain[0].min() if not origin_at_zero else 0, x_domain[1].max()]
+	
 	y_margin_min = y_range[0]
 	var y_margin_max = y_range[1]
 	v_dist = y_decim * pow(10.0, str(y_margin_max).split(".")[0].length() - 1)
@@ -279,7 +355,7 @@ func calculate_tics():
 	if not show_x_values_as_labels:
 		x_chors = x_labels
 	else:
-		for function in identifiers.size():
+		for function in y_labels.size():
 			for value in x_datas[function]:
 				if not x_chors.has(value as String): #Don't append repeated values
 					x_chors.append(value as String)
@@ -291,8 +367,6 @@ func build_chart():
 	
 	SIZE = get_size() - Vector2(OFFSET.x, 0)
 	origin = Vector2(OFFSET.x, SIZE.y - OFFSET.y)
-	
-	
 
 
 func calculate_pass():
@@ -305,11 +379,11 @@ func calculate_coordinates():
 	point_values.clear()
 	point_positions.clear()
 	
-	for _i in identifiers.size():
+	for _i in y_labels.size():
 		point_values.append([])
 		point_positions.append([])
 	
-	for function in identifiers.size():
+	for function in y_labels.size():
 		for val in x_datas[function].size():
 			var value_x = (x_datas[function][val] - x_margin_min) * x_pass / h_dist
 			var value_y = (y_datas[function][val] - y_margin_min) * y_pass / v_dist
@@ -365,7 +439,7 @@ func draw_points():
 			point.create_point(points_shape[function], function_colors[function], 
 			Color.white, point_positions[function][function_point], 
 			point.format_value(point_values[function][function_point], false, false), 
-			identifiers[function])
+			y_labels[function])
 			
 			PointContainer.add_child(point)
 
