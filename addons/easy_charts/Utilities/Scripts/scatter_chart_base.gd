@@ -10,54 +10,118 @@ class_name ScatterChartBase
 var x_domain := [[], []]
 var y_domain := [[], []]
 
-var x_range
-var y_range
+var x_range := [0, 0]
+var y_range := [0, 0]
+var autoscale_x = true
+var autoscale_y = true
 
-var property_list = [
+
+var property_list = []
+
+
+func _init():
+	build_property_list()
+
+
+func build_property_list():
+	property_list.clear()
+	
 	# Chart Properties
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_CATEGORY,
-		"name": "ScatterChartBase", #TODO Changue this in the child classes
+		"name": "ScatterChartBase",
 		"type": TYPE_STRING
-	},
+	})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Properties/are_values_columns",
 		"type": TYPE_BOOL
-	},
+	})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_RANGE,
 		"hint_string": "-1,100,1",
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Properties/labels_index",
 		"type": TYPE_INT
-	},
+	})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Properties/show_x_values_as_labels",
 		"type": TYPE_BOOL
-	},
+	})
 	
 	# Chart Display
+	property_list.append(
+	{
+		"hint": PROPERTY_HINT_NONE,
+		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+		"name": "Chart_Display/autoscale_x",
+		"type": TYPE_BOOL
+	})
+	if not autoscale_x: 
+		property_list.append(
+		{
+			"hint": PROPERTY_HINT_NONE,
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Display/min_x_range",
+			"type": TYPE_REAL
+		})
+		property_list.append(
+		{
+			"hint": PROPERTY_HINT_NONE,
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Display/max_x_range",
+			"type": TYPE_REAL
+		})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_RANGE,
 		"hint_string": "0.001, 10",
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Display/x_decim",
 		"type": TYPE_REAL
-	},
+	})
+	property_list.append(
+	{
+		"hint": PROPERTY_HINT_NONE,
+		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+		"name": "Chart_Display/autoscale_y",
+		"type": TYPE_BOOL
+	})
+	if not autoscale_y:
+		property_list.append(
+		{
+			"hint": PROPERTY_HINT_NONE,
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Display/min_y_range",
+			"type": TYPE_REAL
+		})
+		property_list.append(
+		{
+			"hint": PROPERTY_HINT_NONE,
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+			"name": "Chart_Display/max_y_range",
+			"type": TYPE_REAL
+		})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_RANGE,
 		"hint_string": "0.001, 10",
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Display/y_decim",
 		"type": TYPE_REAL
-	},
+	})
 	
+		
 	# Chart Style
+	property_list.append(
 	{ 
 		"hint": 24, 
 		"hint_string": ("%d/%d:%s"
@@ -66,31 +130,36 @@ var property_list = [
 		"name": "Chart_Style/points_shape", 
 		"type": TYPE_ARRAY, 
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE
-	},
+	})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Style/function_colors",
 		"type": TYPE_COLOR_ARRAY
-	},
+	})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Style/box_color",
 		"type": TYPE_COLOR
-	},
+	})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Style/v_lines_color",
 		"type": TYPE_COLOR
-	},
+	})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Style/h_lines_color",
 		"type": TYPE_COLOR
-	},
+	})
+	property_list.append(
 	{
 		"class_name": "Font",
 		"hint": PROPERTY_HINT_RESOURCE_TYPE,
@@ -98,7 +167,8 @@ var property_list = [
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Style/font",
 		"type": TYPE_OBJECT
-	},
+	})
+	property_list.append(
 	{
 		"class_name": "Font",
 		"hint": PROPERTY_HINT_RESOURCE_TYPE,
@@ -106,47 +176,98 @@ var property_list = [
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Style/bold_font",
 		"type": TYPE_OBJECT
-	},
+	})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Style/font_color",
 		"type": TYPE_COLOR
-	},
+	})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Style/use_template",
 		"type": TYPE_BOOL
-	},
+	})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_ENUM,
 		"hint_string": PoolStringArray(Utilities.templates.keys()).join(","),
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Style/template",
 		"type": TYPE_INT
-	},
+	})
 	
 	# Chart Modifiers
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Modifiers/treshold",
 		"type": TYPE_VECTOR2
-	},
+	})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Modifiers/only_disp_values",
 		"type": TYPE_VECTOR2
-	},
+	})
+	property_list.append(
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Modifiers/invert_chart",
 		"type": TYPE_BOOL
-	},
-	]
+	})
+
+
+func _set(property, value):
+	match property:
+		"Chart_Display/autoscale_x":
+			autoscale_x = value
+			build_property_list()
+			property_list_changed_notify()
+			return true
+		"Chart_Display/autoscale_y":
+			autoscale_y = value
+			build_property_list()
+			property_list_changed_notify()
+			return true
+		"Chart_Display/min_x_range":
+			x_range[0] = value
+			return true
+		"Chart_Display/max_x_range":
+			x_range[1] = value
+			return true
+		"Chart_Display/min_y_range":
+			y_range[0] = value
+			return true
+		"Chart_Display/max_y_range":
+			y_range[1] = value
+			return true
+
+	._set(property, value)
+
+
+func _get(property):
+	match property:
+		"Chart_Display/autoscale_x":
+			return autoscale_x
+		"Chart_Display/autoscale_y":
+			return autoscale_y
+		"Chart_Display/min_x_range":
+			return x_range[0]
+		"Chart_Display/max_x_range":
+			return x_range[1]
+		"Chart_Display/min_y_range":
+			return y_range[0]
+		"Chart_Display/max_y_range":
+			return y_range[1]
+
+	._get(property)
 
 
 
@@ -200,7 +321,6 @@ func plot_function(x:Array, y:Array, id=""):
 	
 	calculate_range(id)
 	plot()
-	
 
 
 func update_function(x:Array, y:Array, id=""):
@@ -326,8 +446,11 @@ func calculate_tics():
 	x_chors.clear()
 	
 	# Chose the min/max from all functions
-	y_range = [y_domain[0].min() if not origin_at_zero else 0, y_domain[1].max()]
-	x_range = [x_domain[0].min() if not origin_at_zero else 0, x_domain[1].max()]
+	if autoscale_x:
+		x_range = [x_domain[0].min() if not origin_at_zero else 0, x_domain[1].max()]
+	if autoscale_y:
+		y_range = [y_domain[0].min() if not origin_at_zero else 0, y_domain[1].max()]
+	
 	
 	y_margin_min = y_range[0]
 	var y_margin_max = y_range[1]

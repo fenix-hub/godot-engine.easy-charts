@@ -16,8 +16,8 @@ class_name LineChart
 
 
 func _get_property_list():
- property_list[0].name = "LineChart"
- return property_list
+	property_list[0].name = "LineChart"
+	return property_list
 
 
 func _draw():
