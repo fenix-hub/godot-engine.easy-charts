@@ -1,4 +1,3 @@
-tool
 extends Chart
 class_name ScatterChartBase
 
@@ -270,7 +269,6 @@ func _get(property):
 	._get(property)
 
 
-
 func plot():
 	# Overwrites the method on Chart to make a reusable piece to be used internally
 	# to do all calculations needed to replot.
@@ -287,15 +285,14 @@ func plot():
 	if not is_connected("item_rect_changed",self, "redraw"): connect("item_rect_changed", self, "redraw")
 
 
-func plot_function(x:Array, y:Array, id=""):
+func plot_function(x:Array, y:Array, param_dic := {}):
 	# Add a function to the chart. If no identifier (label) is given a generic one
 	# is generated.
-	# FIXME: Because of the way the outdated count_functions works,
-	# it has to be called with are_values_columns = false. Maybe just create 
-	# scatter_chart_base own method for the moment??
-	are_values_columns = false
+	# param_dic is a dictionary with specific parameters to this curve
+	
 	load_font()
 	PointData.hide()
+	var id := ""
 	
 	if x.empty() or y.empty():
 		Utilities._print_message("Can't plot a chart with an empty Array.",1)
@@ -303,6 +300,16 @@ func plot_function(x:Array, y:Array, id=""):
 	elif x.size() != y.size():
 		Utilities._print_message("Can't plot a chart with x and y having different number of elements.",1)
 		return
+	
+	for param in param_dic.keys():
+		match param:
+			"label":
+				id = param_dic[param]
+			"color":
+				if function_colors.size() < functions + 1: #There is going to be a new function
+					function_colors.append(param_dic[param])
+				else:
+					function_colors[functions] = param_dic[param]
 	
 	id = generate_identifier() if id.empty() else id
 	
@@ -323,12 +330,19 @@ func plot_function(x:Array, y:Array, id=""):
 	plot()
 
 
-func update_function(x:Array, y:Array, id=""):
+func update_function(id:String, x:Array, y:Array, param_dic := {}):
 	var function = y_labels.find(id)
 	
 	if function == -1: #Not found
 		Utilities._print_message("The identifier %s does not exist." % id,1)
 		return
+	
+	for param in param_dic.keys():
+		match param:
+			"label":
+				y_labels[function] = param_dic[param]
+			"color":
+				function_colors[functions] = param_dic[param]
 	
 	x_datas[function] = x
 	y_datas[function] = y
@@ -337,7 +351,7 @@ func update_function(x:Array, y:Array, id=""):
 	plot()
 
 
-func delete_function(id):
+func delete_function(id:String):
 	var function = y_labels.find(id)
 	
 	if function == -1: #Not found
@@ -428,6 +442,7 @@ func structure_datas(database : Array):
 	
 	calculate_tics()
 
+
 func calculate_range(id):
 	# Calculate the domain of the given function in the x and y axis
 	# and updates the range value
@@ -490,6 +505,10 @@ func build_chart():
 	
 	SIZE = get_size() - Vector2(OFFSET.x, 0)
 	origin = Vector2(OFFSET.x, SIZE.y - OFFSET.y)
+
+
+func count_functions():
+	functions = y_labels.size()
 
 
 func calculate_pass():

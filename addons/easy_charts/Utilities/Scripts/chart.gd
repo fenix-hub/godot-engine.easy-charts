@@ -443,7 +443,7 @@ func load_font():
 
 func calculate_colors():
 	if function_colors.size() < functions:
-		for function in range(functions - function_colors.size() + 1): function_colors.append(Color(randf(),randf(), randf()))
+		for function in range(functions - function_colors.size()): function_colors.append(Color(randf(),randf(), randf()))
 
 func set_shapes():
 	if points_shape.empty() or points_shape.size() < functions:
