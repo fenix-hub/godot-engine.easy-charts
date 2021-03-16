@@ -62,8 +62,8 @@ var x_label : String
 var x_labels : Array
 var y_labels : Array
 
-var x_margin_min : int = 0
-var y_margin_min : int = 0
+var x_margin_min : float = 0
+var y_margin_min : float = 0
 
 # actual values of point, from the database
 var point_values : Array
@@ -78,9 +78,9 @@ export (String) var chart_name : String = "" setget set_chart_name
 export (String, FILE, "*.txt, *.csv") var source : String = "" setget set_source
 export (String) var delimiter : String = ";" setget set_delimiter
 
-var origin_at_zero : bool = true 			setget set_origin_at_zero#, get_origin_at_zero
+var origin_at_zero : bool = false 			setget set_origin_at_zero#, get_origin_at_zero
 var are_values_columns : bool = false   	setget set_are_values_columns#, get_are_values_columns
-var show_x_values_as_labels : bool = true	setget set_show_x_values_as_labels#, get_show_x_values_as_labels
+var show_x_values_as_labels : bool = false	setget set_show_x_values_as_labels#, get_show_x_values_as_labels
 var labels_index : int = 0					setget set_labels_index#, get_labels_index
 var function_names_index : int = 0			setget set_function_names_index#, get_function_names_index
 
@@ -94,7 +94,7 @@ var column_gap : float = 2					setget set_column_gap
 
 # Calculations of decim and its relation with number of tics: https://www.desmos.com/calculator/jeiceaswiy
 var full_scale : float = 1.0				setget set_full_scale
-var x_decim : float = 5.0					setget set_x_decim
+var x_decim : float = 1.0					setget set_x_decim
 var y_decim : float = 1.0					setget set_y_decim
 
 var points_shape : Array = [PointShapes.Dot]	setget set_points_shape

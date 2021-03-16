@@ -454,7 +454,7 @@ func calculate_range(id):
 	
 	x_domain[0][function] = x_datas[function].min()
 	x_domain[1][function] = x_datas[function].max()
-
+	
 
 func calculate_tics():
 	y_chors.clear()
@@ -469,28 +469,37 @@ func calculate_tics():
 	
 	y_margin_min = y_range[0]
 	var y_margin_max = y_range[1]
-	v_dist = y_decim * pow(10.0, str(y_margin_max).split(".")[0].length() - 1)
-	var multi = 0
-	var p = (v_dist * multi) + y_margin_min
-	y_chors.append(p as String)
-	while p < y_margin_max:
-		multi += 1
-		p = (v_dist * multi) + y_margin_min
-		y_chors.append(p as String)
+	v_dist = y_decim * pow(10.0, calculate_number_integer_digits(max(abs(y_margin_max), abs(y_margin_min))) - 1)
+	
+	# There are three cases of min/max:
+	# 		For +/+ and -/- we just do the usual and draw tics from min to max
+	# 		But for the -/+ we do in two times to force the 0 to appear so it is
+	#		easier to read. Then we draw the negative from 0 to min and the positives
+	#		from 0 to max without drawing the 0 again
+	if y_margin_min < 0 and y_margin_max >= 0:
+		calculate_interval_tics(0, y_margin_min, -v_dist, y_chors) #Negative tics
+		calculate_interval_tics(0, y_margin_max, v_dist, y_chors, false) #Positive tics
+		y_chors.sort()
+		y_margin_min = min(y_margin_min, y_chors[0])
+	else:
+		calculate_interval_tics(y_margin_min, y_margin_max, v_dist, y_chors)
+	for i in y_chors.size():
+		y_chors[i] = String(y_chors[i]) #Can't cast directly on calculate_interval_tics because it mess up with the sorting 
 	
 	x_margin_min = x_range[0]
 	var x_margin_max = x_range[1]
 	if not show_x_values_as_labels:
-		h_dist = x_decim * pow(10.0, str(x_margin_max).split(".")[0].length() - 1)
-		multi = 0
-		p = (h_dist * multi) + x_margin_min
-		x_labels.append(p as String)
-		while p < x_margin_max:
-			multi += 1
-			p = (h_dist * multi) + x_margin_min
-			x_labels.append(p as String)
-	
-	if not show_x_values_as_labels:
+		h_dist = x_decim * pow(10.0, calculate_number_integer_digits(max(abs(x_margin_max), abs(x_margin_min))) - 1)
+
+		if x_margin_min < 0 and x_margin_max >= 0:
+			calculate_interval_tics(0, x_margin_min, -h_dist, x_labels) #Negative tics
+			calculate_interval_tics(0, x_margin_max, h_dist, x_labels, false) #Positive tics
+			x_labels.sort()
+			x_margin_min = min(x_margin_min, x_labels[0])
+		else:
+			calculate_interval_tics(x_margin_min, x_margin_max, h_dist, x_labels)
+		for i in x_labels.size():
+			x_labels[i] = String(x_labels[i])
 		x_chors = x_labels
 	else:
 		for function in y_labels.size():
@@ -500,7 +509,8 @@ func calculate_tics():
 
 
 func build_chart():
-	OFFSET.x = str(y_range[1]).length() * font_size
+	#TODO: Still needs improving (for example 0.000001 vS 10 should pick the former)
+	OFFSET.x = str(max(abs(y_range[0]), abs(y_range[1]))).length() * font_size
 	OFFSET.y = font_size * 2
 	
 	SIZE = get_size() - Vector2(OFFSET.x, 0)
@@ -514,7 +524,7 @@ func count_functions():
 func calculate_pass():
 	# Calculate distance in pixel between 2 consecutive values/datas
 	x_pass = (SIZE.x - OFFSET.x) / (x_chors.size() - 1 if x_chors.size() > 1 else x_chors.size())
-	y_pass = (origin.y - ChartName.get_rect().size.y * 2) / (y_chors.size() - 1)
+	y_pass = (origin.y - ChartName.get_rect().size.y * 2) / (y_chors.size() - 1 if y_chors.size() > 1 else y_chors.size())
 
 
 func calculate_coordinates():
@@ -593,3 +603,30 @@ func draw_treshold():
 			draw_line(Vector2(origin.x, treshold_draw.y), Vector2(SIZE.x, treshold_draw.y), Color.red, 0.4, true)
 		if treshold.x != 0:
 			draw_line(Vector2(treshold_draw.x, 0), Vector2(treshold_draw.x, SIZE.y - OFFSET.y), Color.red, 0.4, true)
+
+
+func calculate_number_integer_digits(number):
+	var digits = str(number).split(".")[0].length()
+	
+	if number < 0: #the '-' char doesn't count as digit
+		digits -= 1
+	
+	return digits
+
+
+func calculate_interval_tics(v_from:float, v_to:float, dist:float, chords:Array, include_first := true):
+	# Appends to array chords the tics calculated between v_from and v_to with
+	# a given distance between tics.
+	#include_first is used to tell if v_from should be appended or ignored
+	
+	var multi = 0
+	var p = (dist * multi) + v_from
+	var missing_tics = p < v_to if dist > 0 else p > v_to
+	if include_first:
+		chords.append(p)
+	
+	while missing_tics:
+		multi += 1
+		p = (dist * multi) + v_from
+		missing_tics = p < v_to if dist > 0 else p > v_to
+		chords.append(p)
