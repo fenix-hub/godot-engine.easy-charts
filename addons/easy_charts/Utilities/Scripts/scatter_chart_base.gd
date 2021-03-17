@@ -342,13 +342,14 @@ func update_function(id:String, x:Array, y:Array, param_dic := {}):
 			"label":
 				y_labels[function] = param_dic[param]
 			"color":
-				function_colors[functions] = param_dic[param]
+				function_colors[function] = param_dic[param]
 	
 	x_datas[function] = x
 	y_datas[function] = y
 	
 	calculate_range(id)
 	plot()
+	update()
 
 
 func delete_function(id:String):
@@ -365,8 +366,10 @@ func delete_function(id:String):
 	y_domain[1].remove(function)
 	x_domain[0].remove(function)
 	x_domain[1].remove(function)
+	function_colors.remove(function)
 	
 	plot()
+	update()
 	
 
 func generate_identifier():
@@ -469,7 +472,7 @@ func calculate_tics():
 	
 	y_margin_min = y_range[0]
 	var y_margin_max = y_range[1]
-	v_dist = y_decim * pow(10.0, calculate_number_integer_digits(max(abs(y_margin_max), abs(y_margin_min))) - 1)
+	v_dist = y_decim * pow(10.0, calculate_position_significant_figure(y_margin_max - y_margin_min) - 1)
 	
 	# There are three cases of min/max:
 	# 		For +/+ and -/- we just do the usual and draw tics from min to max
@@ -489,7 +492,7 @@ func calculate_tics():
 	x_margin_min = x_range[0]
 	var x_margin_max = x_range[1]
 	if not show_x_values_as_labels:
-		h_dist = x_decim * pow(10.0, calculate_number_integer_digits(max(abs(x_margin_max), abs(x_margin_min))) - 1)
+		h_dist = x_decim * pow(10.0, calculate_position_significant_figure(x_margin_max - x_margin_min) - 1)
 
 		if x_margin_min < 0 and x_margin_max >= 0:
 			calculate_interval_tics(0, x_margin_min, -h_dist, x_labels) #Negative tics
@@ -509,8 +512,13 @@ func calculate_tics():
 
 
 func build_chart():
-	#TODO: Still needs improving (for example 0.000001 vS 10 should pick the former)
-	OFFSET.x = str(max(abs(y_range[0]), abs(y_range[1]))).length() * font_size
+	var longest_y_tic = 0
+	for y_tic in y_chors:
+		if y_tic.length() > longest_y_tic:
+			longest_y_tic = y_tic.length()
+	longest_y_tic += 1 #Necesary to show 1 digit numbers correctly	until font_size is calculated dinamically
+	
+	OFFSET.x = font_size * longest_y_tic
 	OFFSET.y = font_size * 2
 	
 	SIZE = get_size() - Vector2(OFFSET.x, 0)
@@ -537,8 +545,8 @@ func calculate_coordinates():
 	
 	for function in y_labels.size():
 		for val in x_datas[function].size():
-			var value_x = (x_datas[function][val] - x_margin_min) * x_pass / h_dist
-			var value_y = (y_datas[function][val] - y_margin_min) * y_pass / v_dist
+			var value_x = (x_datas[function][val] - x_margin_min) * x_pass / h_dist if h_dist else 0
+			var value_y = (y_datas[function][val] - y_margin_min) * y_pass / v_dist if v_dist else 0
 	
 			point_values[function].append([x_datas[function][val], y_datas[function][val]])
 			point_positions[function].append(Vector2(value_x + origin.x, origin.y - value_y))
@@ -551,7 +559,7 @@ func draw_grid():
 		# v grid
 		draw_line(point, point - Vector2(0, SIZE.y - OFFSET.y), v_lines_color, 0.2, true)
 		# ascisse
-		draw_line(point - Vector2(0, 5), point, v_lines_color, 1, true)
+		draw_line(point + Vector2(0, 5), point, v_lines_color, 1, true)
 		draw_string(font, point + Vector2(-const_width/2 * x_chors[p].length(), 
 				font_size + const_height), x_chors[p], font_color)
 	
@@ -561,7 +569,7 @@ func draw_grid():
 		# h grid
 		draw_line(point, point + Vector2(SIZE.x - OFFSET.x, 0), h_lines_color, 0.2, true)
 		# ordinate
-		draw_line(point, point + Vector2(5, 0), h_lines_color, 1, true)
+		draw_line(point, point + Vector2(-5, 0), h_lines_color, 1, true)
 		draw_string(font, point - Vector2(y_chors[p].length() * const_width +
 				font_size, -const_height), y_chors[p], font_color)
 
@@ -605,13 +613,8 @@ func draw_treshold():
 			draw_line(Vector2(treshold_draw.x, 0), Vector2(treshold_draw.x, SIZE.y - OFFSET.y), Color.red, 0.4, true)
 
 
-func calculate_number_integer_digits(number):
-	var digits = str(number).split(".")[0].length()
-	
-	if number < 0: #the '-' char doesn't count as digit
-		digits -= 1
-	
-	return digits
+func calculate_position_significant_figure(number):
+	return floor(log(abs(number))/log(10) + 1) if number else 1
 
 
 func calculate_interval_tics(v_from:float, v_to:float, dist:float, chords:Array, include_first := true):
