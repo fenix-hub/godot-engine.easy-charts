@@ -248,8 +248,6 @@ func _set(property, value):
 			y_range[1] = value
 			return true
 
-	._set(property, value)
-
 
 func _get(property):
 	match property:
@@ -265,8 +263,6 @@ func _get(property):
 			return y_range[0]
 		"Chart_Display/max_y_range":
 			return y_range[1]
-
-	._get(property)
 
 
 func plot():
@@ -514,12 +510,12 @@ func calculate_tics():
 func build_chart():
 	var longest_y_tic = 0
 	for y_tic in y_chors:
-		if y_tic.length() > longest_y_tic:
-			longest_y_tic = y_tic.length()
-	longest_y_tic += 1 #Necesary to show 1 digit numbers correctly	until font_size is calculated dinamically
-	
-	OFFSET.x = font_size * longest_y_tic
-	OFFSET.y = font_size * 2
+		var length = font.get_string_size(y_tic).x
+		if length > longest_y_tic:
+			longest_y_tic = length
+
+	OFFSET.x = longest_y_tic + tic_length
+	OFFSET.y = font_size * 2 #TODO: Change when get_string_size.y is correctly understood
 	
 	SIZE = get_size() - Vector2(OFFSET.x, 0)
 	origin = Vector2(OFFSET.x, SIZE.y - OFFSET.y)
@@ -556,22 +552,32 @@ func draw_grid():
 	# ascisse
 	for p in x_chors.size():
 		var point : Vector2 = origin + Vector2(p * x_pass, 0)
+		var size_text : Vector2 = font.get_string_size(x_chors[p])
 		# v grid
 		draw_line(point, point - Vector2(0, SIZE.y - OFFSET.y), v_lines_color, 0.2, true)
 		# ascisse
-		draw_line(point + Vector2(0, 5), point, v_lines_color, 1, true)
-		draw_string(font, point + Vector2(-const_width/2 * x_chors[p].length(), 
-				font_size + const_height), x_chors[p], font_color)
+		draw_line(point + Vector2(0, tic_length), point, v_lines_color, 1, true)
+		draw_string(font, point + Vector2(-size_text.x / 2, size_text.y + tic_length),
+				x_chors[p], font_color)
 	
 	# ordinate
 	for p in y_chors.size():
 		var point : Vector2 = origin - Vector2(0, p * y_pass)
+		var size_text : Vector2 = font.get_string_size(y_chors[p]) #TODO: Investigate into size_text.y being the same for all chars
+		# Apparently numbers are drawn on the upper side of the space, but the size 
+		# return all ascent + descent, meaning that it doesn't get correctly centered 
+		# vertically. Is this behaviour common to all fonts (i think it can't be 
+		# asumed)? Can be taken into account from godot?
+		
+		#TEMPORARY FIX: Substract the descent that is not used to represent numbers (at least in the default font)
+		size_text.y -= font.get_descent()
+		
 		# h grid
 		draw_line(point, point + Vector2(SIZE.x - OFFSET.x, 0), h_lines_color, 0.2, true)
 		# ordinate
-		draw_line(point, point + Vector2(-5, 0), h_lines_color, 1, true)
-		draw_string(font, point - Vector2(y_chors[p].length() * const_width +
-				font_size, -const_height), y_chors[p], font_color)
+		draw_line(point, point + Vector2(-tic_length, 0), h_lines_color, 1, true)
+		draw_string(font, point + Vector2(-size_text.x - tic_length, size_text.y / 2),
+				y_chors[p], font_color)
 
 
 func draw_chart_outlines():
@@ -614,7 +620,7 @@ func draw_treshold():
 
 
 func calculate_position_significant_figure(number):
-	return floor(log(abs(number))/log(10) + 1) if number else 1
+	return floor(log(abs(number))/log(10) + 1) #If number = 0 Godot returns -#INF and it behaves correctly on the pow call on calculate_tics
 
 
 func calculate_interval_tics(v_from:float, v_to:float, dist:float, chords:Array, include_first := true):

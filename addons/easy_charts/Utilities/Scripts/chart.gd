@@ -131,6 +131,8 @@ var treshold : Vector2 setget set_treshold
 # only used to draw treshold values
 var treshold_draw : Vector2
 
+var tic_length : int = 5	setget set_tic_length
+
 # !! API v2
 static func instance(chart_type : int):
 	var chart_t : String = Utilities.get_chart_type(chart_type)
@@ -433,7 +435,6 @@ func load_font():
 		var theme : Theme = Theme.new()
 		theme.set_default_font(font)
 		set_theme(theme)
-		
 	else:
 		var lbl = Label.new()
 		font = lbl.get_font("")
@@ -629,6 +630,10 @@ func set_outline_color(c : Color):
 # ! API
 func set_box_color(c : Color):
 	box_color = c
+
+# ! API
+func set_tic_length(i: int):
+	tic_length = i
 
 # ! API
 func set_grid_color(c : Color):
