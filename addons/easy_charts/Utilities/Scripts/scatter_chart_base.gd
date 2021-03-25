@@ -146,6 +146,14 @@ func build_property_list():
 	})
 	property_list.append(
 	{
+		"hint": PROPERTY_HINT_RANGE,
+		"hint_string": "1, 100, 1",
+		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+		"name": "Chart_Style/grid_lines_width",
+		"type": TYPE_INT
+	})
+	property_list.append(
+	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Style/v_lines_color",
@@ -501,6 +509,7 @@ func calculate_tics():
 			x_labels[i] = String(x_labels[i])
 		x_chors = x_labels
 	else:
+		#TODO: h_dist = ?
 		for function in y_labels.size():
 			for value in x_datas[function]:
 				if not x_chors.has(value as String): #Don't append repeated values
@@ -514,8 +523,8 @@ func build_chart():
 		if length > longest_y_tic:
 			longest_y_tic = length
 
-	OFFSET.x = longest_y_tic + tic_length
-	OFFSET.y = font_size * 2 #TODO: Change when get_string_size.y is correctly understood
+	OFFSET.x = longest_y_tic + tic_length + 2 * label_displacement
+	OFFSET.y = font.get_height() + tic_length + label_displacement
 	
 	SIZE = get_size() - Vector2(OFFSET.x, 0)
 	origin = Vector2(OFFSET.x, SIZE.y - OFFSET.y)
@@ -554,30 +563,23 @@ func draw_grid():
 		var point : Vector2 = origin + Vector2(p * x_pass, 0)
 		var size_text : Vector2 = font.get_string_size(x_chors[p])
 		# v grid
-		draw_line(point, point - Vector2(0, SIZE.y - OFFSET.y), v_lines_color, 0.2, true)
+		draw_line(point, point - Vector2(0, SIZE.y - OFFSET.y), v_lines_color, grid_lines_width, true)
 		# ascisse
-		draw_line(point + Vector2(0, tic_length), point, v_lines_color, 1, true)
+		draw_line(point + Vector2(0, tic_length), point, v_lines_color, grid_lines_width, true)
 		draw_string(font, point + Vector2(-size_text.x / 2, size_text.y + tic_length),
 				x_chors[p], font_color)
 	
 	# ordinate
 	for p in y_chors.size():
 		var point : Vector2 = origin - Vector2(0, p * y_pass)
-		var size_text : Vector2 = font.get_string_size(y_chors[p]) #TODO: Investigate into size_text.y being the same for all chars
-		# Apparently numbers are drawn on the upper side of the space, but the size 
-		# return all ascent + descent, meaning that it doesn't get correctly centered 
-		# vertically. Is this behaviour common to all fonts (i think it can't be 
-		# asumed)? Can be taken into account from godot?
-		
-		#TEMPORARY FIX: Substract the descent that is not used to represent numbers (at least in the default font)
-		size_text.y -= font.get_descent()
+		var size_text := Vector2(font.get_string_size(y_chors[p]).x, font.get_ascent()) #The y should be ascent instead full height to get correctly centered
 		
 		# h grid
-		draw_line(point, point + Vector2(SIZE.x - OFFSET.x, 0), h_lines_color, 0.2, true)
+		draw_line(point, point + Vector2(SIZE.x - OFFSET.x, 0), h_lines_color, grid_lines_width, true)
 		# ordinate
-		draw_line(point, point + Vector2(-tic_length, 0), h_lines_color, 1, true)
-		draw_string(font, point + Vector2(-size_text.x - tic_length, size_text.y / 2),
-				y_chors[p], font_color)
+		draw_line(point, point + Vector2(-tic_length, 0), h_lines_color, grid_lines_width, true)
+		draw_string(font, point + Vector2(-size_text.x - tic_length - label_displacement, 
+				size_text.y / 2), y_chors[p], font_color)
 
 
 func draw_chart_outlines():
@@ -588,10 +590,6 @@ func draw_chart_outlines():
 
 
 func draw_points():
-	var defined_colors : bool = false
-	if function_colors.size():
-		defined_colors = true
-	
 	for function in point_values.size():
 		var PointContainer : Control = Control.new()
 		Points.add_child(PointContainer)

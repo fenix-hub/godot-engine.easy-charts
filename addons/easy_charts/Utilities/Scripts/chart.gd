@@ -101,6 +101,7 @@ var points_shape : Array = [PointShapes.Dot]	setget set_points_shape
 var function_colors = [Color("#1e1e1e")]		setget set_function_colors
 var outline_color : Color = Color("#1e1e1e")	setget set_outline_color
 var box_color : Color = Color("#1e1e1e")		setget set_box_color
+var grid_lines_width : int = 1					setget set_grid_lines_width
 var v_lines_color : Color = Color("#cacaca")	setget set_v_lines_color
 var h_lines_color : Color = Color("#cacaca")	setget set_h_lines_color
 var grid_color : Color = Color("#1e1e1e")		setget set_grid_color
@@ -131,7 +132,9 @@ var treshold : Vector2 setget set_treshold
 # only used to draw treshold values
 var treshold_draw : Vector2
 
-var tic_length : int = 5	setget set_tic_length
+# Custom parameters for plot display
+var tic_length : int = 5	setget set_tic_length # Length of the bar indicating a tic
+var label_displacement : int = 4 setget set_label_displacement # Separation between the label and both the axis and the edge border
 
 # !! API v2
 static func instance(chart_type : int):
@@ -182,6 +185,8 @@ func _get(property):
 			return grid_color
 		"Chart_Style/box_color":
 			return box_color
+		"Chart_Style/grid_lines_width":
+			return grid_lines_width
 		"Chart_Style/v_lines_color":
 			return v_lines_color
 		"Chart_Style/h_lines_color":
@@ -263,6 +268,9 @@ func _set(property, value):
 			return true
 		"Chart_Style/box_color":
 			box_color = value
+			return true
+		"Chart_Style/grid_lines_width":
+			grid_lines_width = value
 			return true
 		"Chart_Style/v_lines_color":
 			v_lines_color = value
@@ -636,8 +644,16 @@ func set_tic_length(i: int):
 	tic_length = i
 
 # ! API
+func set_label_displacement(i:int):
+	label_displacement = i
+
+# ! API
 func set_grid_color(c : Color):
 	grid_color = c
+
+# ! API
+func set_grid_lines_width(i : int):
+	grid_lines_width = i
 
 # ! API
 func set_v_lines_color(c : Color):
