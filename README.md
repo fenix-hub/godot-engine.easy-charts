@@ -6,7 +6,8 @@
 
 # Notice, plugin under refactoring
 **This plugin is under refactoring an maintenance. The next official release will contain multiple updates and upgrades.**\
-**If you encounter any bug, please contact me on Discord.**
+**If you encounter any bug, please contact me on Discord.**\
+
 
 <img src="addons/easy_charts/icon.png" align="left" width="64" height="64">
 
