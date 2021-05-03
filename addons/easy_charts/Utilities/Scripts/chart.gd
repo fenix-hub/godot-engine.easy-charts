@@ -477,11 +477,10 @@ func count_functions():
 	else: functions = y_datas.size()
 
 func clear_points():
-	if $Points.get_children():
-		for function in Points.get_children():
-			function.queue_free()
-	for legend in $Legend.get_children():
-		legend.queue_free()
+	for function in Points.get_children():
+		function.free()
+	for legend in Legend.get_children():
+		legend.free()
 
 func redraw():
 	build_chart()

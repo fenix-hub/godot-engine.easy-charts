@@ -19,7 +19,7 @@ onready var Space = $ImmediateGeometry
 onready var PointData = $PointData/PointData
 
 var point_node : PackedScene = preload("../Utilities/Point/Point.tscn")
-var FunctionLegend : PackedScene = preload("../Utilities/Legend/FunctionLegend.tscn")
+var FunctionLegend : PackedScene = preload("../Utilities/Legend/function_legend.tscn")
 
 var font_size : float = 16
 var const_height : float = font_size/2*font_size/20

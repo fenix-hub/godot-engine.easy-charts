@@ -4,12 +4,17 @@
 </a>
 </p>
 
+# Notice, plugin under refactoring
+**This plugin is under refactoring an maintenance. The next official release will contain multiple updates and upgrades.**\
+**If you encounter any bug, please contact me on Discord.**
+
+
 <img src="addons/easy_charts/icon.png" align="left" width="64" height="64">
 
 # Easy Charts
 A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.  
 Author: *"Nicolo (fenix) Santilio"*  
-Version: *0.5.7*  
+Version: *0.6.0*  
 Wiki: *[wip](https://github.com/fenix-hub/godot-engine.easy-charts/wiki)*  
 Godot Version: *3.2stable*   
 
