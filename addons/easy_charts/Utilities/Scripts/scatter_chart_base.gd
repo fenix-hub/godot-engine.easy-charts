@@ -384,6 +384,13 @@ func generate_identifier():
 func structure_datas(database : Array):
 	# @labels_index can be either a column or a row relative to x values
 	# @y_values can be either a column or a row relative to y values
+	
+	#This is done to make sure this arrays are empty on subsecuent calls of this function.
+	#This function is called from the "old" methods such as plot_from_array and 
+	#for the moment it doesn't clean this variables on clean_variable.
+	x_domain = [[], []]
+	y_domain = [[], []]
+	
 	are_values_columns = invert_chart != are_values_columns
 	var x_values := []
 	

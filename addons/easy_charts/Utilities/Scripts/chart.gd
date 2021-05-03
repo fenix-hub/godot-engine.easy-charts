@@ -342,6 +342,8 @@ func plot():
 	emit_signal("chart_plotted",self)
 
 func plot_from_csv(csv_file : String, _delimiter : String = delimiter):
+	clean_variables()
+	clear_points()
 	load_font()
 	PointData.hide()
 	
@@ -386,7 +388,6 @@ func plot_from_array(array : Array) -> void:
 func plot_from_dataframe(dataframe : DataFrame) -> void:
 	clean_variables()
 	clear_points()
-	load_font()
 	load_font()
 	PointData.hide()
 	
