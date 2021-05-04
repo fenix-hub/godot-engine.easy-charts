@@ -418,7 +418,7 @@ func structure_datas(database : Array):
 				else:
 					if row != 0:
 						var y_data = database[row][column]
-						if typeof(y_data) == TYPE_INT  or typeof(y_data) == TYPE_REAL:
+						if typeof(y_data) == TYPE_INT or typeof(y_data) == TYPE_REAL:
 							y_values[y_column].append(y_data as float)
 						else:
 							y_values[y_column].append(y_data.replace(",",".") as float)
@@ -516,7 +516,6 @@ func calculate_tics():
 			x_labels[i] = String(x_labels[i])
 		x_chors = x_labels
 	else:
-		#TODO: h_dist = ?
 		for function in y_labels.size():
 			for value in x_datas[function]:
 				if not x_chors.has(value as String): #Don't append repeated values
@@ -557,11 +556,13 @@ func calculate_coordinates():
 	
 	for function in y_labels.size():
 		for val in x_datas[function].size():
-			var value_x = (x_datas[function][val] - x_margin_min) * x_pass / h_dist if h_dist else 0
+			var value_x = (x_datas[function][val] - x_margin_min) * x_pass / h_dist if h_dist else 0 \
+					if not show_x_values_as_labels else x_chors.find(String(x_datas[function][val])) * x_pass
 			var value_y = (y_datas[function][val] - y_margin_min) * y_pass / v_dist if v_dist else 0
 	
 			point_values[function].append([x_datas[function][val], y_datas[function][val]])
 			point_positions[function].append(Vector2(value_x + origin.x, origin.y - value_y))
+
 
 
 func draw_grid():
