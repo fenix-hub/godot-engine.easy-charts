@@ -500,9 +500,9 @@ func calculate_tics():
 	for i in y_chors.size():
 		y_chors[i] = String(y_chors[i]) #Can't cast directly on calculate_interval_tics because it mess up with the sorting 
 	
-	x_margin_min = x_range[0]
-	var x_margin_max = x_range[1]
 	if not show_x_values_as_labels:
+		x_margin_min = x_range[0]
+		var x_margin_max = x_range[1]
 		h_dist = x_decim * pow(10.0, calculate_position_significant_figure(x_margin_max - x_margin_min) - 1)
 
 		if x_margin_min < 0 and x_margin_max >= 0:
