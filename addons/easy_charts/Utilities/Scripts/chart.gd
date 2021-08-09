@@ -62,8 +62,8 @@ var x_label : String
 var x_labels : Array
 var y_labels : Array
 
-var x_margin_min : int = 0
-var y_margin_min : int = 0
+var x_margin_min : float = 0
+var y_margin_min : float = 0
 
 # actual values of point, from the database
 var point_values : Array
@@ -78,9 +78,9 @@ export (String) var chart_name : String = "" setget set_chart_name
 export (String, FILE, "*.txt, *.csv") var source : String = "" setget set_source
 export (String) var delimiter : String = ";" setget set_delimiter
 
-var origin_at_zero : bool = true 			setget set_origin_at_zero#, get_origin_at_zero
+var origin_at_zero : bool = false 			setget set_origin_at_zero#, get_origin_at_zero
 var are_values_columns : bool = false   	setget set_are_values_columns#, get_are_values_columns
-var show_x_values_as_labels : bool = true	setget set_show_x_values_as_labels#, get_show_x_values_as_labels
+var show_x_values_as_labels : bool = false	setget set_show_x_values_as_labels#, get_show_x_values_as_labels
 var labels_index : int = 0					setget set_labels_index#, get_labels_index
 var function_names_index : int = 0			setget set_function_names_index#, get_function_names_index
 
@@ -94,13 +94,14 @@ var column_gap : float = 2					setget set_column_gap
 
 # Calculations of decim and its relation with number of tics: https://www.desmos.com/calculator/jeiceaswiy
 var full_scale : float = 1.0				setget set_full_scale
-var x_decim : float = 5.0					setget set_x_decim
+var x_decim : float = 1.0					setget set_x_decim
 var y_decim : float = 1.0					setget set_y_decim
 
 var points_shape : Array = [PointShapes.Dot]	setget set_points_shape
 var function_colors = [Color("#1e1e1e")]		setget set_function_colors
 var outline_color : Color = Color("#1e1e1e")	setget set_outline_color
 var box_color : Color = Color("#1e1e1e")		setget set_box_color
+var grid_lines_width : int = 1					setget set_grid_lines_width
 var v_lines_color : Color = Color("#cacaca")	setget set_v_lines_color
 var h_lines_color : Color = Color("#cacaca")	setget set_h_lines_color
 var grid_color : Color = Color("#1e1e1e")		setget set_grid_color
@@ -130,6 +131,10 @@ var treshold : Vector2 setget set_treshold
 # A vector representing @treshold coordinates in its relative chart
 # only used to draw treshold values
 var treshold_draw : Vector2
+
+# Custom parameters for plot display
+var tic_length : int = 5	setget set_tic_length # Length of the bar indicating a tic
+var label_displacement : int = 4 setget set_label_displacement # Separation between the label and both the axis and the edge border
 
 # !! API v2
 static func instance(chart_type : int):
@@ -180,6 +185,8 @@ func _get(property):
 			return grid_color
 		"Chart_Style/box_color":
 			return box_color
+		"Chart_Style/grid_lines_width":
+			return grid_lines_width
 		"Chart_Style/v_lines_color":
 			return v_lines_color
 		"Chart_Style/h_lines_color":
@@ -262,6 +269,9 @@ func _set(property, value):
 		"Chart_Style/box_color":
 			box_color = value
 			return true
+		"Chart_Style/grid_lines_width":
+			grid_lines_width = value
+			return true
 		"Chart_Style/v_lines_color":
 			v_lines_color = value
 			return true
@@ -332,6 +342,8 @@ func plot():
 	emit_signal("chart_plotted",self)
 
 func plot_from_csv(csv_file : String, _delimiter : String = delimiter):
+	clean_variables()
+	clear_points()
 	load_font()
 	PointData.hide()
 	
@@ -376,7 +388,6 @@ func plot_from_array(array : Array) -> void:
 func plot_from_dataframe(dataframe : DataFrame) -> void:
 	clean_variables()
 	clear_points()
-	load_font()
 	load_font()
 	PointData.hide()
 	
@@ -433,7 +444,6 @@ func load_font():
 		var theme : Theme = Theme.new()
 		theme.set_default_font(font)
 		set_theme(theme)
-		
 	else:
 		var lbl = Label.new()
 		font = lbl.get_font("")
@@ -443,7 +453,7 @@ func load_font():
 
 func calculate_colors():
 	if function_colors.size() < functions:
-		for function in range(functions - function_colors.size() + 1): function_colors.append(Color(randf(),randf(), randf()))
+		for function in range(functions - function_colors.size()): function_colors.append(Color(randf(),randf(), randf()))
 
 func set_shapes():
 	if points_shape.empty() or points_shape.size() < functions:
@@ -630,8 +640,20 @@ func set_box_color(c : Color):
 	box_color = c
 
 # ! API
+func set_tic_length(i: int):
+	tic_length = i
+
+# ! API
+func set_label_displacement(i:int):
+	label_displacement = i
+
+# ! API
 func set_grid_color(c : Color):
 	grid_color = c
+
+# ! API
+func set_grid_lines_width(i : int):
+	grid_lines_width = i
 
 # ! API
 func set_v_lines_color(c : Color):
