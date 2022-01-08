@@ -1,0 +1,66 @@
+[gd_scene load_steps=7 format=2]
+
+<<<<<<<< HEAD:addons/easy_charts/3DChart/ScatterChart3D/scatter_chart3D.tscn
+[ext_resource path="res://addons/easy_charts/3DChart/ScatterChart3D/scatter_chart3D.gd" type="Script" id=1]
+[ext_resource path="res://addons/easy_charts/Utilities/Point/point_data.tscn" type="PackedScene" id=2]
+
+
+========
+[ext_resource path="res://addons/easy_charts/3d_charts/ScatterChart3D/scatter_chart3D.gd" type="Script" id=1]
+[ext_resource path="res://addons/easy_charts/utilities/containers/data_tooltip/data_tooltip.tscn" type="PackedScene" id=2]
+>>>>>>>> dev:addons/easy_charts/3d_charts/ScatterChart3D/scatter_chart3D.tscn
+
+
+[sub_resource type="SpatialMaterial" id=1]
+flags_unshaded = true
+
+[sub_resource type="PlaneMesh" id=2]
+material = SubResource( 1 )
+size = Vector2( 20, 20 )
+
+[sub_resource type="SphereMesh" id=3]
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_color = Color( 0, 1, 0.156863, 1 )
+
+[node name="ScatterChart3D" type="Spatial"]
+script = ExtResource( 1 )
+function_colors = [ "#1e1e1e", "#1e1e1e", "#1e1e1e", "#1e1e1e" ]
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="Chart" type="Spatial" parent="."]
+
+[node name="Point" type="MeshInstance" parent="Chart"]
+mesh = SubResource( 3 )
+material/0 = SubResource( 4 )
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 0.707107, -0.40558, 0.579228, 0, 0.819152, 0.573577, -0.707107, -0.40558, 0.579228, 10, 15, 10 )
+projection = 1
+current = true
+size = 30.0
+near = 0.01
+
+[node name="OmniLight" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DataTooltip" parent="CanvasLayer" instance=ExtResource( 2 )]
+margin_left = 277.135
+margin_top = 449.025
+margin_right = 276.999
+margin_bottom = 449.825
+
+[node name="PointData" parent="CanvasLayer/DataTooltip" index="0"]
+visible = false
+margin_left = 47.2074
+margin_top = -150.915
+margin_right = 47.0714
+margin_bottom = -150.115
+
+[editable path="CanvasLayer/DataTooltip"]
