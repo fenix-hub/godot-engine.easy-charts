@@ -80,3 +80,4 @@ func draw_columns():
 				column_width, 
 				false)
 #            draw_string(font, Vector2(point_positions[function][function_point].x, origin.y+10), y_labels[function_point], font_color)
+

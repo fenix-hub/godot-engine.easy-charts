@@ -118,6 +118,7 @@ func build_property_list():
 		"type": TYPE_BOOL
 	}
 	)
+
 	
 		
 	# Chart Style
@@ -434,7 +435,7 @@ func structure_data(database : Array):
 			
 			y_datas.append(y_values)
 			x_datas.append(x_values if not x_values.empty() else range(y_values.size()))
-	
+  
 	for function in y_labels:
 		y_domain[0].append(null)
 		y_domain[1].append(null)
@@ -592,6 +593,7 @@ func draw_points():
 	for function in point_values.size():
 		var PointContainer : Control = Control.new()
 		PointContainer.name = "PointContainer"
+
 		Points.add_child(PointContainer)
 		
 		for function_point in point_values[function].size():

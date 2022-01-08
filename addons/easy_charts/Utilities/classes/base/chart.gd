@@ -77,6 +77,7 @@ export (String) var delimiter : String = ";" setget set_delimiter
 
 var origin_at_zero : bool = false 			setget set_origin_at_zero#, get_origin_at_zero
 var are_values_columns : bool = true   	setget set_are_values_columns#, get_are_values_columns
+
 var show_x_values_as_labels : bool = false	setget set_show_x_values_as_labels#, get_show_x_values_as_labels
 var labels_index : int = 0					setget set_labels_index#, get_labels_index
 var function_names_index : int = 0			setget set_function_names_index#, get_function_names_index
@@ -87,6 +88,7 @@ var radius : float = 150.0					setget _set_radius,get_radius
 
 # for columns
 var function_line_width : int = 2
+
 var column_width : float = 10				setget set_column_width
 var column_gap : float = 2					setget set_column_gap
 
@@ -173,6 +175,7 @@ func _get(property):
 			return column_gap
 		"Chart_Style/function_line_width":
 			return function_line_width
+
 		
 		"Chart_Display/full_scale":
 			return full_scale
@@ -317,6 +320,7 @@ func _set(property, value):
 
 func _init():
 	build_property_list()
+
 # .......................... Shared Functions and virtuals ........................
 
 # Structure and Display a new plot if a dataset source is given
@@ -484,6 +488,7 @@ func clean_variables():
 # .................. VIRTUAL FUNCTIONS .........................
 func build_property_list():
 	pass
+
 
 func calculate_tics():
 	pass

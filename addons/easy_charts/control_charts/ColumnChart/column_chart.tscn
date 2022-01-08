@@ -93,6 +93,7 @@ margin_top = -28.9529
 margin_right = -52.9281
 margin_bottom = -28.1529
 
+
 [node name="PointData" parent="CanvasLayer/DataTooltip" index="0"]
 margin_left = -593.381
 margin_top = -80.9071
