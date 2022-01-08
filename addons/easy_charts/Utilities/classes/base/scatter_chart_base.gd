@@ -434,7 +434,7 @@ func structure_data(database : Array):
 			
 			y_datas.append(y_values)
 			x_datas.append(x_values if not x_values.empty() else range(y_values.size()))
-
+	
 	for function in y_labels:
 		y_domain[0].append(null)
 		y_domain[1].append(null)
@@ -546,7 +546,7 @@ func calculate_coordinates():
 	
 	for function in y_labels.size():
 		for val in x_datas[function].size():
-			var value_x = (x_datas[function][val] - x_margin_min) * x_pass / h_dist if h_dist else 0 \
+			var value_x = (int(x_datas[function][val]) - x_margin_min) * x_pass / h_dist if h_dist else 0 \
 					if not show_x_values_as_labels else x_chors.find(String(x_datas[function][val])) * x_pass
 			var value_y = (y_datas[function][val] - y_margin_min) * y_pass / v_dist if v_dist else 0
 	

@@ -55,7 +55,7 @@ func calculate_coordinates():
 	
 	for function in y_labels.size():
 		for val in x_datas[function].size():
-			var value_x: float = (x_datas[function][val] - x_margin_min) * x_pass / h_dist if h_dist else 0 \
+			var value_x: float = (int(x_datas[function][val]) - x_margin_min) * x_pass / h_dist if h_dist else 0 \
 					if not show_x_values_as_labels else x_chors.find(String(x_datas[function][val])) * x_pass
 			var value_y: float = (y_datas[function][val] - y_margin_min) * y_pass / v_dist if v_dist else 0
 			var column_offset: float = column_width/2 + (column_width + column_gap)*function - (column_width + column_gap)*functions/2
