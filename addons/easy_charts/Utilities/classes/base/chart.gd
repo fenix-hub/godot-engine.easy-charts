@@ -76,7 +76,8 @@ export (String, FILE, "*.txt, *.csv, *.res") var source : String = "" setget set
 export (String) var delimiter : String = ";" setget set_delimiter
 
 var origin_at_zero : bool = false 			setget set_origin_at_zero#, get_origin_at_zero
-var are_values_columns : bool = false   	setget set_are_values_columns#, get_are_values_columns
+var are_values_columns : bool = true   	setget set_are_values_columns#, get_are_values_columns
+
 var show_x_values_as_labels : bool = false	setget set_show_x_values_as_labels#, get_show_x_values_as_labels
 var labels_index : int = 0					setget set_labels_index#, get_labels_index
 var function_names_index : int = 0			setget set_function_names_index#, get_function_names_index
@@ -86,6 +87,8 @@ var use_height_as_radius : bool = false		setget set_use_height_as_radius
 var radius : float = 150.0					setget _set_radius,get_radius
 
 # for columns
+var function_line_width : int = 2
+
 var column_width : float = 10				setget set_column_width
 var column_gap : float = 2					setget set_column_gap
 
@@ -105,6 +108,8 @@ var grid_color : Color = Color("#1e1e1e")		setget set_grid_color
 var font : Font									setget set_font
 var bold_font : Font							setget set_bold_font
 var font_color : Color = Color("#1e1e1e")		setget set_font_color
+
+var show_points := true
 
 var use_template : bool = true		setget set_use_template
 var template : int = 0		setget set_template
@@ -133,6 +138,14 @@ var treshold_draw : Vector2
 var tic_length : int = 5	setget set_tic_length # Length of the bar indicating a tic
 var label_displacement : int = 4 setget set_label_displacement # Separation between the label and both the axis and the edge border
 
+var property_list: Array = []
+
+
+
+# ..........................................
+
+
+
 # !! API v2
 static func instance(chart_type : int):
 	var chart_t : String = ECUtilities.get_chart_type(chart_type)
@@ -160,6 +173,9 @@ func _get(property):
 			return column_width
 		"Chart_Properties/column_gap":
 			return column_gap
+		"Chart_Style/function_line_width":
+			return function_line_width
+
 		
 		"Chart_Display/full_scale":
 			return full_scale
@@ -233,6 +249,9 @@ func _set(property, value):
 		"Chart_Properties/column_gap":
 			column_gap = value
 			return true
+		"Chart_Style/function_line_width":
+			function_line_width = value
+			return true
 		
 		"Chart_Display/full_scale":
 			full_scale = value
@@ -298,6 +317,9 @@ func _set(property, value):
 		"Chart_Modifiers/invert_chart":
 			invert_chart = value
 			return true
+
+func _init():
+	build_property_list()
 
 # .......................... Shared Functions and virtuals ........................
 
@@ -464,6 +486,10 @@ func clean_variables():
 	y_labels.clear()
 
 # .................. VIRTUAL FUNCTIONS .........................
+func build_property_list():
+	pass
+
+
 func calculate_tics():
 	pass
 

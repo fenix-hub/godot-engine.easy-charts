@@ -14,20 +14,8 @@ class_name LineChart
 # In these cases they are known as run charts.
 # Source: Wikipedia
 
-var show_points := true
-var function_line_width : int = 2
-
-
 func build_property_list():
 	.build_property_list()
-	
-	property_list.append(
-	{
-		"hint": PROPERTY_HINT_NONE,
-		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
-		"name": "Chart_Display/show_points",
-		"type": TYPE_BOOL
-	})
 	
 	#Find first element of Chart Display
 	var position
@@ -49,24 +37,6 @@ func build_property_list():
 func _get_property_list():
 	property_list[0].name = "LineChart"
 	return property_list
-
-
-func _get(property):
-	match property:
-		"Chart_Display/show_points":
-			return show_points
-		"Chart_Style/function_line_width":
-			return function_line_width
-
-
-func _set(property, value):
-	match property:
-		"Chart_Display/show_points":
-			show_points = value
-			return true
-		"Chart_Style/function_line_width":
-			function_line_width = value
-			return true
 
 
 func _draw():
