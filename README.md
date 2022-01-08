@@ -1,3 +1,9 @@
+<p align="right">
+<a href="https://discord.gg/KnJGY9S">
+<img src="https://github.com/fenix-hub/ColoredBadges/blob/master/svg/social/discord.svg" alt="react" style="vertical-align:top; margin:6px 4px">
+</a>
+</p>
+
 # Notice, plugin under refactoring
 **This plugin is under refactoring an maintenance. The next official release will contain multiple updates and upgrades.**\
 **If you encounter any bug, please contact me on Discord.**

@@ -72,7 +72,7 @@ var legend : Array setget set_legend,get_legend
 
 # ................... Export Shared Variables ..................
 export (String) var chart_name : String = "" setget set_chart_name
-export (String, FILE, "*.txt, *.csv") var source : String = "" setget set_source
+export (String, FILE, "*.txt, *.csv, *.res") var source : String = "" setget set_source
 export (String) var delimiter : String = ";" setget set_delimiter
 
 var origin_at_zero : bool = false 			setget set_origin_at_zero#, get_origin_at_zero
@@ -322,7 +322,7 @@ func plot(_dataset: Array = read_data(source, delimiter)) -> void:
 	compute_display()
 	display_plot()
 	emit_signal("chart_plotted",self)
-	if not is_connected("item_rect_changed",self, "redraw"): connect("item_rect_changed", self, "redraw")
+	if not is_connected("item_rect_changed", self, "redraw_plot"): connect("item_rect_changed", self, "redraw_plot")
 
 func plot_from_source(file : String, _delimiter : String = delimiter) -> void:
 	plot(read_data(file, _delimiter))
@@ -385,7 +385,7 @@ func slice_data(data: Array) -> Array:
 		data_to_display = data.duplicate(true)
 	return data_to_display
 
-# .................. Display and Draw functions .......................
+# ................................. Display and Draw functions .......................
 func compute_display():
 	count_functions()
 	calculate_colors()
@@ -396,6 +396,10 @@ func display_plot():
 	build_chart()
 	calculate_pass()
 	calculate_coordinates()
+
+func redraw_plot():
+	clean_points()
+	display_plot()
 
 #  ................................. Helper Functions .................................
 
