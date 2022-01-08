@@ -135,7 +135,7 @@ func _get_children():
 
 func apply_template(template_name: int):
 	template = template_name
-	templates = Utilities._load_templates()
+	templates = ECUtilities._load_templates()
 	if template_name != null:
 		var custom_template = templates.get(templates.keys()[template_name])
 		function_colors = custom_template.function_colors as PoolColorArray

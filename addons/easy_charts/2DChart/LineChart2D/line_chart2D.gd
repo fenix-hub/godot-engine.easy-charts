@@ -89,7 +89,7 @@ func plot():
 	PointData.hide()
 
 	if source == "" or source == null:
-		Utilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().", 1)
+		ECUtilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().", 1)
 		return
 	datas = read_datas(source,delimiter)
 	count_functions()

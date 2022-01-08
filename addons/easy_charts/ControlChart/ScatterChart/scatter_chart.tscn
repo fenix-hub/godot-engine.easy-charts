@@ -1,7 +1,8 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/easy_charts/Utilities/Point/point_data.tscn" type="PackedScene" id=1]
-[ext_resource path="res://addons/easy_charts/ScatterChart/scatter_chart.gd" type="Script" id=2]
+[ext_resource path="res://addons/easy_charts/ControlChart/ScatterChart/scatter_chart.gd" type="Script" id=2]
+
 
 [sub_resource type="Theme" id=1]
 

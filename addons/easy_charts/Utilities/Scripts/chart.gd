@@ -138,7 +138,7 @@ var label_displacement : int = 4 setget set_label_displacement # Separation betw
 
 # !! API v2
 static func instance(chart_type : int):
-	var chart_t : String = Utilities.get_chart_type(chart_type)
+	var chart_t : String = ECUtilities.get_chart_type(chart_type)
 	var chart : String = "res://addons/easy_charts/%s/%s.tscn" % [chart_t, chart_t]
 	return load(chart).instance()
 
@@ -326,7 +326,7 @@ func plot():
 	PointData.hide()
 	
 	if source == "" or source == null:
-		Utilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
+		ECUtilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
 		return
 	
 	
@@ -348,7 +348,7 @@ func plot_from_csv(csv_file : String, _delimiter : String = delimiter):
 	PointData.hide()
 	
 	if csv_file == "" or csv_file == null:
-		Utilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
+		ECUtilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
 		return
 	
 	data = read_datas(csv_file, _delimiter)
@@ -369,7 +369,7 @@ func plot_from_array(array : Array) -> void:
 	PointData.hide()
 	
 	if array.empty():
-		Utilities._print_message("Can't plot a chart with an empty Array.",1)
+		ECUtilities._print_message("Can't plot a chart with an empty Array.",1)
 		return
 	
 	data = array.duplicate(true)
@@ -394,7 +394,7 @@ func plot_from_dataframe(dataframe : DataFrame) -> void:
 	data = dataframe.get_dataframe().duplicate(true)
 	
 	if data.empty():
-		Utilities._print_message("Can't plot a chart with an empty Array.",1)
+		ECUtilities._print_message("Can't plot a chart with an empty Array.",1)
 		return
 	
 	structure_datas(slice_data())
@@ -413,7 +413,7 @@ func plot_from_dataframe(dataframe : DataFrame) -> void:
 # All data are stored.
 func update_plot_data(array : Array) -> void:
 	if array.empty():
-		Utilities._print_message("Can't plot a chart with an empty Array.",1)
+		ECUtilities._print_message("Can't plot a chart with an empty Array.",1)
 		return
 	
 	data.append(array)
@@ -430,7 +430,7 @@ func update_plot_data(array : Array) -> void:
 # Append a new column to data
 func append_new_column(dataset : Array, column : Array):
 	if column.empty():
-		Utilities._print_message("Can't update plot with an empty row.",1)
+		ECUtilities._print_message("Can't update plot with an empty row.",1)
 		return
 	for value_idx in column.size():
 		dataset[value_idx].append(column[value_idx])
@@ -683,7 +683,7 @@ func set_template(template_name : int):
 	if not use_template: return
 	template = template_name
 	if template_name!=null:
-		var custom_template = Utilities.templates.get(Utilities.templates.keys()[template_name])
+		var custom_template = ECUtilities.templates.get(ECUtilities.templates.keys()[template_name])
 		function_colors = custom_template.function_colors as PoolColorArray
 		outline_color = Color(custom_template.outline_color)
 		box_color = Color(custom_template.outline_color)

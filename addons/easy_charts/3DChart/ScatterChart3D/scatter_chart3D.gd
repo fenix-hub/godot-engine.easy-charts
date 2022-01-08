@@ -167,7 +167,7 @@ func plot():
 	PointData.hide()
 	
 	if source == "" or source == null:
-		Utilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
+		ECUtilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
 		return
 	datas = read_datas(source,delimiter)
 #	count_functions()
@@ -295,7 +295,7 @@ func get_legend():
 
 func apply_template(template_name : String):
 	template = template_name
-	templates = Utilities._load_templates()
+	templates = ECUtilities._load_templates()
 	if template_name!=null and template_name!="":
 		var custom_template = templates[template.to_lower()]
 		function_colors = custom_template.function_colors

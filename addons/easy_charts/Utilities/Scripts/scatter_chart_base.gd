@@ -201,7 +201,7 @@ func build_property_list():
 	property_list.append(
 	{
 		"hint": PROPERTY_HINT_ENUM,
-		"hint_string": PoolStringArray(Utilities.templates.keys()).join(","),
+		"hint_string": PoolStringArray(ECUtilities.templates.keys()).join(","),
 		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
 		"name": "Chart_Style/template",
 		"type": TYPE_INT
@@ -299,10 +299,10 @@ func plot_function(x:Array, y:Array, param_dic := {}):
 	var id := ""
 	
 	if x.empty() or y.empty():
-		Utilities._print_message("Can't plot a chart with an empty Array.",1)
+		ECUtilities._print_message("Can't plot a chart with an empty Array.",1)
 		return
 	elif x.size() != y.size():
-		Utilities._print_message("Can't plot a chart with x and y having different number of elements.",1)
+		ECUtilities._print_message("Can't plot a chart with x and y having different number of elements.",1)
 		return
 	
 	for param in param_dic.keys():
@@ -318,7 +318,7 @@ func plot_function(x:Array, y:Array, param_dic := {}):
 	id = generate_identifier() if id.empty() else id
 	
 	if y_labels.has(id):
-		Utilities._print_message("The identifier %s is already used. Please use a different one." % id,1)
+		ECUtilities._print_message("The identifier %s is already used. Please use a different one." % id,1)
 		return
 	
 	y_domain[0].append(null)
@@ -338,7 +338,7 @@ func update_function(id:String, x:Array, y:Array, param_dic := {}):
 	var function = y_labels.find(id)
 	
 	if function == -1: #Not found
-		Utilities._print_message("The identifier %s does not exist." % id,1)
+		ECUtilities._print_message("The identifier %s does not exist." % id,1)
 		return
 	
 	for param in param_dic.keys():
@@ -360,7 +360,7 @@ func delete_function(id:String):
 	var function = y_labels.find(id)
 	
 	if function == -1: #Not found
-		Utilities._print_message("The identifier %s does not exist." % id,1)
+		ECUtilities._print_message("The identifier %s does not exist." % id,1)
 		return
 	
 	y_labels.remove(function)

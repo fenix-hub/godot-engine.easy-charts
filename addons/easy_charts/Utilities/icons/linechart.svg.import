@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/linechart.svg-1b22ec0a8537b638d716ea5c462d4141.stex"
+path="res://.import/linechart.svg-922834f0462a2c88be644081c47c63ad.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/easy_charts/Utilities/icons/linechart.svg"
-dest_files=[ "res://.import/linechart.svg-1b22ec0a8537b638d716ea5c462d4141.stex" ]
+source_file="res://addons/easy_charts/utilities/icons/linechart.svg"
+dest_files=[ "res://.import/linechart.svg-922834f0462a2c88be644081c47c63ad.stex" ]
 
 [params]
 
@@ -28,6 +28,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=false

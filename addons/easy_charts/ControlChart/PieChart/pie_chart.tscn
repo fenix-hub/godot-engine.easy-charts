@@ -1,7 +1,8 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://addons/easy_charts/PieChart/pie_chart.gd" type="Script" id=1]
+[ext_resource path="res://addons/easy_charts/ControlChart/PieChart/pie_chart.gd" type="Script" id=1]
 [ext_resource path="res://addons/easy_charts/Utilities/Point/point_data.tscn" type="PackedScene" id=2]
+
 
 
 [node name="PieChart" type="Control"]
