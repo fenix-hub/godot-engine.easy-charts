@@ -317,6 +317,9 @@ func _set(property, value):
 func _init():
 	build_property_list()
 
+func _ready():
+	load_font()
+
 # .......................... Shared Functions and virtuals ........................
 
 # Structure and Display a new plot if a dataset source is given
@@ -324,7 +327,6 @@ func _init():
 func plot(_dataset: Array = read_data(source, delimiter)) -> void:
 	clean_variables()
 	clean_points()
-	load_font()
 	data_tooltip.hide()
 	
 	if _dataset.empty():
@@ -418,8 +420,10 @@ func display_plot():
 	calculate_coordinates()
 
 func redraw_plot():
+	data_tooltip.hide()
 	clean_points()
 	display_plot()
+	update()
 
 #  ................................. Helper Functions .................................
 

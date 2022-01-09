@@ -5,6 +5,8 @@ class_name ScatterChartBase
 # of points in a two-variable space. It handles basic data structure and grid 
 # layout and leaves to child classes the more specific behaviour.
 
+var x_values := []
+var y_values := []
 #Stored in the form of [[min_func1, min_func2, min_func3, ...], [max_func1, max_func2, ...]]
 var x_domain := [[], []]
 var y_domain := [[], []]
@@ -272,13 +274,10 @@ func _get(property):
 		"Chart_Display/max_y_range":
 			return y_range[1]
 
-func plot_function(x:Array, y:Array, param_dic := {}):
+func plot_function(id: String, x:Array, y:Array, param_dic := {}):
 	# Add a function to the chart. If no identifier (label) is given a generic one
 	# is generated.
 	# param_dic is a dictionary with specific parameters to this curve
-	
-	data_tooltip.hide()
-	var id := ""
 	
 	if x.empty() or y.empty():
 		ECUtilities._print_message("Can't plot a chart with an empty Array.",1)
@@ -286,16 +285,6 @@ func plot_function(x:Array, y:Array, param_dic := {}):
 	elif x.size() != y.size():
 		ECUtilities._print_message("Can't plot a chart with x and y having different number of elements.",1)
 		return
-	
-	for param in param_dic.keys():
-		match param:
-			"label":
-				id = param_dic[param]
-			"color":
-				if function_colors.size() < functions + 1: #There is going to be a new function
-					function_colors.append(param_dic[param])
-				else:
-					function_colors[functions] = param_dic[param]
 	
 	id = generate_identifier() if id.empty() else id
 	
@@ -308,15 +297,33 @@ func plot_function(x:Array, y:Array, param_dic := {}):
 	x_domain[0].append(null)
 	x_domain[1].append(null)
 	
-	x_datas.append(x)
-	y_datas.append(y)
-	y_labels.append(id)
+	x_values.append_array(x)
+	y_values = y
+	
+	populate_x_datas()
+	populate_y_datas()
 	
 	calculate_range(id)
-	plot()
+	calculate_tics()
+	redraw_plot()
+	update()
 
+func update_functions(new_x, new_y : Array, param_dic : = {}) :
+	x_values.append(new_x)
+	for function in y_labels.size():
+		_update_function(y_labels[function], new_y[function])
+	calculate_tics()
+	redraw_plot()
+	update()
 
-func update_function(id:String, x:Array, y:Array, param_dic := {}):
+func update_function(id: String, new_x, new_y, param_dic := {}) -> void:
+	x_values.append(new_x)
+	_update_function(id, new_y, param_dic)
+	calculate_tics()
+	redraw_plot()
+	update()
+
+func _update_function(id: String, new_y, param_dic := {}):
 	var function = y_labels.find(id)
 	
 	if function == -1: #Not found
@@ -330,22 +337,20 @@ func update_function(id:String, x:Array, y:Array, param_dic := {}):
 			"color":
 				function_colors[function] = param_dic[param]
 	
-	x_datas[function] = x
-	y_datas[function] = y
+	for y_data_i in range(0, y_datas.size()):
+		if y_data_i == function: y_datas[y_data_i].append(new_y)
+		else: y_datas[y_data_i].append(y_datas[y_data_i][y_datas[y_data_i].size()-1])
 	
 	calculate_range(id)
-	plot()
-	update()
 
-
-func delete_function(id:String):
+func delete_function(id: String):
 	var function = y_labels.find(id)
 	
 	if function == -1: #Not found
 		ECUtilities._print_message("The identifier %s does not exist." % id,1)
 		return
 	
-	y_labels.remove(function)
+#	y_labels.remove(function)
 	x_datas.remove(function)
 	y_datas.remove(function)
 	y_domain[0].remove(function)
@@ -354,14 +359,25 @@ func delete_function(id:String):
 	x_domain[1].remove(function)
 	function_colors.remove(function)
 	
-	plot()
+	calculate_tics()
+	redraw_plot()
 	update()
-	
 
 func generate_identifier():
 	#TODO: Check if the identifier generated already exist (given by the user)
 	return "f%d" % (y_labels.size() + 1)
 
+func populate_x_datas():
+	x_labels = x_values
+	x_datas.append(x_values)
+
+func populate_y_datas():
+	y_labels.append(y_values.duplicate(true).pop_front() as String)
+	
+	for val in y_values.size():
+		y_values[val] = y_values[val] as float
+	
+	y_datas.append(y_values)
 
 func structure_data(database : Array):
 	# @labels_index can be either a column or a row relative to x values
@@ -371,8 +387,6 @@ func structure_data(database : Array):
 	#This function is called from the "old" methods such as plot_from_array and 
 	#for the moment it doesn't clean this variables on clean_variable.
 	
-	var x_values := []
-	var y_values := []
 	x_domain = [[], []]
 	y_domain = [[], []]
 	
@@ -380,22 +394,11 @@ func structure_data(database : Array):
 	if database_size.has(labels_index):
 		x_values = database[labels_index]
 		x_label = x_values.pop_front() as String
-		x_labels = x_values
 		database_size.erase(labels_index) #Remove x row from the iterator
-	for row in database_size:
-		y_values = database[row] as Array
-		y_labels.append(y_values.pop_front() as String)
-		
-		for val in y_values.size():
-			y_values[val] = y_values[val] as float
-		
-		y_datas.append(y_values)
-		
-		for x_value in x_values:
-			if str(x_value).is_valid_float():
-				x_datas.append(x_values if not x_values.empty() else range(y_values.size()))
-			else:
-				x_datas.append(x_labels)
+	for size in database_size:
+		populate_x_datas()
+		y_values = database[size]
+		populate_y_datas()
 	
 	for function in y_labels:
 		y_domain[0].append(null)
@@ -449,13 +452,13 @@ func calculate_tics():
 		calculate_interval_tics(y_margin_min, y_margin_max, v_dist, y_chors)
 	for i in y_chors.size():
 		y_chors[i] = String(y_chors[i]) #Can't cast directly on calculate_interval_tics because it mess up with the sorting 
-	x_chors = x_labels
+	x_chors = x_labels.duplicate(true)
 
 
 func build_chart():
 	var longest_y_tic = 0
 	for y_tic in y_chors:
-		var length = font.get_string_size(y_tic).x
+		var length = font.get_string_size(str(y_tic)).x
 		if length > longest_y_tic:
 			longest_y_tic = length
 
@@ -489,7 +492,7 @@ func calculate_coordinates():
 	for function in y_labels.size():
 		for val in x_datas[function].size():
 			var value_x = (int(x_datas[function][val]) - x_margin_min) * x_pass / h_dist if h_dist else \
-					x_chors.find(String(x_datas[function][val])) * x_pass
+					val * x_pass
 			var value_y = (y_datas[function][val] - y_margin_min) * y_pass / v_dist if v_dist else 0
 	
 			point_values[function].append([x_datas[function][val], y_datas[function][val]])
@@ -500,13 +503,13 @@ func draw_grid():
 	# ascisse
 	for p in x_chors.size():
 		var point : Vector2 = origin + Vector2(p * x_pass, 0)
-		var size_text : Vector2 = font.get_string_size(x_chors[p])
+		var size_text : Vector2 = font.get_string_size(str(x_chors[p]))
 		# v grid
 		draw_line(point, point - Vector2(0, SIZE.y - OFFSET.y), v_lines_color, grid_lines_width, true)
 		# ascisse
 		draw_line(point + Vector2(0, tic_length), point, v_lines_color, grid_lines_width, true)
 		draw_string(font, point + Vector2(-size_text.x / 2, size_text.y + tic_length),
-				x_chors[p], font_color)
+				str(x_chors[p]), font_color)
 	
 	# ordinate
 	for p in y_chors.size():
@@ -578,3 +581,11 @@ func calculate_interval_tics(v_from:float, v_to:float, dist:float, chords:Array,
 		p = (dist * multi) + v_from
 		missing_tics = p < v_to if dist > 0 else p > v_to
 		chords.append(p)
+
+
+func _to_string() -> String:
+	return \
+	"X DATA: %s\n" % str(x_datas) + \
+	"Y DATA: %s\n" % str(y_datas) + \
+	"X LABELS: %s\n" % str(x_labels) + \
+	"Y LABELS: %s\n" % str(y_labels) 

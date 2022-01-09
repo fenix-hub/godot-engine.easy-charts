@@ -12,11 +12,27 @@ func insert_row(row : Array, index : int = values.size()) -> void:
 		assert(row.size() == columns(), "the row size must match matrix row size")
 	values.insert(index, row)
 
+func update_row(row : Array, index : int) -> void:
+	assert(rows() > index, "the row size must match matrix row size")
+	values[index] = row
+
 func insert_column(column : Array, index : int = values[0].size()) -> void:
 	if columns() != 0:
 		assert(column.size() == rows(), "the column size must match matrix column size")
 	for row_idx in column.size():
 		values[row_idx].insert(index, column[row_idx])
+
+func update_column(column : Array, index : int) -> void:
+	assert(columns() > index, "the column size must match matrix column size")
+	for row_idx in column.size():
+		values[row_idx][index] = column[row_idx]
+
+func resize(rows: int, columns: int) -> void:
+	for row in range(rows):
+		var value_row := []
+		for column in range(columns):
+			value_row.append(null)
+		values.append(value_row)
 
 func to_array() -> Array:
 	return values.duplicate(true)
@@ -37,7 +53,7 @@ func get_column(column : int) -> Array:
 		column_array.append(row[column])
 	return column_array
 
-func get_columns(from : int, to : int) -> Array:
+func get_columns(from : int = 0, to : int = columns()-1) -> Array:
 	var values : Array = []
 	for column in range(from, to):
 		values.append(get_column(column))
@@ -48,9 +64,12 @@ func get_row(row : int) -> Array:
 	assert(row < rows(), "index of the row requested (%s) exceedes matrix rows (%s)"%[row, rows()])
 	return values[row]
 
-func get_rows(from : int, to : int) -> Array:
+func get_rows(from : int = 0, to : int = rows()-1) -> Array:
 	return values.slice(from, to)
 #    return MatrixGenerator.from_array(values)    
+
+func empty() -> bool:
+	return rows() == 0 and columns() == 0
 
 func _to_string() -> String:
 	var last_string_len : int

@@ -9,8 +9,9 @@ var datamatrix : Matrix = null
 var dataset : Array = []
 
 func _init(datamatrix : Matrix, headers : PoolStringArray = [], labels : PoolStringArray = [] , table_name : String = "") -> void:
-	if labels.empty() : for label in range(datamatrix.get_size().x) : labels.append(label as String)
 	if headers.empty() : for header in range(datamatrix.get_size().y) : headers.append(MatrixGenerator.get_letter_index(header))
+	if labels.empty() : for label in range(datamatrix.get_size().x) : labels.append(label as String)
+	if datamatrix.empty(): datamatrix.resize(labels.size(), headers.size())
 	build_dataframe(datamatrix, headers, labels, table_name)
 
 func build_dataframe(datamatrix : Matrix, headers : PoolStringArray = [], labels : PoolStringArray = [] , table_name : String = "") -> void:
@@ -32,12 +33,18 @@ func build_dataset_from_matrix(datamatrix : Matrix, headers : PoolStringArray, l
 func insert_column(column : Array, header : String = "", index : int = dataset[0].size()) -> void:
 	assert(column.size() == datamatrix.rows(), "error: the column size must match the dataset column size")
 	headers.insert(index, header if header != "" else MatrixGenerator.get_letter_index(index))
-	datamatrix.insert_column(column, index-1)
+	if datamatrix.get_column(index-2 if index > 2 else 0).count(null) == datamatrix.rows():
+		datamatrix.update_column(column, index-2)
+	else:
+		datamatrix.insert_column(column, index-1)
 	dataset = build_dataset_from_matrix(datamatrix, headers, labels)
 
 func insert_row(row : Array, label : String = "", index : int = dataset.size()) -> PoolStringArray:
 	labels.insert(index-1, label if label != "" else (index-1) as String)
-	datamatrix.insert_row(row, index-1)
+	if datamatrix.get_row(index-2 if index > 2 else 0).count(null) == datamatrix.columns():
+		datamatrix.update_row(row, index-2 if index > 2 else 0)
+	else:
+		datamatrix.insert_row(row, index-1)
 	dataset = build_dataset_from_matrix(datamatrix, headers, labels)
 	return PoolStringArray([label] + row)
 

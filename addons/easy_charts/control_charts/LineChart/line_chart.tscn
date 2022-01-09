@@ -26,11 +26,11 @@ In these cases they are known as run charts."
 }
 Chart_Properties/are_values_columns = false
 Chart_Properties/labels_index = 0
-Chart_Properties/show_x_values_as_labels = false
 Chart_Display/autoscale_x = true
 Chart_Display/x_decim = 1.0
 Chart_Display/autoscale_y = true
 Chart_Display/y_decim = 1.0
+Chart_Display/show_points = true
 Chart_Style/points_shape = [ 0 ]
 Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
 Chart_Style/function_line_width = 2
@@ -46,7 +46,6 @@ Chart_Style/template = 0
 Chart_Modifiers/treshold = Vector2( 0, 0 )
 Chart_Modifiers/only_disp_values = Vector2( 0, 0 )
 Chart_Modifiers/invert_chart = false
-Chart_Display/show_points = true
 
 [node name="Background" type="ColorRect" parent="."]
 visible = false
@@ -86,10 +85,10 @@ __meta__ = {
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="DataTooltip" parent="CanvasLayer" instance=ExtResource( 1 )]
-margin_left = -50.9019
-margin_top = -37.7724
-margin_right = -51.0379
-margin_bottom = -36.9724
+margin_left = -124.653
+margin_top = -56.7206
+margin_right = -124.789
+margin_bottom = -55.9206
 
 [node name="PointData" parent="CanvasLayer/DataTooltip" index="0"]
 margin_left = -189.809
