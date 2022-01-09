@@ -62,7 +62,7 @@ func _to_string() -> String:
 	var string : String = ""
 	for row_i in dataset.size():
 		if row_i == 0:
-			string+="%*s" % [last_string_len+1, ""]
+			string+="%*s" % [last_string_len+1, ""] if get_dataset()[0].size() < get_dataset()[1].size() else ""
 		for column_i in dataset[row_i].size():
 			string+="%*s" % [last_string_len+1, dataset[row_i][column_i]]
 		string+="\n"

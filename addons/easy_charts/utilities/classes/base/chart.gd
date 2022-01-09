@@ -78,7 +78,6 @@ export (String) var delimiter : String = ";" setget set_delimiter
 var origin_at_zero : bool = false 			setget set_origin_at_zero#, get_origin_at_zero
 var are_values_columns : bool = true   	setget set_are_values_columns#, get_are_values_columns
 
-var show_x_values_as_labels : bool = false	setget set_show_x_values_as_labels#, get_show_x_values_as_labels
 var labels_index : int = 0					setget set_labels_index#, get_labels_index
 var function_names_index : int = 0			setget set_function_names_index#, get_function_names_index
 
@@ -159,8 +158,6 @@ func _get(property):
 			return origin_at_zero
 		"Chart_Properties/are_values_columns":
 			return are_values_columns
-		"Chart_Properties/show_x_values_as_labels":
-			return show_x_values_as_labels
 		"Chart_Properties/labels_index":
 			return labels_index
 		"Chart_Properties/function_names_index":
@@ -227,9 +224,6 @@ func _set(property, value):
 			return true
 		"Chart_Properties/are_values_columns":
 			are_values_columns = value
-			return true
-		"Chart_Properties/show_x_values_as_labels":
-			show_x_values_as_labels = value
 			return true
 		"Chart_Properties/labels_index":
 			labels_index = value
@@ -339,7 +333,7 @@ func plot(_dataset: Array = read_data(source, delimiter)) -> void:
 		ECUtilities._print_message("Can't plot a chart with an empty Array.",1)
 		return
 	
-	data = _dataset.duplicate(true)
+	data = _dataset
 	structure_data(slice_data(data))
 	compute_display()
 	display_plot()
@@ -350,7 +344,7 @@ func plot_from_source(file : String, _delimiter : String = delimiter) -> void:
 	plot(read_data(file, _delimiter))
 
 func plot_from_dataframe(dataframe : DataFrame) -> void:
-	plot(dataframe.get_dataframe())
+	plot(dataframe.get_dataset())
 
 func plot_placeholder() -> void:
 	pass
@@ -358,12 +352,8 @@ func plot_placeholder() -> void:
 # Append new data (in array format) to the already plotted data.
 # The new data will be appended as a new row of the dataset.
 # All data are stored.
-func update_plot(new_data : Array) -> void:
-	if new_data.empty():
-		ECUtilities._print_message("Can't plot a chart with an empty Array.",1)
-		return
-	
-	data.append(new_data.duplicate(true))
+func update_plot(new_data : Array = []) -> void:
+	if not new_data.empty(): data.append(new_data)
 	plot(data)
 
 # Append a new column to data
@@ -382,11 +372,10 @@ func read_data(source : String, _delimiter : String = delimiter):
 	var content : Array
 	while not file.eof_reached():
 		var line : PoolStringArray = file.get_csv_line(_delimiter)
+		if line.empty() or line.size() < 2: 
+			continue
 		content.append(line)
 	file.close()
-	for data in content:
-		if data.size() < 2 or data.empty():
-			content.erase(data)
 	return content.duplicate(true)
 
 func slice_data(data: Array) -> Array:
@@ -564,10 +553,6 @@ func set_origin_at_zero(b : bool):
 # ! API
 func set_are_values_columns(b : bool):
 	are_values_columns = b
-
-# ! API
-func set_show_x_values_as_labels(b : bool):
-	show_x_values_as_labels = b
 
 func set_labels_index(i : int):
 	labels_index = i

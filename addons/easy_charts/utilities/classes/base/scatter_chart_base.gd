@@ -41,13 +41,6 @@ func build_property_list():
 		"name": "Chart_Properties/labels_index",
 		"type": TYPE_INT
 	})
-	property_list.append(
-	{
-		"hint": PROPERTY_HINT_NONE,
-		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
-		"name": "Chart_Properties/show_x_values_as_labels",
-		"type": TYPE_BOOL
-	})
 	
 	# Chart Display
 	property_list.append(
@@ -370,72 +363,47 @@ func generate_identifier():
 	return "f%d" % (y_labels.size() + 1)
 
 
-func structure_data(database : Array):
+func structure_data(dataset : Array):
 	# @labels_index can be either a column or a row relative to x values
 	# @y_values can be either a column or a row relative to y values
 	
 	#This is done to make sure this arrays are empty on subsecuent calls of this function.
 	#This function is called from the "old" methods such as plot_from_array and 
 	#for the moment it doesn't clean this variables on clean_variable.
+	
+	are_values_columns = invert_chart != are_values_columns
+	
+	# Read the dataset in the proper way 
+	var database : Array = dataset \
+	if not are_values_columns \
+	else MatrixGenerator.transpose(Matrix.new(dataset)).to_array()
+	
+	var x_values := []
+	var y_values := []
 	x_domain = [[], []]
 	y_domain = [[], []]
 	
-	are_values_columns = invert_chart != are_values_columns
-	var x_values := []
+	var database_size = range(database.size())
+	if database_size.has(labels_index):
+		x_values = database[labels_index]
+		x_label = x_values.pop_front() as String
+		x_labels = x_values
+		database_size.erase(labels_index) #Remove x row from the iterator
+	for row in database_size:
+		y_values = database[row] as Array
+		y_labels.append(y_values.pop_front() as String)
+		
+		for val in y_values.size():
+			y_values[val] = y_values[val] as float
+		
+		y_datas.append(y_values)
+		
+		for x_value in x_values:
+			if str(x_value).is_valid_float():
+				x_datas.append(x_values if not x_values.empty() else range(y_values.size()))
+			else:
+				x_datas.append(x_labels)
 	
-	if are_values_columns:
-		var y_values := []
-		var y_columns = database[0].size()
-		if range(database.size()).has(labels_index): # x column is present
-			y_columns -= 1
-		else:
-			x_values = range(database.size()) #If no x column is given, a generic one is generated
-			x_values.push_front("")
-		
-		for _i in y_columns: #Resize to number of y columns	
-			y_values.append([])
-		
-		for row in database.size():
-			var y_column = 0
-			for column in database[row].size():
-				if column == labels_index:
-					var x_data = database[row][column]
-					if typeof(x_data) == TYPE_INT  or typeof(x_data) == TYPE_REAL:
-						x_values.append(x_data as float)
-					else:
-						x_values.append(x_data.replace(",", ".") as float)
-				else:
-					if row != 0:
-						var y_data = database[row][column]
-						if typeof(y_data) == TYPE_INT or typeof(y_data) == TYPE_REAL:
-							y_values[y_column].append(y_data as float)
-						else:
-							y_values[y_column].append(y_data.replace(",",".") as float)
-					else:
-						y_labels.append(str(database[row][column]))
-					y_column += 1
-					
-		x_label = str(x_values.pop_front())
-		for function in y_values.size():
-			y_datas.append(y_values[function])
-			x_datas.append(x_values)
-	else:
-		var database_size = range(database.size())
-		if database_size.has(labels_index):
-			x_values = database[labels_index]
-			x_label = x_values.pop_front() as String
-			database_size.erase(labels_index) #Remove x row from the iterator
-			
-		for row in database_size:
-			var y_values = database[row] as Array
-			y_labels.append(y_values.pop_front() as String)
-			
-			for val in y_values.size():
-				y_values[val] = y_values[val] as float
-			
-			y_datas.append(y_values)
-			x_datas.append(x_values if not x_values.empty() else range(y_values.size()))
-  
 	for function in y_labels:
 		y_domain[0].append(null)
 		y_domain[1].append(null)
@@ -488,27 +456,7 @@ func calculate_tics():
 		calculate_interval_tics(y_margin_min, y_margin_max, v_dist, y_chors)
 	for i in y_chors.size():
 		y_chors[i] = String(y_chors[i]) #Can't cast directly on calculate_interval_tics because it mess up with the sorting 
-	
-	if not show_x_values_as_labels:
-		x_margin_min = x_range[0]
-		var x_margin_max = x_range[1]
-		h_dist = x_decim * pow(10.0, calculate_position_significant_figure(x_margin_max - x_margin_min) - 1)
-
-		if x_margin_min < 0 and x_margin_max >= 0:
-			calculate_interval_tics(0, x_margin_min, -h_dist, x_labels) #Negative tics
-			calculate_interval_tics(0, x_margin_max, h_dist, x_labels, false) #Positive tics
-			x_labels.sort()
-			x_margin_min = min(x_margin_min, x_labels[0])
-		else:
-			calculate_interval_tics(x_margin_min, x_margin_max, h_dist, x_labels)
-		for i in x_labels.size():
-			x_labels[i] = String(x_labels[i])
-		x_chors = x_labels
-	else:
-		for function in y_labels.size():
-			for value in x_datas[function]:
-				if not x_chors.has(value as String): #Don't append repeated values
-					x_chors.append(value as String)
+	x_chors = x_labels
 
 
 func build_chart():
@@ -547,8 +495,8 @@ func calculate_coordinates():
 	
 	for function in y_labels.size():
 		for val in x_datas[function].size():
-			var value_x = (int(x_datas[function][val]) - x_margin_min) * x_pass / h_dist if h_dist else 0 \
-					if not show_x_values_as_labels else x_chors.find(String(x_datas[function][val])) * x_pass
+			var value_x = (int(x_datas[function][val]) - x_margin_min) * x_pass / h_dist if h_dist else \
+					x_chors.find(String(x_datas[function][val])) * x_pass
 			var value_y = (y_datas[function][val] - y_margin_min) * y_pass / v_dist if v_dist else 0
 	
 			point_values[function].append([x_datas[function][val], y_datas[function][val]])
