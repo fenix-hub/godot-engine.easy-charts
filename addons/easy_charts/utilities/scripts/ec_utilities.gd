@@ -6,11 +6,11 @@ var alphabet : String = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
 var plugin_name : String = "Easy Charts"
 var templates : Dictionary = {}
 var chart_types : Dictionary = {
-	0:"LineChart",
-	1:"ColumnChart",
-	2:"ScatterChart",
-	3:"RadarChart",
-	4:"PieChart"
+	0:["LineChart","line_chart"],
+	1:["ColumnChart","column_chart"],
+	2:["ScatterChart","scatter_chart"],
+	3:["RadarChart","radar_chart"],
+	4:["PieChart","pie_chart"]
 }
 
 func _ready():
@@ -33,7 +33,7 @@ func _load_templates() -> Dictionary:
 func get_template(template_index : int):
 	return templates.get(templates.keys()[template_index])
 
-func get_chart_type(chart_type : int):
+func get_chart_type(chart_type : int) -> Array:
 	return chart_types.get(chart_types.keys()[chart_type])
 
 func get_letter_index(index : int) -> String:
