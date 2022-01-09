@@ -15,13 +15,6 @@ var autoscale_x = true
 var autoscale_y = true
 
 
-var property_list: Array = []
-
-
-func _init():
-	build_property_list()
-
-
 func build_property_list():
 	property_list.clear()
 	
@@ -30,7 +23,7 @@ func build_property_list():
 	{
 		"hint": PROPERTY_HINT_NONE,
 		"usage": PROPERTY_USAGE_CATEGORY,
-		"name": "ScatterChartBase",
+		"name": get_name(),
 		"type": TYPE_STRING
 	})
 	property_list.append(
@@ -117,6 +110,15 @@ func build_property_list():
 		"name": "Chart_Display/y_decim",
 		"type": TYPE_REAL
 	})
+	property_list.append(
+	{
+		"hint": PROPERTY_HINT_NONE,
+		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_SCRIPT_VARIABLE,
+		"name": "Chart_Display/show_points",
+		"type": TYPE_BOOL
+	}
+	)
+
 	
 		
 	# Chart Style
@@ -233,6 +235,9 @@ func build_property_list():
 
 func _set(property, value):
 	match property:
+		"Chart_Display/show_points":
+			show_points = value
+			return true
 		"Chart_Display/autoscale_x":
 			autoscale_x = value
 			build_property_list()
@@ -259,6 +264,8 @@ func _set(property, value):
 
 func _get(property):
 	match property:
+		"Chart_Display/show_points":
+			return show_points
 		"Chart_Display/autoscale_x":
 			return autoscale_x
 		"Chart_Display/autoscale_y":
@@ -428,7 +435,7 @@ func structure_data(database : Array):
 			
 			y_datas.append(y_values)
 			x_datas.append(x_values if not x_values.empty() else range(y_values.size()))
-
+  
 	for function in y_labels:
 		y_domain[0].append(null)
 		y_domain[1].append(null)
@@ -540,7 +547,7 @@ func calculate_coordinates():
 	
 	for function in y_labels.size():
 		for val in x_datas[function].size():
-			var value_x = (x_datas[function][val] - x_margin_min) * x_pass / h_dist if h_dist else 0 \
+			var value_x = (int(x_datas[function][val]) - x_margin_min) * x_pass / h_dist if h_dist else 0 \
 					if not show_x_values_as_labels else x_chors.find(String(x_datas[function][val])) * x_pass
 			var value_y = (y_datas[function][val] - y_margin_min) * y_pass / v_dist if v_dist else 0
 	
@@ -585,6 +592,8 @@ func draw_chart_outlines():
 func draw_points():
 	for function in point_values.size():
 		var PointContainer : Control = Control.new()
+		PointContainer.name = "PointContainer"
+
 		Points.add_child(PointContainer)
 		
 		for function_point in point_values[function].size():
