@@ -331,8 +331,15 @@ func plot(_dataset: Array = read_data(source, delimiter)) -> void:
 		ECUtilities._print_message("Can't plot a chart with an empty Array.",1)
 		return
 	
-	data = _dataset
-	structure_data(slice_data(data))
+	are_values_columns = invert_chart != are_values_columns
+	
+	# Read the dataset in the proper way 
+	var database : Array = _dataset \
+	if not are_values_columns \
+	else MatrixGenerator.transpose(Matrix.new(_dataset)).to_array()
+	
+	data = slice_data(database)
+	structure_data(data)
 	compute_display()
 	display_plot()
 	emit_signal("chart_plotted",self)
@@ -382,22 +389,20 @@ func read_data(source : String, _delimiter : String = delimiter):
 	file.close()
 	return content.duplicate(true)
 
-func slice_data(data: Array) -> Array:
+func slice_data(database : Array) -> Array:
 	var data_to_display : Array
-	data_to_display.resize(data.size())
-	if only_disp_values == Vector2(0,0) :
-		data_to_display = data.duplicate(true)
-	elif only_disp_values.x == 0 and only_disp_values.y < data[0].size():
-		for row_idx in data.size():
-			data_to_display[row_idx] = [data[row_idx][0]] + data[row_idx].slice(data[row_idx].size()-only_disp_values.y, data[row_idx].size()-1)
-	elif only_disp_values.y == 0 and only_disp_values.x < data[0].size():
-		for row_idx in data.size():
-			data_to_display[row_idx] = [data[row_idx][0]] + data[row_idx].slice(1, only_disp_values.x)
-	elif only_disp_values.x != 0 and only_disp_values.y != 0 and only_disp_values.y < data[0].size() and only_disp_values.x < data[0].size():
-		for row_idx in data.size():
-			data_to_display[row_idx] = [data[row_idx][0]] + data[row_idx].slice(only_disp_values.x, data[row_idx].size()-only_disp_values.y)
+	data_to_display.resize(database.size())
+	if only_disp_values == Vector2(): return database.duplicate(true)
+	if only_disp_values.x == 0 and only_disp_values.y < database.size():
+		data_to_display = [database[0]] + database.slice(database.size()-only_disp_values.y, database.size()-1)
+	elif only_disp_values.y == 0 and only_disp_values.x < database[0].size():
+		for row_idx in database.size():
+			data_to_display[row_idx] = [database[row_idx][0]] + Array(database[row_idx]).slice(database[row_idx].size() - only_disp_values.x, database[row_idx].size() -1 )
+	elif only_disp_values.x != 0 and only_disp_values.y != 0 and only_disp_values.y < database[0].size() and only_disp_values.x < database[0].size():
+		for row_idx in database.size():
+			data_to_display[row_idx] = [database[row_idx][0]] + database[row_idx].slice(only_disp_values.x, database[row_idx].size()-only_disp_values.y)
 	else:
-		data_to_display = data.duplicate(true)
+		data_to_display = database.duplicate(true)
 	return data_to_display
 
 # ................................. Display and Draw functions .......................

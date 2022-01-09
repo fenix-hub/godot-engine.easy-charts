@@ -363,20 +363,13 @@ func generate_identifier():
 	return "f%d" % (y_labels.size() + 1)
 
 
-func structure_data(dataset : Array):
+func structure_data(database : Array):
 	# @labels_index can be either a column or a row relative to x values
 	# @y_values can be either a column or a row relative to y values
 	
 	#This is done to make sure this arrays are empty on subsecuent calls of this function.
 	#This function is called from the "old" methods such as plot_from_array and 
 	#for the moment it doesn't clean this variables on clean_variable.
-	
-	are_values_columns = invert_chart != are_values_columns
-	
-	# Read the dataset in the proper way 
-	var database : Array = dataset \
-	if not are_values_columns \
-	else MatrixGenerator.transpose(Matrix.new(dataset)).to_array()
 	
 	var x_values := []
 	var y_values := []
