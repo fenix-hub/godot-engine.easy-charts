@@ -512,6 +512,12 @@ func apply_template(template_name : int):
 		set_template(template_name)
 		property_list_changed_notify()
 
+func set_data(data : Array) -> void:
+	self.data = data
+
+func set_dataframe(dataframe : DataFrame) -> void:
+	self.dataframe = dataframe
+
 # !!! API v2 
 func set_chart_name(ch_name : String):
 	chart_name = ch_name

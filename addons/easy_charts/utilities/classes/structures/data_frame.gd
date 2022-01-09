@@ -21,7 +21,7 @@ func build_dataframe(datamatrix : Matrix, headers : PoolStringArray = [], labels
 	self.dataset = build_dataset_from_matrix(datamatrix, headers, labels)
 
 func build_dataset(data : Array, headers : PoolStringArray, labels : PoolStringArray) -> Array:
-	var dataset : Array = [Array([""]) + Array(headers)]
+	var dataset : Array = [Array(headers)]
 	for row_i in range(data.size()): dataset.append([labels[row_i]]+data[row_i])
 	return dataset
 
@@ -30,6 +30,7 @@ func build_dataset_from_matrix(datamatrix : Matrix, headers : PoolStringArray, l
 	return build_dataset(data, headers, labels)
 
 func insert_column(column : Array, header : String = "", index : int = dataset[0].size()) -> void:
+	assert(column.size() == datamatrix.rows(), "error: the column size must match the dataset column size")
 	headers.insert(index, header if header != "" else MatrixGenerator.get_letter_index(index))
 	datamatrix.insert_column(column, index-1)
 	dataset = build_dataset_from_matrix(datamatrix, headers, labels)
@@ -58,12 +59,12 @@ func _to_string() -> String:
 		for column in row:
 			var string_len : int = str(column).length()
 			last_string_len = string_len if string_len > last_string_len else last_string_len
-	var string : String = "\n"
+	var string : String = ""
 	for row_i in dataset.size():
 		for column_i in dataset[row_i].size():
 			string+="%*s" % [last_string_len+1, dataset[row_i][column_i]]
 		string+="\n"
-	string+="['{table_name}' : {rows} rows x {columns} columns]\n".format({
+	string+="\n['{table_name}' : {rows} rows x {columns} columns]\n".format({
 		rows = datamatrix.rows(), 
 		columns = datamatrix.columns(),
 		table_name = table_name})
