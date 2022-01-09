@@ -325,13 +325,13 @@ func plot(_dataset: Array = read_data(source, delimiter)) -> void:
 	load_font()
 	data_tooltip.hide()
 	
-	if source == "" or source == null:
-		ECUtilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
-		return
-	
 	if _dataset.empty():
-		ECUtilities._print_message("Can't plot a chart with an empty Array.",1)
-		return
+		if source == "" or source == null:
+			ECUtilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
+			return
+		else:
+			ECUtilities._print_message("Can't plot a chart with an empty Array.",1)
+			return
 	
 	data = _dataset
 	structure_data(slice_data(data))
