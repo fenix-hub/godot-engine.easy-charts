@@ -370,6 +370,7 @@ func append_new_column(dataset : Array, column : Array):
 # ...................... Dataset Manipulation Functions .........................
 
 func read_data(source : String, _delimiter : String = delimiter):
+	assert(source != "" and source != null, "A source file must be specified")
 	var file : File = File.new()
 	file.open(source,File.READ)
 	var content : Array
