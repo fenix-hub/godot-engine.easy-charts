@@ -149,7 +149,6 @@ var property_list: Array = []
 # !! API v2
 static func instance(chart_type : int):
 	var chart_t : Array = ECUtilities.get_chart_type(chart_type)
-	"res://addons/easy_charts/control_charts/RadarChart/radar_chart.tscn"
 	var chart : String = "res://addons/easy_charts/control_charts/%s/%s.tscn" % [chart_t[0], chart_t[1]]
 	return load(chart).instance()
 
