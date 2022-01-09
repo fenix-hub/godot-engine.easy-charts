@@ -92,3 +92,7 @@ static func multiply_float(_matrix1 : Matrix, _float : float) -> Matrix:
 		for y in range(_matrix1.to_array()[x].size()):
 			array[x][y]*=_float
 	return Matrix.new(array)
+
+# ------------------------------------------------------------
+static func get_letter_index(index : int) -> String:
+	return "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z".split(" ")[index]

@@ -4,15 +4,17 @@ class_name Matrix
 
 var values : Array = []
 
-func _init(matrix : Array = []) -> void:
+func _init(matrix : Array = [], size : int = 0) -> void:
 	values = matrix
 
 func insert_row(row : Array, index : int = values.size()) -> void:
-	assert(row.size() == values[0].size(), "the row size must match matrix row size")
+	if rows() != 0:
+		assert(row.size() == columns(), "the row size must match matrix row size")
 	values.insert(index, row)
 
 func insert_column(column : Array, index : int = values[0].size()) -> void:
-	assert(column.size() == values.size(), "the column size must match matrix column size")
+	if columns() != 0:
+		assert(column.size() == rows(), "the column size must match matrix column size")
 	for row_idx in column.size():
 		values[row_idx].insert(index, column[row_idx])
 
@@ -20,13 +22,13 @@ func to_array() -> Array:
 	return values.duplicate(true)
 
 func get_size() -> Vector2:
-	return Vector2(values.size(), values[0].size())
+	return Vector2(rows(), columns())
 
 func rows() -> int:
 	return values.size()
 
 func columns() -> int:
-	return values[0].size()
+	return values[0].size() if rows() != 0 else 0
 
 func get_column(column : int) -> Array:
 	assert(column < columns(), "index of the column requested (%s) exceedes matrix columns (%s)"%[column, columns()])
@@ -77,9 +79,3 @@ func _get(_property : String):
 	else:
 		if (_property as String).is_valid_integer():
 			return get_row(_property as int)
-
-
-
-
-
-
