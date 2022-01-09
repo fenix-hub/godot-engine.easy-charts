@@ -45,6 +45,8 @@ var y_coordinates : Array
 
 # data contained in file
 var data : Array
+# If using a Dataframe
+var dataframe: DataFrame
 
 # amount of functions to represent
 var functions : int = 0
@@ -325,10 +327,6 @@ func plot(_dataset: Array = read_data(source, delimiter)) -> void:
 	load_font()
 	data_tooltip.hide()
 	
-	if source == "" or source == null:
-		ECUtilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
-		return
-	
 	if _dataset.empty():
 		ECUtilities._print_message("Can't plot a chart with an empty Array.",1)
 		return
@@ -341,9 +339,14 @@ func plot(_dataset: Array = read_data(source, delimiter)) -> void:
 	if not is_connected("item_rect_changed", self, "redraw_plot"): connect("item_rect_changed", self, "redraw_plot")
 
 func plot_from_source(file : String, _delimiter : String = delimiter) -> void:
+	if source == "" or source == null:
+		ECUtilities._print_message("Can't plot a chart without a Source file. Please, choose it in editor, or use the custom function _plot().",1)
+		return
+	
 	plot(read_data(file, _delimiter))
 
 func plot_from_dataframe(dataframe : DataFrame) -> void:
+	self.dataframe = dataframe
 	plot(dataframe.get_dataset())
 
 func plot_placeholder() -> void:
@@ -354,7 +357,7 @@ func plot_placeholder() -> void:
 # All data are stored.
 func update_plot(new_data : Array = []) -> void:
 	if not new_data.empty(): data.append(new_data)
-	plot(data)
+	plot(data if dataframe == null else dataframe.get_dataset())
 
 # Append a new column to data
 func append_new_column(dataset : Array, column : Array):

@@ -540,8 +540,6 @@ func draw_chart_outlines():
 func draw_points():
 	for function in point_values.size():
 		var PointContainer : Control = Control.new()
-		PointContainer.name = "PointContainer"
-
 		Points.add_child(PointContainer)
 		
 		for function_point in point_values[function].size():

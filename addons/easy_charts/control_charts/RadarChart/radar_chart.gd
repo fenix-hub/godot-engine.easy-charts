@@ -1,5 +1,5 @@
 tool
-extends Chart
+extends ScatterChartBase
 class_name RadarChart
 
 """
@@ -125,74 +125,75 @@ func _get_property_list():
 		},
 	]
 
-func structure_data(database : Array):
-	# @x_values_index can be either a column or a row relative to x values
-	# @y_values can be either a column or a row relative to y values
-	are_values_columns = invert_chart != are_values_columns
-	match are_values_columns:
-		true:
-			for row in database.size():
-				var t_row : Array = []
-				for column in database[row].size():
-					if row == labels_index:
-						if column == function_names_index:
-							pass
-						else:
-							x_labels.append(database[row][column])
-					else:
-						if column == function_names_index:
-							y_labels.append(database[row][column])
-						else:
-							if typeof(database[row][column]) == TYPE_INT or typeof(database[row][column]) == TYPE_REAL:
-								t_row.append(database[row][column] as float)
-							else:
-								t_row.append(database[row][column].replace(",", ".") as float)
-				if not t_row.empty():
-					x_datas.append(t_row)
-		false:
-			for row in database.size():
-				if row == function_names_index:
-					y_labels = database[row] as PoolStringArray
-				
-				var x_temp_datas : PoolRealArray = []
-				for column in database[row].size():
-					if column == labels_index:
-						x_labels.append(database[row][column] as String)
-					else:
-						x_temp_datas.append(database[row][column] as float)
-					x_datas.append(x_temp_datas)
-	
-	
-	if labels_index == -1 :
-		for data in x_datas[0].size():
-			x_labels.append("Element %s" % data)
-	
-	if function_names_index == -1 :
-		for data in x_datas.size():
-			y_labels.append("Function %s" % data)
-
-func build_chart():
-	SIZE = get_size()
-	origin = OFFSET + SIZE/2
+#func structure_data(database : Array):
+#	# @x_values_index can be either a column or a row relative to x values
+#	# @y_values can be either a column or a row relative to y values
+#	are_values_columns = invert_chart != are_values_columns
+#	match are_values_columns:
+#		true:
+#			for row in database.size():
+#				var t_row : Array = []
+#				for column in database[row].size():
+#					if row == labels_index:
+#						if column == function_names_index:
+#							pass
+#						else:
+#							x_labels.append(database[row][column])
+#					else:
+#						if column == function_names_index:
+#							y_labels.append(database[row][column])
+#						else:
+#							if typeof(database[row][column]) == TYPE_INT or typeof(database[row][column]) == TYPE_REAL:
+#								t_row.append(database[row][column] as float)
+#							else:
+#								t_row.append(database[row][column].replace(",", ".") as float)
+#				if not t_row.empty():
+#					x_datas.append(t_row)
+#		false:
+#			for row in database.size():
+#				if row == function_names_index:
+#					y_labels = database[row] as PoolStringArray
+#
+#				var x_temp_datas : PoolRealArray = []
+#				for column in database[row].size():
+#					if column == labels_index:
+#						x_labels.append(database[row][column] as String)
+#					else:
+#						x_temp_datas.append(database[row][column] as float)
+#					x_datas.append(x_temp_datas)
+#
+#
+#	if labels_index == -1 :
+#		for data in x_datas[0].size():
+#			x_labels.append("Element %s" % data)
+#
+#	if function_names_index == -1 :
+#		for data in x_datas.size():
+#			y_labels.append("Function %s" % data)
+#
+#func build_chart():
+#	SIZE = get_size()
+#	origin = OFFSET + SIZE/2
+#
+#
+#func calculate_pass() : 
+#	var ordered_max : Array
+#	for data in x_datas :
+#		var ordered_data : Array = data.duplicate()
+#		ordered_data.sort()
+#		ordered_max.append(ordered_data.pop_back())
+#	ordered_max.sort()
+#	var max_value : float = ordered_max.pop_back()
+#	var dist = full_scale * pow(10.0,str(max_value).length()-2)
+#	var multi = 0
+#	var value = dist * multi
+#	x_chors.append(value as String)
+#	while value < max_value:
+#		multi+=1
+#		value = dist * multi
+#		x_chors.append(value as String)
 
 var radar_polygon : Array
-
-func calculate_pass() : 
-	var ordered_max : Array
-	for data in x_datas :
-		var ordered_data : Array = data.duplicate()
-		ordered_data.sort()
-		ordered_max.append(ordered_data.pop_back())
-	ordered_max.sort()
-	var max_value : float = ordered_max.pop_back()
-	var dist = full_scale * pow(10.0,str(max_value).length()-2)
-	var multi = 0
-	var value = dist * multi
-	x_chors.append(value as String)
-	while value < max_value:
-		multi+=1
-		value = dist * multi
-		x_chors.append(value as String)
 
 func calculate_coordinates():
 	for chor in x_chors.size():
