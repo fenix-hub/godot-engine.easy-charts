@@ -455,7 +455,6 @@ func calculate_tics():
 		calculate_interval_tics(y_margin_min, y_margin_max, v_dist, y_chors)
 	for i in y_chors.size():
 		y_chors[i] = String(y_chors[i]) #Can't cast directly on calculate_interval_tics because it mess up with the sorting 
-	print(y_chors)
 	x_chors = x_labels.duplicate(true)
 
 
@@ -472,8 +471,6 @@ func build_chart():
 	
 	SIZE = get_size() - Vector2(OFFSET.x, 0)
 	origin = Vector2(OFFSET.x, SIZE.y - OFFSET.y)
-	print(SIZE)
-	print(origin)
 
 func count_functions():
 	functions = y_labels.size()

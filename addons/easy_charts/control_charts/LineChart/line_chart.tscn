@@ -86,10 +86,10 @@ __meta__ = {
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="DataTooltip" parent="CanvasLayer" instance=ExtResource( 1 )]
-margin_left = -163.544
-margin_top = 34.4964
-margin_right = -163.68
-margin_bottom = 35.2964
+margin_left = -136.674
+margin_top = -56.7206
+margin_right = -136.81
+margin_bottom = -55.9206
 
 [node name="PointData" parent="CanvasLayer/DataTooltip" index="0"]
 margin_left = -189.809
