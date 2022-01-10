@@ -24,7 +24,7 @@ A line chart is often used to visualize a trend in data over intervals of time â
 a time series â€“ thus the line is often drawn chronologically. 
 In these cases they are known as run charts."
 }
-Chart_Properties/are_values_columns = false
+Chart_Properties/are_values_columns = true
 Chart_Properties/labels_index = 0
 Chart_Display/autoscale_x = true
 Chart_Display/x_decim = 1.0
@@ -85,10 +85,10 @@ __meta__ = {
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="DataTooltip" parent="CanvasLayer" instance=ExtResource( 1 )]
-margin_left = -124.653
-margin_top = -56.7206
-margin_right = -124.789
-margin_bottom = -55.9206
+margin_left = -126.774
+margin_top = -58.1348
+margin_right = -126.91
+margin_bottom = -57.3348
 
 [node name="PointData" parent="CanvasLayer/DataTooltip" index="0"]
 margin_left = -189.809

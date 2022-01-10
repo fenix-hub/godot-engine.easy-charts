@@ -308,40 +308,44 @@ func plot_function(id: String, x:Array, y:Array, param_dic := {}):
 	redraw_plot()
 	update()
 
+func _slice():
+	if only_disp_values.x < x_values.size() and only_disp_values.x != 0:
+		x_values.pop_front()
+		for y_data in y_datas:
+			y_data.pop_front()
+
 func update_functions(new_x, new_y : Array, param_dic : = {}) :
+	_slice()
 	x_values.append(new_x)
-	for function in y_labels.size():
-		_update_function(y_labels[function], new_y[function])
+	
+	for function in y_datas.size():
+		y_datas[function].append(new_y[function])
+		
+		calculate_range(y_labels[function])
 	calculate_tics()
 	redraw_plot()
 	update()
+
 
 func update_function(id: String, new_x, new_y, param_dic := {}) -> void:
+	_slice()
+	if only_disp_values.x < x_values[0].size():
+		x_values.pop_front()
 	x_values.append(new_x)
-	_update_function(id, new_y, param_dic)
-	calculate_tics()
-	redraw_plot()
-	update()
-
-func _update_function(id: String, new_y, param_dic := {}):
 	var function = y_labels.find(id)
 	
 	if function == -1: #Not found
 		ECUtilities._print_message("The identifier %s does not exist." % id,1)
 		return
 	
-	for param in param_dic.keys():
-		match param:
-			"label":
-				y_labels[function] = param_dic[param]
-			"color":
-				function_colors[function] = param_dic[param]
-	
 	for y_data_i in range(0, y_datas.size()):
 		if y_data_i == function: y_datas[y_data_i].append(new_y)
 		else: y_datas[y_data_i].append(y_datas[y_data_i][y_datas[y_data_i].size()-1])
 	
 	calculate_range(id)
+	calculate_tics()
+	redraw_plot()
+	update()
 
 func delete_function(id: String):
 	var function = y_labels.find(id)

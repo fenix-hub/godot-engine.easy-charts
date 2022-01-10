@@ -366,7 +366,8 @@ func plot_placeholder() -> void:
 # All data are stored.
 func update_plot(new_data : Array = []) -> void:
 	if not new_data.empty(): data.append(new_data)
-	plot(data if dataframe == null else dataframe.get_dataset())
+	plot(data if dataframe == null else dataframe.get_dataset().duplicate(true))
+	update()
 
 # Append a new column to data
 func append_new_column(dataset : Array, column : Array):
@@ -391,21 +392,23 @@ func read_data(source : String, _delimiter : String = delimiter):
 	file.close()
 	return content.duplicate(true)
 
+func slice_x(x_data : Array) -> Array:
+	return [x_data[0]] + Array(x_data).slice(x_data.size() - only_disp_values.x, x_data.size() -1 )
+
+func slice_y(y_data : Array) -> Array:
+	return [y_data[0]] + y_data.slice(y_data.size()-only_disp_values.y, y_data.size()-1)
+
+## TODO: Data should not be sliced!!
+## Instead, only_disp_values should affect all the `range()` to plot points
+
 func slice_data(database : Array) -> Array:
-	var data_to_display : Array
-	data_to_display.resize(database.size())
-	if only_disp_values == Vector2(): return database.duplicate(true)
-	if only_disp_values.x == 0 and only_disp_values.y < database.size():
-		data_to_display = [database[0]] + database.slice(database.size()-only_disp_values.y, database.size()-1)
-	elif only_disp_values.y == 0 and only_disp_values.x < database[0].size():
+	var data_to_display : Array = database
+	if only_disp_values.y < database.size() and only_disp_values.y !=0:
+		data_to_display = slice_y(database)
+	if only_disp_values.x < database[0].size() and only_disp_values.x !=0:
 		for row_idx in database.size():
-			data_to_display[row_idx] = [database[row_idx][0]] + Array(database[row_idx]).slice(database[row_idx].size() - only_disp_values.x, database[row_idx].size() -1 )
-	elif only_disp_values.x != 0 and only_disp_values.y != 0 and only_disp_values.y < database[0].size() and only_disp_values.x < database[0].size():
-		for row_idx in database.size():
-			data_to_display[row_idx] = [database[row_idx][0]] + database[row_idx].slice(only_disp_values.x, database[row_idx].size()-only_disp_values.y)
-	else:
-		data_to_display = database.duplicate(true)
-	return data_to_display
+			data_to_display[row_idx] = slice_x(database[row_idx])
+	return data_to_display.duplicate(true)
 
 # ................................. Display and Draw functions .......................
 func compute_display():
@@ -443,8 +446,8 @@ func load_font():
 		bold_font = font
 
 func count_functions():
-	if are_values_columns: functions = data[0].size()-1
-	else: functions = y_datas.size()
+	if are_values_columns: functions = x_labels.size()
+	else: functions = y_labels.size()
 
 func calculate_colors():
 	if function_colors.size() < functions:
@@ -464,7 +467,7 @@ func create_legend():
 		else:
 			function_legend = legend_element.instance()
 			legend.append(function_legend)
-		var f_name : String = y_labels[function] if not are_values_columns else str(x_datas[function])
+		var f_name : String = y_labels[function] if are_values_columns else str(x_labels[function])
 		var legend_font : Font
 		if font != null:
 			legend_font = font
