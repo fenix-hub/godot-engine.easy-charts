@@ -455,6 +455,7 @@ func calculate_tics():
 		calculate_interval_tics(y_margin_min, y_margin_max, v_dist, y_chors)
 	for i in y_chors.size():
 		y_chors[i] = String(y_chors[i]) #Can't cast directly on calculate_interval_tics because it mess up with the sorting 
+	print(y_chors)
 	x_chors = x_labels.duplicate(true)
 
 
@@ -464,13 +465,15 @@ func build_chart():
 		var length = font.get_string_size(str(y_tic)).x
 		if length > longest_y_tic:
 			longest_y_tic = length
-
+	
 	OFFSET.x = longest_y_tic + tic_length + 2 * label_displacement
 	OFFSET.y = font.get_height() + tic_length + label_displacement
 	
+	
 	SIZE = get_size() - Vector2(OFFSET.x, 0)
 	origin = Vector2(OFFSET.x, SIZE.y - OFFSET.y)
-
+	print(SIZE)
+	print(origin)
 
 func count_functions():
 	functions = y_labels.size()
@@ -481,7 +484,7 @@ func calculate_pass():
 	if x_chors.size() > 0:
 		x_pass = (SIZE.x - OFFSET.x) / (x_chors.size() - 1 if x_chors.size() > 1 else x_chors.size())
 	if y_chors.size() > 0:
-		y_pass = (origin.y - ChartName.get_rect().size.y * 2) / (y_chors.size() - 1 if y_chors.size() > 1 else y_chors.size())
+		y_pass = (origin.y) / (y_chors.size() - 1 if y_chors.size() > 1 else y_chors.size())
 
 
 # Calculate all Points' coordinates in the dataset

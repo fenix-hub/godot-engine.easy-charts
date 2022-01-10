@@ -58,6 +58,7 @@ __meta__ = {
 }
 
 [node name="ChartName" type="Label" parent="."]
+visible = false
 anchor_right = 1.0
 margin_bottom = 14.0
 align = 1
@@ -85,10 +86,10 @@ __meta__ = {
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="DataTooltip" parent="CanvasLayer" instance=ExtResource( 1 )]
-margin_left = -126.774
-margin_top = -58.1348
-margin_right = -126.91
-margin_bottom = -57.3348
+margin_left = -163.544
+margin_top = 34.4964
+margin_right = -163.68
+margin_bottom = 35.2964
 
 [node name="PointData" parent="CanvasLayer/DataTooltip" index="0"]
 margin_left = -189.809
