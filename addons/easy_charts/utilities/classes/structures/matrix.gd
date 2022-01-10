@@ -29,10 +29,9 @@ func update_column(column : Array, index : int) -> void:
 
 func resize(rows: int, columns: int) -> void:
 	for row in range(rows):
-		var value_row := []
-		for column in range(columns):
-			value_row.append(null)
-		values.append(value_row)
+		var row_column: Array = []
+		row_column.resize(columns)
+		values.append(row_column)
 
 func to_array() -> Array:
 	return values.duplicate(true)

@@ -372,7 +372,7 @@ func populate_x_datas():
 	x_datas.append(x_values)
 
 func populate_y_datas():
-	y_labels.append(y_values.duplicate(true).pop_front() as String)
+	y_labels.append(y_values.pop_front() as String)
 	
 	for val in y_values.size():
 		y_values[val] = y_values[val] as float
