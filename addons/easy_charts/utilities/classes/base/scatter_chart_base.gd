@@ -478,8 +478,10 @@ func count_functions():
 
 # Calculate distance in pixel between 2 consecutive values/datas
 func calculate_pass():
-	x_pass = (SIZE.x - OFFSET.x) / (x_chors.size() - 1 if x_chors.size() > 1 else x_chors.size())
-	y_pass = (origin.y - ChartName.get_rect().size.y * 2) / (y_chors.size() - 1 if y_chors.size() > 1 else y_chors.size())
+	if x_chors.size() > 0:
+		x_pass = (SIZE.x - OFFSET.x) / (x_chors.size() - 1 if x_chors.size() > 1 else x_chors.size())
+	if y_chors.size() > 0:
+		y_pass = (origin.y - ChartName.get_rect().size.y * 2) / (y_chors.size() - 1 if y_chors.size() > 1 else y_chors.size())
 
 
 # Calculate all Points' coordinates in the dataset

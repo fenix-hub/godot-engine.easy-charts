@@ -355,6 +355,8 @@ func plot_from_source(file : String, _delimiter : String = delimiter) -> void:
 	plot(read_data(file, _delimiter))
 
 func plot_from_dataframe(dataframe : DataFrame) -> void:
+	assert(dataframe.headers.size() > 1 or dataframe.labels.size() > 1, 
+	"Cannot plot a dataframe of size %sx%s"%[dataframe.headers.size(), dataframe.labels.size()])
 	self.dataframe = dataframe
 	plot(dataframe.get_dataset())
 
