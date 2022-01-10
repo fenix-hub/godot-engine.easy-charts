@@ -315,6 +315,8 @@ func _slice():
 			y_data.pop_front()
 
 func update_functions(new_x, new_y : Array, param_dic : = {}) :
+	assert(new_y.size() == y_labels.size(), 
+	"new values array size (%s) must match Labels size (%s)"%[new_y.size(), y_labels.size()])
 	_slice()
 	x_values.append(new_x)
 	
@@ -328,16 +330,13 @@ func update_functions(new_x, new_y : Array, param_dic : = {}) :
 
 
 func update_function(id: String, new_x, new_y, param_dic := {}) -> void:
-	_slice()
-	if only_disp_values.x < x_values[0].size():
-		x_values.pop_front()
-	x_values.append(new_x)
 	var function = y_labels.find(id)
 	
 	if function == -1: #Not found
 		ECUtilities._print_message("The identifier %s does not exist." % id,1)
 		return
 	
+	_slice()
 	for y_data_i in range(0, y_datas.size()):
 		if y_data_i == function: y_datas[y_data_i].append(new_y)
 		else: y_datas[y_data_i].append(y_datas[y_data_i][y_datas[y_data_i].size()-1])

@@ -31,13 +31,13 @@ func build_dataset(data : Array, headers : PoolStringArray, labels : PoolStringA
 	return dataset
 
 func insert_column(column : Array, header : String = "", index : int = dataset[0].size() - 1) -> void:
-	assert(column.size() == datamatrix.rows() if not datamatrix.empty() else labels.size(), "error: the column size must match the dataset column size")
+	assert(column.size() == (datamatrix.rows() if not datamatrix.empty() else labels.size()), "error: the column size must match the dataset column size")
 	headers.insert(index, header if header != "" else MatrixGenerator.get_letter_index(index))
 	datamatrix.insert_column(column, index)
 	dataset = build_dataset_from_matrix(datamatrix, headers, labels)
 
 func insert_row(row : Array, label : String = "", index : int = dataset.size() - 1) -> PoolStringArray:
-	assert(row.size() == datamatrix.columns() if not datamatrix.empty() else headers.size(), "error: the row size must match the dataset row size")
+	assert(row.size() == (datamatrix.columns() if not datamatrix.empty() else headers.size()), "error: the row size must match the dataset row size")
 	labels.insert(index, label if label != "" else str(index))
 	datamatrix.insert_row(row, index)
 	dataset = build_dataset_from_matrix(datamatrix, headers, labels)
