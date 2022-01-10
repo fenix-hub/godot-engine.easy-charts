@@ -38,3 +38,11 @@ func get_chart_type(chart_type : int) -> Array:
 
 func get_letter_index(index : int) -> String:
 	return alphabet.split(" ")[index]
+
+func save_dataframe_to_file(dataframe: DataFrame, path: String, delimiter: String = ";") -> void:
+	var file = File.new()
+	file.open(path, File.WRITE)
+	for row in dataframe.get_dataset():
+		file.store_line(PoolStringArray(row).join(delimiter))
+	file.close()
+
