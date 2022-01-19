@@ -25,7 +25,7 @@ func _get_children():
     PointTween = $PointTween
     Functions = $Functions
     GridTween = $GridTween
-    DataTooltip = $CanvasLayer/DataTooltip
+    DataTooltip = $CanvasLayer/PointData
     Outlines = $Outlines
     Grid = $Grid
 

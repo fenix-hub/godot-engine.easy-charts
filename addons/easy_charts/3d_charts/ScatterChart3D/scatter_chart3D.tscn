@@ -1,14 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
-<<<<<<<< HEAD:addons/easy_charts/3DChart/ScatterChart3D/scatter_chart3D.tscn
-[ext_resource path="res://addons/easy_charts/3DChart/ScatterChart3D/scatter_chart3D.gd" type="Script" id=1]
-[ext_resource path="res://addons/easy_charts/Utilities/Point/point_data.tscn" type="PackedScene" id=2]
-
-
-========
 [ext_resource path="res://addons/easy_charts/3d_charts/ScatterChart3D/scatter_chart3D.gd" type="Script" id=1]
 [ext_resource path="res://addons/easy_charts/utilities/containers/data_tooltip/data_tooltip.tscn" type="PackedScene" id=2]
->>>>>>>> dev:addons/easy_charts/3d_charts/ScatterChart3D/scatter_chart3D.tscn
 
 
 [sub_resource type="SpatialMaterial" id=1]

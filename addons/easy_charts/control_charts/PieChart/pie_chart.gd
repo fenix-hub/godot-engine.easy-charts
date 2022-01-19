@@ -158,6 +158,12 @@ func calculate_pass():
 	for y_data in y_datas: tot+=y_data[0]
 	x_pass = 360/tot
 
+
+func create_legend():
+	#temporary override due to error
+	pass
+
+
 func calculate_coordinates():
 	area_angles.clear()
 	slices.clear()
