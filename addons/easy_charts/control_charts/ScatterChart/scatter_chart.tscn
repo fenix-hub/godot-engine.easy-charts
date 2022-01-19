@@ -1,14 +1,8 @@
 [gd_scene load_steps=3 format=2]
 
-<<<<<<<< HEAD:addons/easy_charts/ControlChart/ScatterChart/scatter_chart.tscn
-[ext_resource path="res://addons/easy_charts/Utilities/Point/point_data.tscn" type="PackedScene" id=1]
-[ext_resource path="res://addons/easy_charts/ControlChart/ScatterChart/scatter_chart.gd" type="Script" id=2]
 
-[sub_resource type="Theme" id=1]
-========
 [ext_resource path="res://addons/easy_charts/control_charts/ScatterChart/scatter_chart.gd" type="Script" id=1]
 [ext_resource path="res://addons/easy_charts/utilities/containers/data_tooltip/data_tooltip.tscn" type="PackedScene" id=2]
->>>>>>>> dev:addons/easy_charts/control_charts/ScatterChart/scatter_chart.tscn
 
 [node name="ScatterChart" type="Control"]
 anchor_right = 1.0
@@ -26,30 +20,6 @@ for a set of data. If the points are coded (color/shape/size), one additional va
 The data are displayed as a collection of points, each having the value of one variable determining the position on 
 the horizontal axis and the value of the other variable determining the position on the vertical axis."
 }
-<<<<<<<< HEAD:addons/easy_charts/ControlChart/ScatterChart/scatter_chart.tscn
-Chart_Properties/are_values_columns = false
-Chart_Properties/labels_index = 0
-Chart_Properties/show_x_values_as_labels = false
-Chart_Display/autoscale_x = true
-Chart_Display/x_decim = 1.0
-Chart_Display/autoscale_y = true
-Chart_Display/y_decim = 1.0
-Chart_Style/points_shape = [  ]
-Chart_Style/function_colors = PoolColorArray(  )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/grid_lines_width = 1
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font = null
-Chart_Style/bold_font = null
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/use_template = true
-Chart_Style/template = 0
-Chart_Modifiers/treshold = Vector2( 0, 0 )
-Chart_Modifiers/only_disp_values = Vector2( 0, 0 )
-Chart_Modifiers/invert_chart = false
-========
->>>>>>>> dev:addons/easy_charts/control_charts/ScatterChart/scatter_chart.tscn
 
 [node name="Background" type="ColorRect" parent="."]
 visible = false
@@ -88,19 +58,8 @@ __meta__ = {
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-<<<<<<<< HEAD:addons/easy_charts/ControlChart/ScatterChart/scatter_chart.tscn
-[node name="PointData" parent="PointData" index="0"]
-margin_left = -510.384
-margin_top = -148.79
-margin_right = -510.52
-margin_bottom = -147.99
-theme = SubResource( 1 )
-
-[editable path="PointData"]
-========
 [node name="DataTooltip" parent="CanvasLayer" instance=ExtResource( 2 )]
 margin_left = 264.788
 margin_top = 446.78
 margin_right = 264.65
 margin_bottom = 447.58
->>>>>>>> dev:addons/easy_charts/control_charts/ScatterChart/scatter_chart.tscn
