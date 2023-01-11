@@ -233,8 +233,9 @@ func _draw_grid() -> void:
 		return
 	
 	# draw vertical lines
-	var v_lines: float = (x_sampled.min_max.right - x_sampled.min_max.left) / chart_properties.x_scale
-	for _x in chart_properties.x_scale+1:
+	var v_lines: float = (x_sampled.min_max.right - x_sampled.min_max.left) / (chart_properties.x_scale - 1)
+	var x_labels_spacing: float = x_labels.size() / (chart_properties.x_scale - 1)
+	for _x in chart_properties.x_scale:
 		var x_val: float = _x * v_lines + x_sampled.min_max.left
 		var p1: Vector2 = Vector2(
 			range_lerp(x_val, x_sampled.min_max.left, x_sampled.min_max.right, x_sampled_domain.left, x_sampled_domain.right),
@@ -251,7 +252,7 @@ func _draw_grid() -> void:
 			if x_labels.empty():
 				tick_lbl = ("%.2f" if x_has_decimals else "%s") % x_val
 			else:
-				tick_lbl = x_labels[floor(v_lines) * _x]
+				tick_lbl = x_labels[clamp(x_labels_spacing * _x, 0, x_labels.size() - 1)]
 			
 			draw_string(
 				drawing_options.font, 
@@ -272,8 +273,9 @@ func _draw_grid() -> void:
 			draw_line(p1, p2, drawing_options.colors.grid, 1, true)
 	
 	# draw horizontal lines
-	var h_lines: float = (y_sampled.min_max.right - y_sampled.min_max.left) / chart_properties.y_scale
-	for _y in chart_properties.y_scale+1:
+	var h_lines: float = (y_sampled.min_max.right - y_sampled.min_max.left) / (chart_properties.y_scale - 1)
+	var y_labels_spacing: float = y_labels.size() / (chart_properties.y_scale - 1)
+	for _y in chart_properties.y_scale:
 		var y_val: float = _y * h_lines + y_sampled.min_max.left
 		var p1: Vector2 = Vector2(
 			bounding_box.position.x,
@@ -290,7 +292,7 @@ func _draw_grid() -> void:
 			if y_labels.empty():
 				tick_lbl = ("%.2f" if y_has_decimals else "%s") % y_val
 			else:
-				tick_lbl = y_labels[floor(h_lines) * _y]
+				tick_lbl = y_labels[clamp(y_labels * _y, 0, y_labels.size() - 1)]
 			
 			draw_string(
 				drawing_options.font, 
