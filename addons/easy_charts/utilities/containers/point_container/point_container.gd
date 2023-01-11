@@ -49,6 +49,25 @@ func _draw_point() -> void:
 			draw_circle(point_rel_pos, self.radius,  self.color)
 		PointShape.SQUARE:
 			draw_rect(Rect2(point_rel_pos * 0.5, point_rel_pos), self.color, true, 1.0, false)
+		PointShape.TRIANGLE:
+			draw_colored_polygon(
+				PoolVector2Array([
+					point_rel_pos + (Vector2.UP * self.radius * 1.5),
+					point_rel_pos + (Vector2.ONE * self.radius * 1.5),
+					point_rel_pos - (Vector2(1, -1) * self.radius * 1.5)
+				]), self.color, [], null, null, false
+			)
+		PointShape.CROSS:
+			draw_line(
+				point_rel_pos - (Vector2.ONE * self.radius),
+				point_rel_pos + (Vector2.ONE * self.radius),
+				self.color, self.radius, true
+			)
+			draw_line(
+				point_rel_pos + (Vector2(1, -1) * self.radius),
+				point_rel_pos + (Vector2(-1, 1) * self.radius),
+				self.color, self.radius / 2, true
+			)
 
 func _draw():
 #	_draw_bounding_box()

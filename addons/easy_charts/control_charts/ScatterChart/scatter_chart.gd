@@ -9,12 +9,15 @@ signal point_exited(point)
 func _ready():
 	pass
 
-func plot(x: Array, y: Array) -> void:
+func plot(x: Array, y: Array, drawing_options: DrawingOptions = null, chart_properties: ChartProperties = null) -> void:
 	self.x = x
 	self.y = y
 	
-	_clear()
-	_pre_process()
+	if chart_properties != null:
+		self.chart_properties = chart_properties
+	if drawing_options != null:
+		self.drawing_options = drawing_options
+	
 	update()
 
 func _draw_point(point: Point, function_index: int) -> void:
@@ -22,8 +25,8 @@ func _draw_point(point: Point, function_index: int) -> void:
 	$Points.add_child(point_container)
 	point_container.set_point(
 		point,
-		drawing_options.colors.functions[function_index],
-		drawing_options.shapes[function_index]
+		drawing_options.get_function_color(function_index),
+		drawing_options.get_point_shape(function_index)
 	)
 	point_container.connect("point_entered", self, "_on_point_entered")
 	point_container.connect("point_exited", self, "_on_point_exited")

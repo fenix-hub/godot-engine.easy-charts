@@ -11,9 +11,12 @@ __meta__ = {
 }
 
 [node name="Points" type="Control" parent="."]
-unique_name_in_owner = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": true
 }
+
+[node name="Canvas" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
