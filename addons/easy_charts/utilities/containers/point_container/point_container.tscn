@@ -9,4 +9,5 @@ margin_right = 8.0
 margin_bottom = 8.0
 script = ExtResource( 1 )
 
-[connection signal="mouse_entered" from="." to="." method="_on_Control_mouse_entered"]
+[connection signal="mouse_entered" from="." to="." method="_on_PointContainer_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_PointContainer_mouse_exited"]

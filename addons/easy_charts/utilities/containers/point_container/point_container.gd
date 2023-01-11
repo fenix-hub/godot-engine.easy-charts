@@ -1,6 +1,9 @@
 extends Control
 class_name PointContainer
 
+signal point_entered(point)
+signal point_exited(point)
+
 enum PointShape {
 	CIRCLE,
 	TRIANGLE,
@@ -45,13 +48,15 @@ func _draw_point() -> void:
 		PointShape.CIRCLE:
 			draw_circle(point_rel_pos, self.radius,  self.color)
 		PointShape.SQUARE:
-			draw_rect(Rect2(point_rel_pos * 0.5, point_rel_pos), self.color, true, 1.0, true)
+			draw_rect(Rect2(point_rel_pos * 0.5, point_rel_pos), self.color, true, 1.0, false)
 
 func _draw():
 #	_draw_bounding_box()
 	_draw_point()
 #	_draw_label()
 
+func _on_PointContainer_mouse_entered():
+	emit_signal("point_entered", self.point)
 
-func _on_Control_mouse_entered():
-	print("hello %s " % point)
+func _on_PointContainer_mouse_exited():
+	emit_signal("point_exited", self.point)

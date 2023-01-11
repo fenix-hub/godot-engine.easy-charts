@@ -113,7 +113,7 @@ func _draw_points() -> void:
 	pass
 
 func _draw_background() -> void:
-	draw_rect(node_box, Color.white, true, 1.0, true)
+	draw_rect(node_box, Color.white, true, 1.0, false)
 
 func _draw_grid() -> void:
 	var validation: int = _validate_sampled_axis(x_sampled, y_sampled)
