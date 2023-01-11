@@ -47,10 +47,6 @@ var _x_ticklabel_size: Vector2 # offset only on the X axis
 var _x_ticklabel_offset: int = 5 # offset only on the X axis
 var _x_tick_size: int = 7
 
-
-var point_container_scene: PackedScene = preload("res://addons/easy_charts/utilities/containers/point_container/point_container.tscn")
-
-
 ###########
 func plot(x: Array, y: Array, drawing_options: DrawingOptions = DrawingOptions.new(), chart_properties: ChartProperties = ChartProperties.new()) -> void:
 	pass
@@ -342,8 +338,9 @@ func _draw_title() -> void:
 	)
 
 func _clear_points() -> void:
-	for point in $Points.get_children():
-		point.queue_free()
+	pass
+#	for point in $Points.get_children():
+#		point.queue_free()
 
 func _clear_canvas_labels() -> void:
 	for label in $Canvas.get_children():

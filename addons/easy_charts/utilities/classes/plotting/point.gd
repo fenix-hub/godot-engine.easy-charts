@@ -2,6 +2,13 @@ tool
 extends Reference
 class_name Point
 
+enum Shape {
+	CIRCLE,
+	TRIANGLE,
+	SQUARE,
+	CROSS
+}
+
 var position: Vector2
 var value: Pair
 

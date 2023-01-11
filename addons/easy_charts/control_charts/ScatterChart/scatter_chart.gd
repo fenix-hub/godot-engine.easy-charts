@@ -2,7 +2,11 @@ extends Chart
 class_name ScatterChart
 
 signal point_entered(point)
-signal point_exited(point)
+
+var focused_point: Point = null
+
+var points: Array = []
+var _point_box_rad: int = 10
 
 
 # Called when the node enters the scene tree for the first time.
@@ -20,16 +24,76 @@ func plot(x: Array, y: Array, drawing_options: DrawingOptions = null, chart_prop
 	
 	update()
 
+func _clear_points() -> void:
+	points = []
+
+func _get_point_box(point: Point, rad: int) -> Rect2:
+	return Rect2(point.position - (Vector2.ONE * rad), (Vector2.ONE * rad * 2))
+
+func _move_tooltip(position: Vector2) -> void:
+	$Label.set_position(position + (Vector2.ONE * 15))
+
+func _show_tooltip(position: Vector2, text: String) -> void:
+	_move_tooltip(position)
+	$Label.show()
+	$Label.set_text(text)
+	$Label.set_size(Vector2.ZERO)
+
+func _hide_tooltip() -> void:
+	$Label.hide()
+	$Label.set_text("")
+	$Label.set_size(Vector2.ZERO)
+
+func _input(event: InputEvent):
+	if event is InputEventMouse:
+		for point in points:
+			if _get_point_box(point, _point_box_rad).abs().has_point(event.position):
+				if focused_point == point:
+					_move_tooltip(event.position)
+					return
+				else:
+					focused_point = point
+					_show_tooltip(event.position, str(focused_point.value))
+					emit_signal("point_entered", point)
+					return
+		# Mouse is not in any point's box
+		focused_point = null
+		_hide_tooltip()
+
 func _draw_point(point: Point, function_index: int) -> void:
-	var point_container: PointContainer = point_container_scene.instance()
-	$Points.add_child(point_container)
-	point_container.set_point(
-		point,
-		drawing_options.get_function_color(function_index),
-		drawing_options.get_point_shape(function_index)
-	)
-	point_container.connect("point_entered", self, "_on_point_entered")
-	point_container.connect("point_exited", self, "_on_point_exited")
+	points.append(point)
+	
+	match drawing_options.get_point_shape(function_index):
+		Point.Shape.CIRCLE:
+			draw_circle(point.position, drawing_options.point_radius,  drawing_options.get_function_color(function_index))
+		Point.Shape.SQUARE:
+			draw_rect(_get_point_box(point, drawing_options.point_radius), drawing_options.get_function_color(function_index), true, 1.0, false)
+		Point.Shape.TRIANGLE:
+			draw_colored_polygon(
+				PoolVector2Array([
+					point.position + (Vector2.UP * drawing_options.point_radius * 1.3),
+					point.position + (Vector2.ONE * drawing_options.point_radius * 1.3),
+					point.position - (Vector2(1, -1) * drawing_options.point_radius * 1.3)
+				]), drawing_options.get_function_color(function_index), [], null, null, false
+			)
+		Point.Shape.CROSS:
+			draw_line(
+				point.position - (Vector2.ONE * drawing_options.point_radius),
+				point.position + (Vector2.ONE * drawing_options.point_radius),
+				drawing_options.get_function_color(function_index), drawing_options.point_radius, true
+			)
+			draw_line(
+				point.position + (Vector2(1, -1) * drawing_options.point_radius),
+				point.position + (Vector2(-1, 1) * drawing_options.point_radius),
+				drawing_options.get_function_color(function_index), drawing_options.point_radius / 2, true
+			)
+	
+#	# (debug)
+#	draw_rect(
+#		_get_point_box(point, _point_box_rad),
+#		Color.red,
+#		false, 1, true
+#	)
 
 func _draw_points() -> void:
 	var validation: int = _validate_sampled_axis(x_sampled, y_sampled)
@@ -50,9 +114,3 @@ func _draw_points() -> void:
 			var sampled_point_pos: Vector2 = Vector2(x_sampled.values[i], y_sampled.values[i])
 			var point: Point = Point.news(sampled_point_pos, real_point_val)
 			_draw_point(point, i)
-
-func _on_point_entered(point: Point) -> void:
-	emit_signal("point_entered", point)
-
-func _on_point_exited(point: Point) -> void:
-	emit_signal("point_exited", point)
