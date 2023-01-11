@@ -10,10 +10,8 @@ var y_min_max: Pair = Pair.new()
 var x_sampled: SampledAxis = SampledAxis.new()
 var y_sampled: SampledAxis = SampledAxis.new()
 
-# 
-var x_scale: float = 5.0
-var y_scale: float = 2.0
-
+var x_labels: Array = []
+var y_labels: Array = []
 
 ###### STYLE
 var drawing_options: DrawingOptions = DrawingOptions.new()
@@ -235,8 +233,8 @@ func _draw_grid() -> void:
 		return
 	
 	# draw vertical lines
-	var v_lines: float = (x_sampled.min_max.right - x_sampled.min_max.left) / x_scale
-	for _x in x_scale+1:
+	var v_lines: float = (x_sampled.min_max.right - x_sampled.min_max.left) / chart_properties.x_scale
+	for _x in chart_properties.x_scale+1:
 		var x_val: float = _x * v_lines + x_sampled.min_max.left
 		var p1: Vector2 = Vector2(
 			range_lerp(x_val, x_sampled.min_max.left, x_sampled.min_max.right, x_sampled_domain.left, x_sampled_domain.right),
@@ -249,7 +247,11 @@ func _draw_grid() -> void:
 		
 		# Draw V labels
 		if drawing_options.labels:
-			var tick_lbl: String = ("%.2f" if x_has_decimals else "%s") % x_val
+			var tick_lbl: String = ""
+			if x_labels.empty():
+				tick_lbl = ("%.2f" if x_has_decimals else "%s") % x_val
+			else:
+				tick_lbl = x_labels[floor(v_lines) * _x]
 			
 			draw_string(
 				drawing_options.font, 
@@ -270,8 +272,8 @@ func _draw_grid() -> void:
 			draw_line(p1, p2, drawing_options.colors.grid, 1, true)
 	
 	# draw horizontal lines
-	var h_lines: float = (y_sampled.min_max.right - y_sampled.min_max.left) / y_scale
-	for _y in y_scale+1:
+	var h_lines: float = (y_sampled.min_max.right - y_sampled.min_max.left) / chart_properties.y_scale
+	for _y in chart_properties.y_scale+1:
 		var y_val: float = _y * h_lines + y_sampled.min_max.left
 		var p1: Vector2 = Vector2(
 			bounding_box.position.x,
@@ -284,12 +286,15 @@ func _draw_grid() -> void:
 		
 		# Draw H labels
 		if drawing_options.labels:
-			var tick_lbl: String = ("%.2f" if y_has_decimals else "%s") % y_val
-			var tick_lbl_size: Vector2 = drawing_options.font.get_string_size(tick_lbl)
+			var tick_lbl: String = ""
+			if y_labels.empty():
+				tick_lbl = ("%.2f" if y_has_decimals else "%s") % y_val
+			else:
+				tick_lbl = y_labels[floor(h_lines) * _y]
 			
 			draw_string(
 				drawing_options.font, 
-				p1 - Vector2(tick_lbl_size.x + _y_ticklabel_offset + _y_tick_size, - _y_ticklabel_size.y * 0.35),
+				p1 - Vector2(drawing_options.font.get_string_size(tick_lbl).x + _y_ticklabel_offset + _y_tick_size, - _y_ticklabel_size.y * 0.35),
 				tick_lbl, 
 				drawing_options.colors.bounding_box
 			)
@@ -382,7 +387,7 @@ func _validate_sampled_axis(x_data: SampledAxis, y_data: SampledAxis) -> int:
 	if x_data.values.empty() or y_data.values.empty():
 		# Either there are no X or Y
 		error = 1
-	if y_data.values[0] is Array:
+	elif y_data.values[0] is Array:
 		for dim in y_data.values:
 			if dim.size() != x_data.values.size():
 				error = 3 # one of Y dim has not X length
