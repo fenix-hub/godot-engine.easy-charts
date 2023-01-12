@@ -13,14 +13,12 @@ var _point_box_rad: int = 10
 func _ready():
 	pass
 
-func plot(x: Array, y: Array, drawing_options: DrawingOptions = null, chart_properties: ChartProperties = null) -> void:
+func plot(x: Array, y: Array, properties: ChartProperties = self.chart_properties) -> void:
 	self.x = x
 	self.y = y
 	
-	if chart_properties != null:
-		self.chart_properties = chart_properties
-	if drawing_options != null:
-		self.drawing_options = drawing_options
+	if properties != null:
+		self.chart_properties = properties
 	
 	update()
 
@@ -63,29 +61,29 @@ func _input(event: InputEvent):
 func _draw_point(point: Point, function_index: int) -> void:
 	points.append(point)
 	
-	match drawing_options.get_point_shape(function_index):
+	match chart_properties.get_point_shape(function_index):
 		Point.Shape.CIRCLE:
-			draw_circle(point.position, drawing_options.point_radius,  drawing_options.get_function_color(function_index))
+			draw_circle(point.position, chart_properties.point_radius,  chart_properties.get_function_color(function_index))
 		Point.Shape.SQUARE:
-			draw_rect(_get_point_box(point, drawing_options.point_radius), drawing_options.get_function_color(function_index), true, 1.0, false)
+			draw_rect(_get_point_box(point, chart_properties.point_radius), chart_properties.get_function_color(function_index), true, 1.0, false)
 		Point.Shape.TRIANGLE:
 			draw_colored_polygon(
 				PoolVector2Array([
-					point.position + (Vector2.UP * drawing_options.point_radius * 1.3),
-					point.position + (Vector2.ONE * drawing_options.point_radius * 1.3),
-					point.position - (Vector2(1, -1) * drawing_options.point_radius * 1.3)
-				]), drawing_options.get_function_color(function_index), [], null, null, false
+					point.position + (Vector2.UP * chart_properties.point_radius * 1.3),
+					point.position + (Vector2.ONE * chart_properties.point_radius * 1.3),
+					point.position - (Vector2(1, -1) * chart_properties.point_radius * 1.3)
+				]), chart_properties.get_function_color(function_index), [], null, null, false
 			)
 		Point.Shape.CROSS:
 			draw_line(
-				point.position - (Vector2.ONE * drawing_options.point_radius),
-				point.position + (Vector2.ONE * drawing_options.point_radius),
-				drawing_options.get_function_color(function_index), drawing_options.point_radius, true
+				point.position - (Vector2.ONE * chart_properties.point_radius),
+				point.position + (Vector2.ONE * chart_properties.point_radius),
+				chart_properties.get_function_color(function_index), chart_properties.point_radius, true
 			)
 			draw_line(
-				point.position + (Vector2(1, -1) * drawing_options.point_radius),
-				point.position + (Vector2(-1, 1) * drawing_options.point_radius),
-				drawing_options.get_function_color(function_index), drawing_options.point_radius / 2, true
+				point.position + (Vector2(1, -1) * chart_properties.point_radius),
+				point.position + (Vector2(-1, 1) * chart_properties.point_radius),
+				chart_properties.get_function_color(function_index), chart_properties.point_radius / 2, true
 			)
 	
 #	# (debug)
