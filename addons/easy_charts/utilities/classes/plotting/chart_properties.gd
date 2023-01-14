@@ -8,14 +8,20 @@ var y_label: String
 var x_scale: float = 5.0
 var y_scale: float = 2.0
 
-var points: bool = true
-var grid: bool = false
-var bounding_box: bool = true
-var background: bool = true
+# Scale type, 0 = linear | 1 = logarithmic
+var x_scale_type: int = 0
+var y_scale_type: int = 0
+
 var borders: bool = false
+var background: bool = true
+var bounding_box: bool = true
+var grid: bool = false
 var ticks: bool = true
 var labels: bool = true
 var origin: bool = true
+var points: bool = true
+var lines: bool = true
+var interactive: bool = false
 
 var colors: Dictionary = {
 	bounding_box = Color.black,
@@ -23,8 +29,9 @@ var colors: Dictionary = {
 	functions = [Color.red, Color.green, Color.blue, Color.black]
 }
 
-var shapes: Array = [Point.Shape.CIRCLE, Point.Shape.SQUARE, Point.Shape.TRIANGLE, Point.Shape.CROSS]
 var point_radius: float = 3.0
+var line_width: float = 1.0
+var shapes: Array = [Point.Shape.CIRCLE, Point.Shape.SQUARE, Point.Shape.TRIANGLE, Point.Shape.CROSS]
 var font: BitmapFont = Label.new().get_font("")
 
 func get_function_color(function_index: int) -> Color:

@@ -4,8 +4,10 @@ class_name Chart
 var x: Array
 var y: Array
 
-var x_min_max: Pair = Pair.new()
-var y_min_max: Pair = Pair.new()
+var x_min_max: Pair = Pair.new() # Min and Max values of @x
+var x_domain: Pair = Pair.new()  # Rounded domain of values of @x
+var y_min_max: Pair = Pair.new() # Min and Max values of @y
+var y_domain: Pair = Pair.new()  # Rounded domain of values of @x
 
 var x_sampled: SampledAxis = SampledAxis.new()
 var y_sampled: SampledAxis = SampledAxis.new()
@@ -45,8 +47,20 @@ var _x_ticklabel_offset: int = 5 # offset only on the X axis
 var _x_tick_size: int = 7
 
 ###########
+func _ready() -> void:
+	set_process_input(false)
+	set_process(false)
+
 func plot(x: Array, y: Array, properties: ChartProperties = self.chart_properties) -> void:
-	pass
+	self.x = x
+	self.y = y
+	
+	if properties != null:
+		self.chart_properties = properties
+	
+	set_process_input(chart_properties.interactive)
+	
+	update()
 
 func _map_pair(val: float, rel: Pair, ref: Pair) -> float:
 	return range_lerp(val, rel.left, rel.right, ref.left, ref.right)
@@ -99,8 +113,6 @@ func _sample_values(values: Array, rel_values: Pair, ref_values: Pair) -> Sample
 					return SampledAxis.new()
 	
 	var temp: Array = values.duplicate(true)
-	var _min: float
-	var _max: float
 	
 	var rels: Array = []
 	if temp[0] is Array:
@@ -116,8 +128,13 @@ func _sample_values(values: Array, rel_values: Pair, ref_values: Pair) -> Sample
 	
 	return SampledAxis.new(rels, rel_values)
 
+func _round_min(val: float) -> float:
+	return round(val) if abs(val) < 10 else floor(val / 10.0) * 10.0
 
-func _pre_process_drawings() -> void:
+func _round_max(val: float) -> float:
+	return round(val) if abs(val) < 10 else ceil(val / 10.0) * 10.0
+
+func _pre_process() -> void:
 	var t_gr: Rect2 = get_global_rect()
 	
 	#### @node_box size, which is the whole "frame"
@@ -125,7 +142,9 @@ func _pre_process_drawings() -> void:
 	
 	#### drawing size for defining @bounding_box
 	x_min_max = _find_min_max(x)
+	x_domain = Pair.new(_round_min(x_min_max.left), _round_max(x_min_max.right))
 	y_min_max = _find_min_max(y)
+	y_domain = Pair.new(_round_min(y_min_max.left), _round_max(y_min_max.right))
 	
 	#### calculating offset from the @node_box for the @bounding_box.
 	var offset: Vector2 = _padding_offset
@@ -142,7 +161,7 @@ func _pre_process_drawings() -> void:
 		x_has_decimals = _has_decimals(x)
 		# calculate the string length of the largest value on the Y axis.
 		# remember that "-" sign adds additional pixels, and it is relative only to negative numbers!
-		var x_max_formatted: String = ("%.2f" if x_has_decimals else "%s") % x_min_max.right
+		var x_max_formatted: String = ("%.2f" if x_has_decimals else "%s") % x_domain.right
 		_x_ticklabel_size = chart_properties.font.get_string_size(x_max_formatted)
 		
 		offset.y += _x_label_offset + _x_label_size.y + _x_ticklabel_offset + _x_ticklabel_size.y
@@ -151,10 +170,10 @@ func _pre_process_drawings() -> void:
 		y_has_decimals = _has_decimals(y)
 		# calculate the string length of the largest value on the Y axis.
 		# remember that "-" sign adds additional pixels, and it is relative only to negative numbers!
-		var y_max_formatted: String = ("%.2f" if y_has_decimals else "%s") % y_min_max.right
-		if y_min_max.left < 0:
+		var y_max_formatted: String = ("%.2f" if y_has_decimals else "%s") % y_domain.right
+		if y_domain.left < 0:
 			# negative number
-			var y_min_formatted: String = ("%.2f" if y_has_decimals else "%s") % y_min_max.left
+			var y_min_formatted: String = ("%.2f" if y_has_decimals else "%s") % y_domain.left
 			if y_min_formatted.length() >= y_max_formatted.length():
 				 _y_ticklabel_size = chart_properties.font.get_string_size(y_min_formatted)
 			else:
@@ -183,21 +202,10 @@ func _pre_process_drawings() -> void:
 		Vector2(x_sampled_domain.left, y_sampled_domain.left),
 		Vector2(x_sampled_domain.right, y_sampled_domain.right)
 	)
-
-func _pre_process_sampling() -> void:
 	
 	# samples
 	x_sampled = _sample_values(x, x_min_max, x_sampled_domain)
-	y_sampled = _sample_values(y, y_min_max, y_sampled_domain)
-
-func _pre_process() -> void:
-	_pre_process_drawings()
-	_pre_process_sampling()
-
-
-
-func _draw_points() -> void:
-	pass
+	y_sampled = _sample_values(y, y_domain, y_sampled_domain)
 
 func _draw_borders() -> void:
 	draw_rect(node_box, Color.red, false, 1, true)
@@ -212,7 +220,7 @@ func _draw_bounding_box() -> void:
 
 func _draw_origin() -> void:
 	var xorigin: float = _map_pair(0.0, x_min_max, x_sampled_domain)
-	var yorigin: float = _map_pair(0.0, y_min_max, y_sampled_domain)
+	var yorigin: float = _map_pair(0.0, y_domain, y_sampled_domain)
 	draw_line(Vector2(xorigin, bounding_box.position.y), Vector2(xorigin, bounding_box.position.y + bounding_box.size.y), Color.black, 1, 0)
 	draw_line(Vector2(bounding_box.position.x, yorigin), Vector2(bounding_box.position.x + bounding_box.size.x, yorigin), Color.black, 1, 0)
 	draw_string(chart_properties.font, Vector2(xorigin, yorigin) - Vector2(15, -15), "O", chart_properties.colors.bounding_box)
@@ -232,10 +240,15 @@ func _draw_grid() -> void:
 		return
 	
 	# draw vertical lines
-	var v_lines: float = (x_sampled.min_max.right - x_sampled.min_max.left) / (chart_properties.x_scale - 1)
-	var x_labels_spacing: float = x_labels.size() / (chart_properties.x_scale - 1)
-	for _x in chart_properties.x_scale:
-		var x_val: float = _x * v_lines + x_sampled.min_max.left
+	
+	# 1. the amount of lines is equals to the X_scale: it identifies in how many sectors the x domain
+	#    should be devided
+	# 2. calculate the spacing between each line in pixel. It is equals to x_sampled_domain / x_scale
+	# 3. calculate the offset in the real x domain, which is x_domain / x_scale.
+	var x_pixel_dist: float = (x_sampled.min_max.right - x_sampled.min_max.left) / (chart_properties.x_scale)
+	var x_lbl_val: float = (x_min_max.right - x_min_max.left) / (chart_properties.x_scale)
+	for _x in chart_properties.x_scale + 1:
+		var x_val: float = _x * x_pixel_dist + x_sampled.min_max.left
 		var p1: Vector2 = Vector2(
 			range_lerp(x_val, x_sampled.min_max.left, x_sampled.min_max.right, x_sampled_domain.left, x_sampled_domain.right),
 			bounding_box.position.y
@@ -249,9 +262,9 @@ func _draw_grid() -> void:
 		if chart_properties.labels:
 			var tick_lbl: String = ""
 			if x_labels.empty():
-				tick_lbl = ("%.2f" if x_has_decimals else "%s") % x_val
+				tick_lbl = ("%.2f" if x_has_decimals else "%s") % [x_min_max.left + (_x * x_lbl_val)]
 			else:
-				tick_lbl = x_labels[clamp(x_labels_spacing * _x, 0, x_labels.size() - 1)]
+				tick_lbl = x_labels[clamp(x_lbl_val * _x, 0, x_labels.size() - 1)]
 			
 			draw_string(
 				chart_properties.font, 
@@ -272,10 +285,15 @@ func _draw_grid() -> void:
 			draw_line(p1, p2, chart_properties.colors.grid, 1, true)
 	
 	# draw horizontal lines
-	var h_lines: float = (y_sampled.min_max.right - y_sampled.min_max.left) / (chart_properties.y_scale - 1)
-	var y_labels_spacing: float = y_labels.size() / (chart_properties.y_scale - 1)
-	for _y in chart_properties.y_scale:
-		var y_val: float = _y * h_lines + y_sampled.min_max.left
+	
+	# 1. the amount of lines is equals to the y_scale: it identifies in how many sectors the y domain
+	#    should be devided
+	# 2. calculate the spacing between each line in pixel. It is equals to y_sampled_domain / y_scale
+	# 3. calculate the offset in the real y domain, which is y_domain / y_scale.
+	var y_pixel_dist: float = (y_sampled.min_max.right - y_sampled.min_max.left) / (chart_properties.y_scale)
+	var y_lbl_val: float = (y_domain.right - y_domain.left) / (chart_properties.y_scale)
+	for _y in chart_properties.y_scale + 1:
+		var y_val: float = (_y * y_pixel_dist) + y_sampled.min_max.left
 		var p1: Vector2 = Vector2(
 			bounding_box.position.x,
 			range_lerp(y_val, y_sampled.min_max.left, y_sampled.min_max.right, y_sampled_domain.left, y_sampled_domain.right)
@@ -289,7 +307,7 @@ func _draw_grid() -> void:
 		if chart_properties.labels:
 			var tick_lbl: String = ""
 			if y_labels.empty():
-				tick_lbl = ("%.2f" if y_has_decimals else "%s") % y_val
+				tick_lbl = ("%.2f" if y_has_decimals else "%s") % [y_domain.left + (_y * y_lbl_val)]
 			else:
 				tick_lbl = y_labels[clamp(y_labels * _y, 0, y_labels.size() - 1)]
 			
@@ -321,15 +339,23 @@ func _create_canvas_label(text: String, position: Vector2, rotation: float = 0.0
 	lbl.rect_position = position
 	return lbl
 
+func _update_canvas_label(canvas_label: Label, text: String, position: Vector2, rotation: float = 0.0) -> void:
+	canvas_label.set_text(text)
+	canvas_label.modulate = chart_properties.colors.bounding_box
+	canvas_label.rect_rotation = rotation
+	canvas_label.rect_position = position
+
 func _draw_yaxis_label() -> void:
-	_create_canvas_label(
+	_update_canvas_label(
+		$Canvas/YLabel,
 		chart_properties.y_label,
 		Vector2(_padding_offset.x, (node_box.size.y / 2) + (_y_label_size.x / 2)),
 		-90
 	)
 
 func _draw_xaxis_label() -> void:
-	_create_canvas_label(
+	_update_canvas_label(
+		$Canvas/XLabel,
 		chart_properties.x_label,
 		Vector2(
 			node_box.size.x/2 - (_x_label_size.x / 2), 
@@ -338,24 +364,24 @@ func _draw_xaxis_label() -> void:
 	)
 
 func _draw_title() -> void:
-	_create_canvas_label(
+	_update_canvas_label(
+		$Canvas/Title,
 		chart_properties.title,
 		Vector2(node_box.size.x / 2, _padding_offset.y*2) - (chart_properties.font.get_string_size(chart_properties.title) / 2)
 	)
-
-func _clear_points() -> void:
-	pass
-#	for point in $Points.get_children():
-#		point.queue_free()
 
 func _clear_canvas_labels() -> void:
 	for label in $Canvas.get_children():
 		label.queue_free()
 
 func _clear() -> void:
-	_clear_points()
 	_clear_canvas_labels()
 
+# Draw Loop:
+#    the drow loop gives order to what thigs will be drawn
+#    each chart specifies its own draw loop that inherits from this one.
+#    The draw loop also contains the "processing loop" which is where
+#    everything is calculated in a separated function.
 func _draw():
 	_clear()
 	_pre_process()
@@ -366,11 +392,6 @@ func _draw():
 	if chart_properties.borders:
 		_draw_borders()
 	
-	if chart_properties.labels:
-		_draw_xaxis_label()
-		_draw_yaxis_label()
-		_draw_title()
-	
 	if chart_properties.grid or chart_properties.ticks or chart_properties.labels:
 		_draw_grid()
 	
@@ -380,8 +401,10 @@ func _draw():
 	if chart_properties.origin:
 		_draw_origin()
 	
-	if chart_properties.points:
-		_draw_points()
+	if chart_properties.labels:
+		_draw_xaxis_label()
+		_draw_yaxis_label()
+		_draw_title()
 
 func _validate_sampled_axis(x_data: SampledAxis, y_data: SampledAxis) -> int:
 	var error: int = 0 # OK

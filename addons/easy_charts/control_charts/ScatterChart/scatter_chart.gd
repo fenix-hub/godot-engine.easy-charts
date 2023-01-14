@@ -3,46 +3,37 @@ class_name ScatterChart
 
 signal point_entered(point)
 
-var focused_point: Point = null
-
-var points: Array = []
 var _point_box_rad: int = 10
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass
-
-func plot(x: Array, y: Array, properties: ChartProperties = self.chart_properties) -> void:
-	self.x = x
-	self.y = y
-	
-	if properties != null:
-		self.chart_properties = properties
-	
-	update()
+var points: Array = []
+var function_points: Array = []
+var focused_point: Point = null
 
 func _clear_points() -> void:
-	points = []
+	points.clear()
+	function_points.clear()
+
+func _clear() -> void:
+	_clear_points()
 
 func _get_point_box(point: Point, rad: int) -> Rect2:
 	return Rect2(point.position - (Vector2.ONE * rad), (Vector2.ONE * rad * 2))
 
 func _move_tooltip(position: Vector2) -> void:
-	$Label.set_position(position + (Vector2.ONE * 15))
+	$Tooltip.set_position(position + (Vector2.ONE * 15))
 
 func _show_tooltip(position: Vector2, text: String) -> void:
 	_move_tooltip(position)
-	$Label.show()
-	$Label.set_text(text)
-	$Label.set_size(Vector2.ZERO)
+	$Tooltip.show()
+	$Tooltip.set_text(text)
+	$Tooltip.set_size(Vector2.ZERO)
 
 func _hide_tooltip() -> void:
-	$Label.hide()
-	$Label.set_text("")
-	$Label.set_size(Vector2.ZERO)
+	$Tooltip.hide()
+	$Tooltip.set_text("")
+	$Tooltip.set_size(Vector2.ZERO)
 
-func _input(event: InputEvent):
+func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
 		for point in points:
 			if _get_point_box(point, _point_box_rad).abs().has_point(event.position):
@@ -59,8 +50,6 @@ func _input(event: InputEvent):
 		_hide_tooltip()
 
 func _draw_point(point: Point, function_index: int) -> void:
-	points.append(point)
-	
 	match chart_properties.get_point_shape(function_index):
 		Point.Shape.CIRCLE:
 			draw_circle(point.position, chart_properties.point_radius,  chart_properties.get_function_color(function_index))
@@ -94,6 +83,11 @@ func _draw_point(point: Point, function_index: int) -> void:
 #	)
 
 func _draw_points() -> void:
+	for function in function_points.size():
+		for point in function_points[function]:
+			_draw_point(point, function)
+
+func _calculate_points() -> void:
 	var validation: int = _validate_sampled_axis(x_sampled, y_sampled)
 	if not validation == OK:
 		printerr("Cannot plot points for invalid dataset! Error: %s" % validation)
@@ -101,14 +95,24 @@ func _draw_points() -> void:
 	
 	if y_sampled.values[0] is Array:
 		for yxi in y_sampled.values.size():
+			var _function_points: Array = []
 			for i in y_sampled.values[yxi].size():
 				var real_point_val: Pair = Pair.new(x[i], y[yxi][i])
 				var sampled_point_pos: Vector2 = Vector2(x_sampled.values[i], y_sampled.values[yxi][i])
 				var point: Point = Point.new(sampled_point_pos, real_point_val)
-				_draw_point(point, yxi)
+				_function_points.append(point)
+				points.append(point)
+			function_points.append(_function_points)
 	else:
 		for i in y_sampled.values.size():
 			var real_point_val: Pair = Pair.new(x[i], y[i])
 			var sampled_point_pos: Vector2 = Vector2(x_sampled.values[i], y_sampled.values[i])
 			var point: Point = Point.news(sampled_point_pos, real_point_val)
-			_draw_point(point, i)
+			points.append(point)
+		function_points.append(points)
+
+func _draw() -> void:
+	_calculate_points()
+	
+	if chart_properties.points:
+		_draw_points()

@@ -15,4 +15,4 @@ func _init(left: float = 0.0, right: float = 0.0) -> void:
 	self.right = right
 
 func _to_string() -> String:
-	return "[%s, %s]" % [self.left, self.right]
+	return "[%.2f, %.2f]" % [self.left, self.right]
