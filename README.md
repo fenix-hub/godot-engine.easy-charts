@@ -43,7 +43,6 @@ This library offers a set of charts for each main Godot Node:
 ![example_Piechart](imgs/pie_chart_realtime.gif)
 ![exampleradar](imgs/radar.png)
 ![example01](imgs/scatter.gif)
-![example02](imgs/example02.png)
 ![example03](imgs/example03.gif)  
 
 ##### Some references for charts and plots
