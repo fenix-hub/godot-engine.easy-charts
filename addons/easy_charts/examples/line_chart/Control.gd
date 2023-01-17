@@ -7,9 +7,9 @@ func _ready():
 	# NOTE: `x.size() == y.size()` or `x.size() == y[n].size()`
 	var y: Array = [
 		ArrayOperations.multiply_float(ArrayOperations.cos(x), 1.0),
-		ArrayOperations.add_float(ArrayOperations.multiply_int(ArrayOperations.sin(x), 1), 0)
+		ArrayOperations.multiply_float(ArrayOperations.sin(x), 1.0)
 	]
-	print(y)
+	
 	# Add some labels for the x axis, we don't want to use our x values array
 	# they will be printed on the chart ticks instead of the value of the x axis.
 	var x_labels: Array = ArrayOperations.suffix(x, "s")
@@ -24,8 +24,10 @@ func _ready():
 	cp.x_scale = 10
 	cp.y_label = ("Sensor values")
 	cp.y_scale = 10
-	cp.points = false
+	cp.points = true
 	cp.line_width = 2.0
+	cp.point_radius = 2.5
+	cp.use_splines = true
 	cp.interactive = false # false by default, it allows the chart to create a tooltip to show point values
 	# and interecept clicks on the plot
 	
@@ -43,8 +45,8 @@ func _process(delta: float):
 	# and updaptes the plot
 	var new_val: float = $LineChart.x.back() + 1
 	$LineChart.x.append(new_val)
-	$LineChart.y[0].append(cos(new_val) * 20)
-	$LineChart.y[1].append(20 + sin(new_val) * 20)
+	$LineChart.y[0].append(cos(new_val))
+	$LineChart.y[1].append(2 + sin(new_val))
 	$LineChart.x_labels.append(str(new_val) + "s")
 	$LineChart.update()
 

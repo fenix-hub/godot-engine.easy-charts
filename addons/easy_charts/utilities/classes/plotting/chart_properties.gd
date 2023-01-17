@@ -23,6 +23,8 @@ var points: bool = true
 var lines: bool = true
 var interactive: bool = false
 
+var use_splines: bool = false
+
 var colors: Dictionary = {
 	bounding_box = Color.black,
 	grid = Color.gray,
