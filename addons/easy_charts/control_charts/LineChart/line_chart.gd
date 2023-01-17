@@ -10,33 +10,6 @@ func _draw_line(from: Point, to: Point, function_index: int) -> void:
 		true
 		)
 
-#func u(t) -> float:
-#	return pow(1.0 - t, 2) / (pow(t, 2) + pow(1.0 - t, 2))
-#
-#func ratio(t: float) -> float:
-#	return abs((pow(t, 2) + pow(1.0 - t, 2) - 1.0) / (pow(t, 2) + pow(1.0 - t, 2)))
-#
-#func find_a(B: Vector2, C: Vector2, t: float) -> Vector2:
-#	return B + ((B - C) / ratio(t))
-#
-#func find_c(P0: Vector2, P2: Vector2, t: float) -> Vector2:
-#	return (u(t) * P0) + ((1.0 - u(t)) * P2)
-#
-#func _bezier(P0: Vector2, P1: Vector2, P2: Vector2, w: float) -> Vector2:
-#	return (pow(1.0 - w, 2) * P0) + (2.0 * w * (1.0 - w) * P1) + (pow(w, 2) * P2)
-#
-#func find_t(P0: Vector2, P1: Vector2, P2: Vector2) -> float:
-#	return abs(P0.distance_to(P1)) / (abs(P0.distance_to(P1)) + abs(P2.distance_to(P1)))
-#
-#func _draw_spline(p1: Point, p2: Point, p3: Point) -> void:
-#	var t: float = find_t(p1.position, p2.position, p3.position)
-#	var c: Vector2 = find_c(p1.position, p3.position, t)
-#	var a: Vector2 = find_a(p2.position, c, t)
-#	for j in 101:
-#		var bezier1: Vector2 = _bezier(p1.position, a, p3.position, (j / 100.0) - 0.01)
-#		var bezier2: Vector2 = _bezier(p1.position, a, p3.position, j / 100.0)
-#		draw_line(bezier1, bezier2, Color.black, 1, true)
-
 # Draw a B-Spline using the Catmull-Rom method
 # Also, add a fake starting and ending point to complete the beginning and the end of the spline
 # @points = a list of at least 4 coordinates
