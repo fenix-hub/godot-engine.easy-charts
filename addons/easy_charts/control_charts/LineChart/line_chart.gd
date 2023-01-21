@@ -10,10 +10,6 @@ func _draw_line(from: Point, to: Point, function_index: int) -> void:
 		true
 		)
 
-# Draw a B-Spline using the Catmull-Rom method
-# Also, add a fake starting and ending point to complete the beginning and the end of the spline
-# @points = a list of at least 4 coordinates
-# @tension = some value greater than 0, defaulting to 1
 func _draw_spline(points: Array, function: int, density: float = 10.0, tension: float = 1) -> void:
 	var spline_points: Array = []
 	
@@ -25,28 +21,15 @@ func _draw_spline(points: Array, function: int, density: float = 10.0, tension: 
 	augmented.append(pf)
 	
 	for p in range(1, augmented.size() - 2, 1) : #(inclusive)
-		var p0: Vector2 = augmented[p - 1].position
-#	  v1 = p1 = augmented[p]
-		var p1: Vector2 = augmented[p].position
-		var v1: Vector2 = p1
-#	  v2 = p2 = augmented[p+1]
-		var p2: Vector2 = augmented[p + 1].position
-		var v2: Vector2 = p2
-		var p3: Vector2 = augmented[p + 2].position
-		
-		var s: int = 2.0 * tension
-		var dv1: Vector2 = (p2 - p0) / s
-		var dv2: Vector2 = (p3 - p1) / s
 		
 		for f in range(0, density + 1, 1):
-			var t: float = f / density
-			var c0: float = (2.0 * pow(t, 3)) - (3.0 * pow(t,2)) + 1.0
-			var c1: float = pow(t, 3) - (2.0 * pow(t, 2)) + t
-			var c2: float = (-2.0 * pow(t, 3)) + (3.0 * pow(t, 2))
-			var c3: float = pow(t, 3) - pow(t, 2)
-			var crp: Vector2 = (c0 * v1 + c1 * dv1 + c2 * v2 + c3 * dv2)
-#			draw_circle(crp, 4, Color.magenta)
-			spline_points.append(crp)
+			spline_points.append(
+				augmented[p].position.cubic_interpolate(
+					augmented[p + 1].position, 
+					augmented[p - 1].position, 
+					augmented[p + 2].position, 
+					f / density)
+				)
 	
 	for i in range(1, spline_points.size()):
 		draw_line(spline_points[i-1], spline_points[i], chart_properties.get_function_color(function), chart_properties.line_width, true)
