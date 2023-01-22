@@ -12,7 +12,7 @@ enum Shape {
 var position: Vector2
 var value: Pair
 
-func _init(position: Vector2, value: Pair) -> void:
+func _init(position: Vector2, value: Pair = Pair.new()) -> void:
 	self.value = value
 	self.position = position
 

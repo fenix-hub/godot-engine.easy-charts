@@ -1,9 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://addons/easy_charts/control_charts/chart.gd" type="Script" id=1]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 1, 1, 1, 1 )
+[ext_resource path="res://addons/easy_charts/utilities/containers/data_tooltip/data_tooltip.tscn" type="PackedScene" id=2]
 
 [node name="Chart" type="Control"]
 anchor_right = 1.0
@@ -26,9 +24,5 @@ margin_bottom = 14.0
 margin_right = 40.0
 margin_bottom = 14.0
 
-[node name="Tooltip" type="Label" parent="."]
+[node name="Tooltip" parent="." instance=ExtResource( 2 )]
 visible = false
-margin_right = 40.0
-margin_bottom = 14.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_styles/normal = SubResource( 1 )

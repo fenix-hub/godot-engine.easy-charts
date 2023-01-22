@@ -7,12 +7,19 @@ or of a Vector2 (ex. `var v2: Vector2 = Vector2(0.6, 0.8)`).
 extends Reference
 class_name Pair
 
-var left: float
-var right: float
+var left
+var right
 
-func _init(left: float = 0.0, right: float = 0.0) -> void:
+func _init(left = null, right = null) -> void:
 	self.left = left
 	self.right = right
 
+func _format(val) -> String:
+	var format: String = "%s"
+	match typeof(val):
+		TYPE_REAL:
+			"%.2f"
+	return format % val
+
 func _to_string() -> String:
-	return "[%.2f, %.2f]" % [self.left, self.right]
+	return "[%s, %s]" % [_format(self.left), _format(self.right)]

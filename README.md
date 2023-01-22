@@ -29,7 +29,7 @@ This library offers a set of charts for each main Godot Node:
 |--------------|---------|----|----|
 | ScatterChart | ✅ | ❌ | ❌ |
 | LineChart | ✅ | ❌ | ❌ |
-| ColumnChart | ❌ | ❌ | ❌ |
+| BarChart | ✅ | ❌ | ❌ |
 | AreaChart | ❌ | ❌ | ❌ |
 | PieChart | ❌ | ❌ | ❌ |
 | RadarChart | ❌ | ❌ | ❌ |
