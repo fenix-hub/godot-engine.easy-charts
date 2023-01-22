@@ -8,8 +8,7 @@ func _ready():
 	# And our y values. It can be an n-size array of arrays.
 	# NOTE: `x.size() == y.size()` or `x.size() == y[n].size()`
 	var y: Array = [
-		[20, 10, -15, 30, 42],
-		[10, 1, -5, 20, 32]
+		20, 10, -15, 30, 42
 	]
 	
 	# Add some labels for the x axis, we don't want to use our x values array
@@ -43,8 +42,7 @@ func _process(delta: float):
 	# and updaptes the plot
 	var new_val: String = "Day %s" % (chart.x.size() + 1)
 	chart.x.append(new_val)
-	chart.y[0].append(randi() % 40)
-	chart.y[1].append(randi() % 50)
+	chart.y.append(randi() % 40)
 	chart.update()
 
 
