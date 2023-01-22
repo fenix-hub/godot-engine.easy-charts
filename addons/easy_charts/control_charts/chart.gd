@@ -14,6 +14,7 @@ var y_sampled: SampledAxis = SampledAxis.new()
 
 var x_labels: Array = []
 var y_labels: Array = []
+var functions_names: Array = []
 
 ###### STYLE
 var chart_properties: ChartProperties = ChartProperties.new()
@@ -22,12 +23,13 @@ var chart_properties: ChartProperties = ChartProperties.new()
 # The bounding_box of the chart
 var node_box: Rect2
 var bounding_box: Rect2
+var plot_offset: Vector2
+var plot_box: Rect2
 
 # The Reference Rectangle to plot samples
 # It is the @bounding_box Rectangle inverted on the Y axis
 var x_sampled_domain: Pair
 var y_sampled_domain: Pair
-var sampled_domain_rect: Rect2
 
 var _padding_offset: Vector2 = Vector2(20.0, 20.0)
 var _internal_offset: Vector2 = Vector2(15.0, 15.0)
@@ -51,6 +53,13 @@ func _ready() -> void:
 	set_process_input(false)
 	set_process(false)
 
+func validate_input_samples(samples: Array) -> bool:
+	if samples.size() > 1 and samples[0] is Array:
+		for sample in samples:
+			if (not sample is Array) or sample.size() != samples[0].size():
+				return false
+	return true
+
 func plot(x: Array, y: Array, properties: ChartProperties = self.chart_properties) -> void:
 	self.x = x
 	self.y = y
@@ -71,10 +80,14 @@ func _has_decimals(values: Array) -> bool:
 	if temp[0] is Array:
 		for dim in temp:
 			for val in dim:
+				if val is String:
+					return false
 				if abs(fmod(val, 1)) > 0.0:
 					 return true
 	else:
 		for val in temp:
+			if val is String:
+				return false
 			if abs(fmod(val, 1)) > 0.0:
 				 return true
 	
@@ -93,7 +106,6 @@ func _find_min_max(values: Array) -> Pair:
 			max_ts.append(dim.max())
 		_min = min_ts.min()
 		_max = max_ts.max()
-		
 	else:
 		_min = temp.min()
 		_max = temp.max()
@@ -115,6 +127,7 @@ func _sample_values(values: Array, rel_values: Pair, ref_values: Pair) -> Sample
 	var temp: Array = values.duplicate(true)
 	
 	var rels: Array = []
+	var division_size: float
 	if temp[0] is Array:
 		for t_dim in temp:
 			var rels_t: Array = []
@@ -123,8 +136,12 @@ func _sample_values(values: Array, rel_values: Pair, ref_values: Pair) -> Sample
 			rels.append(rels_t)
 		
 	else:
-		for val in temp:
-			rels.append(_map_pair(val, rel_values, ref_values))
+		division_size = (ref_values.right - ref_values.left) / values.size()
+		for val_i in temp.size():
+			if temp[val_i] is String:
+				rels.append(val_i * division_size)
+			else:
+				rels.append(_map_pair(temp[val_i], rel_values, ref_values))
 	
 	return SampledAxis.new(rels, rel_values)
 
@@ -134,20 +151,47 @@ func _round_min(val: float) -> float:
 func _round_max(val: float) -> float:
 	return round(val) if abs(val) < 10 else ceil(val / 10.0) * 10.0
 
-func _pre_process() -> void:
-	var t_gr: Rect2 = get_global_rect()
-	
-	#### @node_box size, which is the whole "frame"
-	node_box = Rect2(Vector2.ZERO, t_gr.size - t_gr.position)
-	
-	#### drawing size for defining @bounding_box
+
+func _calc_x_domain() -> void:
 	x_min_max = _find_min_max(x)
 	x_domain = Pair.new(_round_min(x_min_max.left), _round_max(x_min_max.right))
+
+func _sample_x() -> void:
+	### @sampled_domain, which are the domain relative to the sampled values
+	### x (real value) --> sampling --> x_sampled (pixel value in canvas)
+	x_sampled_domain = Pair.new(plot_box.position.x, plot_box.end.x)
+	
+	# samples
+	x_sampled = _sample_values(x, x_min_max, x_sampled_domain)
+
+func _calc_y_domain() -> void:
 	y_min_max = _find_min_max(y)
 	y_domain = Pair.new(_round_min(y_min_max.left), _round_max(y_min_max.right))
+
+func _sample_y() -> void:
+	### @sampled_domain, which are the domain relative to the sampled values
+	### x (real value) --> sampling --> x_sampled (pixel value in canvas)
+	y_sampled_domain = Pair.new(plot_box.end.y, plot_box.position.y)
+	
+	# samples
+	y_sampled = _sample_values(y, y_domain, y_sampled_domain)
+
+
+func _find_longest_x() -> String:
+	return ("%.2f" if x_has_decimals else "%s") % x_domain.right
+
+func _pre_process() -> void:
+	_calc_x_domain()
+	_calc_y_domain()
+	
+	var frame: Rect2 = get_global_rect()
+	
+	
+	#### @node_box size, which is the whole "frame"
+	node_box = Rect2(Vector2.ZERO, frame.size - frame.position)
 	
 	#### calculating offset from the @node_box for the @bounding_box.
-	var offset: Vector2 = _padding_offset
+	plot_offset = _padding_offset
 	
 	### if @labels drawing is enabled, calcualte offsets
 	if chart_properties.labels:
@@ -159,12 +203,12 @@ func _pre_process() -> void:
 		
 		###### --- X
 		x_has_decimals = _has_decimals(x)
-		# calculate the string length of the largest value on the Y axis.
+		# calculate the string length of the largest value on the X axis.
 		# remember that "-" sign adds additional pixels, and it is relative only to negative numbers!
-		var x_max_formatted: String = ("%.2f" if x_has_decimals else "%s") % x_domain.right
+		var x_max_formatted: String = _find_longest_x()
 		_x_ticklabel_size = chart_properties.font.get_string_size(x_max_formatted)
 		
-		offset.y += _x_label_offset + _x_label_size.y + _x_ticklabel_offset + _x_ticklabel_size.y
+		plot_offset.y += _x_label_offset + _x_label_size.y + _x_ticklabel_offset + _x_ticklabel_size.y
 		
 		###### --- Y
 		y_has_decimals = _has_decimals(y)
@@ -181,31 +225,26 @@ func _pre_process() -> void:
 		else:
 			_y_ticklabel_size = chart_properties.font.get_string_size(y_max_formatted)
 		
-		offset.x += _y_label_offset + _y_label_size.y + _y_ticklabel_offset + _y_ticklabel_size.x
+		plot_offset.x += _y_label_offset + _y_label_size.y + _y_ticklabel_offset + _y_ticklabel_size.x
 	
 	### if @ticks drawing is enabled, calculate offsets
 	if chart_properties.ticks:
-		offset.x += _y_tick_size
-		offset.y += _x_tick_size
+		plot_offset.x += _y_tick_size
+		plot_offset.y += _x_tick_size
 	
 	### @bounding_box, where the points will be plotted
 	bounding_box = Rect2(
-		offset, 
-		t_gr.size - (offset * 2)
+		plot_offset, 
+		frame.size - (plot_offset * 2)
 	)
 	
-	### @sampled_domain, which are the domain relative to the sampled values
-	### x (real value) --> sampling --> x_sampled (pixel value in canvas)
-	x_sampled_domain = Pair.new(bounding_box.position.x + _internal_offset.x, bounding_box.position.x + bounding_box.size.x - _internal_offset.y)
-	y_sampled_domain = Pair.new(bounding_box.size.y + bounding_box.position.y - _internal_offset.x, bounding_box.position.y + _internal_offset.y)
-	sampled_domain_rect = Rect2(
-		Vector2(x_sampled_domain.left, y_sampled_domain.left),
-		Vector2(x_sampled_domain.right, y_sampled_domain.right)
+	plot_box = Rect2(
+		bounding_box.position + _internal_offset,
+		bounding_box.size - (_internal_offset * 2)
 	)
 	
-	# samples
-	x_sampled = _sample_values(x, x_min_max, x_sampled_domain)
-	y_sampled = _sample_values(y, y_domain, y_sampled_domain)
+	_sample_x()
+	_sample_y()
 
 func _draw_borders() -> void:
 	draw_rect(node_box, Color.red, false, 1, true)
@@ -233,12 +272,82 @@ func _draw_background() -> void:
 #	draw_line(Vector2(half.x, node_box.position.y), Vector2(half.x, node_box.size.y), Color.red, 3, false)
 #	draw_line(Vector2(node_box.position.x, half.y), Vector2(node_box.size.x, half.y), Color.red, 3, false)
 
-func _draw_grid() -> void:
-	var validation: int = _validate_sampled_axis(x_sampled, y_sampled)
-	if not validation == OK:
-		printerr("Cannot draw grid for invalid dataset! Error: %s" % validation)
-		return
+func _draw_tick(from: Vector2, to: Vector2, color: Color) -> void:
+	draw_line(from, to, color, 1, true)
+
+
+func _get_vertical_tick_label_pos(base_position: Vector2, text: String) -> Vector2:
+	return  base_position + Vector2(
+		- chart_properties.font.get_string_size(text).x / 2,
+		_x_label_size.y + _x_tick_size
+	)
+
+func _get_tick_label(line_index: int, line_value: float) -> String:
+	var tick_lbl: String = ""
+	if x_labels.empty():
+		tick_lbl = ("%.2f" if x_has_decimals else "%s") % [x_min_max.left + (line_index * line_value)]
+	else:
+		tick_lbl = x_labels[clamp(line_value * line_index, 0, x_labels.size() - 1)]
 	
+	return tick_lbl
+
+func _draw_vertical_gridline_component(p1: Vector2, p2: Vector2, line_index: int, line_value: float) -> void:
+	if chart_properties.labels:
+		var tick_lbl: String = _get_tick_label(line_index, line_value)
+		draw_string(
+			chart_properties.font, 
+			_get_vertical_tick_label_pos(p2, tick_lbl),
+			tick_lbl, 
+			chart_properties.colors.bounding_box
+		)
+	
+	# Draw V Ticks
+	if chart_properties.ticks:
+		_draw_tick(p2, p2 + Vector2(0, _x_tick_size), chart_properties.colors.bounding_box)
+	
+	# Draw V Grid Lines
+	if chart_properties.grid:
+		draw_line(p1, p2, chart_properties.colors.grid, 1, true)
+
+
+func _draw_horizontal_tick_label(font: Font, position: Vector2, color: Color, line_index: int, line_value: float) -> void:
+	var tick_lbl: String = ""
+	if y_labels.empty():
+		tick_lbl = ("%.2f" if y_has_decimals else "%s") % [y_domain.left + (line_index * line_value)]
+	else:
+		tick_lbl = y_labels[clamp(y_labels.size() * line_index, 0, y_labels.size() - 1)]
+	
+	draw_string(
+		chart_properties.font, 
+		position - Vector2(
+			chart_properties.font.get_string_size(tick_lbl).x + _y_ticklabel_offset + _y_tick_size, 
+			- _y_ticklabel_size.y * 0.35
+		), 
+		tick_lbl, 
+		chart_properties.colors.bounding_box
+	)
+
+
+func _draw_horizontal_gridline_component(p1: Vector2, p2: Vector2, line_index: int, line_value: float) -> void:
+	# Draw H labels
+	if chart_properties.labels:
+		_draw_horizontal_tick_label(
+			chart_properties.font, 
+			p1,
+			chart_properties.colors.bounding_box,
+			line_index,
+			line_value 
+		)
+	
+	# Draw H Ticks
+	if chart_properties.ticks:
+		_draw_tick(p1, p1 - Vector2(_y_tick_size, 0), chart_properties.colors.bounding_box)
+	
+	# Draw H Grid Lines
+	if chart_properties.grid:
+		draw_line(p1, p2, chart_properties.colors.grid, 1, true)
+
+func _draw_vertical_grid() -> void:
 	# draw vertical lines
 	
 	# 1. the amount of lines is equals to the X_scale: it identifies in how many sectors the x domain
@@ -249,43 +358,18 @@ func _draw_grid() -> void:
 	var x_lbl_val: float = (x_min_max.right - x_min_max.left) / (chart_properties.x_scale)
 	for _x in chart_properties.x_scale + 1:
 		var x_val: float = _x * x_pixel_dist + x_sampled.min_max.left
-		var p1: Vector2 = Vector2(
+		var top: Vector2 = Vector2(
 			range_lerp(x_val, x_sampled.min_max.left, x_sampled.min_max.right, x_sampled_domain.left, x_sampled_domain.right),
 			bounding_box.position.y
 		)
-		var p2: Vector2 = Vector2(
+		var bottom: Vector2 = Vector2(
 			range_lerp(x_val, x_sampled.min_max.left, x_sampled.min_max.right, x_sampled_domain.left, x_sampled_domain.right),
 			bounding_box.size.y + bounding_box.position.y
 		)
 		
-		# Draw V labels
-		if chart_properties.labels:
-			var tick_lbl: String = ""
-			if x_labels.empty():
-				tick_lbl = ("%.2f" if x_has_decimals else "%s") % [x_min_max.left + (_x * x_lbl_val)]
-			else:
-				tick_lbl = x_labels[clamp(x_lbl_val * _x, 0, x_labels.size() - 1)]
-			
-			draw_string(
-				chart_properties.font, 
-				p2 + Vector2(
-					- chart_properties.font.get_string_size(tick_lbl).x / 2,
-					_x_label_size.y + _x_tick_size
-				), 
-				tick_lbl, 
-				chart_properties.colors.bounding_box
-			)
-		
-		# Draw V Ticks
-		if chart_properties.ticks:
-			draw_line(p2, p2 + Vector2(0, _x_tick_size), chart_properties.colors.bounding_box, 1, true)
-		
-		# Draw V Grid Lines
-		if chart_properties.grid:
-			draw_line(p1, p2, chart_properties.colors.grid, 1, true)
-	
-	# draw horizontal lines
-	
+		_draw_vertical_gridline_component(top, bottom, _x, x_lbl_val)
+
+func _draw_horizontal_grid() -> void:
 	# 1. the amount of lines is equals to the y_scale: it identifies in how many sectors the y domain
 	#    should be devided
 	# 2. calculate the spacing between each line in pixel. It is equals to y_sampled_domain / y_scale
@@ -294,40 +378,25 @@ func _draw_grid() -> void:
 	var y_lbl_val: float = (y_domain.right - y_domain.left) / (chart_properties.y_scale)
 	for _y in chart_properties.y_scale + 1:
 		var y_val: float = (_y * y_pixel_dist) + y_sampled.min_max.left
-		var p1: Vector2 = Vector2(
+		var left: Vector2 = Vector2(
 			bounding_box.position.x,
 			range_lerp(y_val, y_sampled.min_max.left, y_sampled.min_max.right, y_sampled_domain.left, y_sampled_domain.right)
 		)
-		var p2: Vector2 = Vector2(
+		var right: Vector2 = Vector2(
 			bounding_box.size.x + bounding_box.position.x,
 			range_lerp(y_val, y_sampled.min_max.left, y_sampled.min_max.right, y_sampled_domain.left, y_sampled_domain.right)
 		)
 		
-		# Draw H labels
-		if chart_properties.labels:
-			var tick_lbl: String = ""
-			if y_labels.empty():
-				tick_lbl = ("%.2f" if y_has_decimals else "%s") % [y_domain.left + (_y * y_lbl_val)]
-			else:
-				tick_lbl = y_labels[clamp(y_labels * _y, 0, y_labels.size() - 1)]
-			
-			draw_string(
-				chart_properties.font, 
-				p1 - Vector2(chart_properties.font.get_string_size(tick_lbl).x + _y_ticklabel_offset + _y_tick_size, - _y_ticklabel_size.y * 0.35),
-				tick_lbl, 
-				chart_properties.colors.bounding_box
-			)
-		
-		# Draw H Ticks
-		if chart_properties.ticks:
-			draw_line(
-				p1, 
-				p1 - Vector2(_y_tick_size, 0), 
-				chart_properties.colors.bounding_box, 1, true)
-		
-		# Draw H Grid Lines
-		if chart_properties.grid:
-			draw_line(p1, p2, chart_properties.colors.grid, 1, true)
+		_draw_horizontal_gridline_component(left, right, _y, y_lbl_val)
+
+func _draw_grid() -> void:
+	var validation: int = _validate_sampled_axis(x_sampled, y_sampled)
+	if not validation == OK:
+		printerr("Cannot draw grid for invalid dataset! Error: %s" % validation)
+		return
+	
+	_draw_vertical_grid()
+	_draw_horizontal_grid()
 
 func _create_canvas_label(text: String, position: Vector2, rotation: float = 0.0) -> Label:
 	var lbl: Label = Label.new()
@@ -383,6 +452,10 @@ func _clear() -> void:
 #    The draw loop also contains the "processing loop" which is where
 #    everything is calculated in a separated function.
 func _draw():
+	if not (validate_input_samples(x) and validate_input_samples(y)):
+		printerr("Input samples are invalid!")
+		return 
+	
 	_clear()
 	_pre_process()
 	
@@ -421,3 +494,10 @@ func _validate_sampled_axis(x_data: SampledAxis, y_data: SampledAxis) -> int:
 			# X and Y samples don't have same length
 			error = 2
 	return error
+
+# ----- utilities
+func _get_function_name(function_idx: int) -> String:
+	return functions_names[function_idx] if functions_names.size() > 0 else "Function %s" % function_idx
+
+func _get_function_color(function_idx: int) -> Color:
+	return chart_properties.colors.functions[function_idx] if chart_properties.colors.functions.size() > 0 else Color.black

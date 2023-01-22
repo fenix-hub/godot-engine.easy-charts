@@ -5,8 +5,13 @@ signal point_entered(point)
 
 var _point_box_rad: int = 10
 
+# List of all unordered points belonging to this plot
 var points: Array = []
+
+# List of all points, grouped by function
 var function_points: Array = []
+
+# Currently focused point
 var focused_point: Point = null
 
 func _clear_points() -> void:
@@ -19,35 +24,36 @@ func _clear() -> void:
 func _get_point_box(point: Point, rad: int) -> Rect2:
 	return Rect2(point.position - (Vector2.ONE * rad), (Vector2.ONE * rad * 2))
 
-func _move_tooltip(position: Vector2) -> void:
-	$Tooltip.set_position(position + (Vector2.ONE * 15))
-
-func _show_tooltip(position: Vector2, text: String) -> void:
-	_move_tooltip(position)
-	$Tooltip.show()
-	$Tooltip.set_text(text)
-	$Tooltip.set_size(Vector2.ZERO)
-
-func _hide_tooltip() -> void:
-	$Tooltip.hide()
-	$Tooltip.set_text("")
-	$Tooltip.set_size(Vector2.ZERO)
+func _get_function_point(point: Point) -> int:
+	var point_f_index: int = -1
+	for f_point in function_points.size():
+		var found: int = function_points[f_point].find(point)
+		if found != -1:
+			point_f_index = f_point
+			break
+	return point_f_index
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
 		for point in points:
 			if _get_point_box(point, _point_box_rad).abs().has_point(event.position):
 				if focused_point == point:
-					_move_tooltip(event.position)
 					return
 				else:
 					focused_point = point
-					_show_tooltip(event.position, str(focused_point.value))
+					var func_index: int = _get_function_point(focused_point)
+					$Tooltip.update_values(
+						str(point.value.left),
+						str(point.value.right),
+						_get_function_name(func_index),
+						_get_function_color(func_index)
+					)
+					$Tooltip.show()
 					emit_signal("point_entered", point)
 					return
 		# Mouse is not in any point's box
 		focused_point = null
-		_hide_tooltip()
+		$Tooltip.hide()
 
 func _draw_point(point: Point, function_index: int) -> void:
 	match chart_properties.get_point_shape(function_index):
@@ -107,7 +113,7 @@ func _calculate_points() -> void:
 		for i in y_sampled.values.size():
 			var real_point_val: Pair = Pair.new(x[i], y[i])
 			var sampled_point_pos: Vector2 = Vector2(x_sampled.values[i], y_sampled.values[i])
-			var point: Point = Point.news(sampled_point_pos, real_point_val)
+			var point: Point = Point.new(sampled_point_pos, real_point_val)
 			points.append(point)
 		function_points.append(points)
 

@@ -43,5 +43,4 @@ func _draw_lines() -> void:
 				_draw_line(function_points[function][i - 1], function_points[function][i], function)
 
 func _draw() -> void:
-	if chart_properties.lines:
-		_draw_lines()
+	_draw_lines()
