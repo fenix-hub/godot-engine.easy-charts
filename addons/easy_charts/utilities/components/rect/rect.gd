@@ -7,7 +7,7 @@ var color : Color
 var color_outline : Color
 var function : String
 
-var mouse_entered : bool = false
+var mouse_entered_flag : bool = false
 
 
 signal _mouse_entered()
@@ -19,8 +19,8 @@ func _ready():
 
 
 func _draw():
-	if mouse_entered:
-		draw_rect(Rect2(rect_position - OFFSET,rect_size),color_outline,true,12,true)
+	if mouse_entered_flag:
+		draw_rect(Rect2(position - OFFSET,size),color_outline,true,12)
 
 func create_point(color : Color, color_outline : Color, position : Vector2, size : Vector2, value : Array, function : String):
 	
@@ -56,11 +56,11 @@ func format(n):
 	return s.replace("Null","")
 
 func _on_Rect_mouse_entered():
-	mouse_entered = true
+	mouse_entered_flag = true
 	emit_signal("_mouse_entered")
-	update()
+	queue_redraw()
 
 func _on_Rect_mouse_exited():
-	mouse_entered = false
+	mouse_entered_flag = false
 	emit_signal("_mouse_exited")
-	update()
+	queue_redraw()

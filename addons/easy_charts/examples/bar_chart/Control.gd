@@ -1,7 +1,5 @@
 extends Control
 
-onready var chart: BarChart = $BarChart
-
 func _ready():
 	# Let's create our @x values
 	var x: Array = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5"]
@@ -32,7 +30,7 @@ func _ready():
 #	$LineChart.x_labels = x_labels
 	
 	# Plot our data
-	chart.plot(x, y, cp)
+	$BarChart.plot(x, y, cp)
 	
 	# Uncommenting this line will show how real time data plotting works
 	set_process(false)
@@ -40,10 +38,10 @@ func _ready():
 func _process(delta: float):
 	# This function updates the values of chart x, y, and x_labels array
 	# and updaptes the plot
-	var new_val: String = "Day %s" % (chart.x.size() + 1)
-	chart.x.append(new_val)
-	chart.y.append(randi() % 40)
-	chart.update()
+	var new_val: String = "Day %s" % ($BarChart.x.size() + 1)
+	$BarChart.x.append(new_val)
+	$BarChart.y.append(randi() % 40)
+	$BarChart.queue_redraw()
 
 
 func _on_CheckButton_pressed():

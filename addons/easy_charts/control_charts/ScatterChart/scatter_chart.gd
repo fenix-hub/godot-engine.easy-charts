@@ -60,14 +60,14 @@ func _draw_point(point: Point, function_index: int) -> void:
 		Point.Shape.CIRCLE:
 			draw_circle(point.position, chart_properties.point_radius,  chart_properties.get_function_color(function_index))
 		Point.Shape.SQUARE:
-			draw_rect(_get_point_box(point, chart_properties.point_radius), chart_properties.get_function_color(function_index), true, 1.0, false)
+			draw_rect(_get_point_box(point, chart_properties.point_radius), chart_properties.get_function_color(function_index), true)
 		Point.Shape.TRIANGLE:
 			draw_colored_polygon(
-				PoolVector2Array([
+				PackedVector2Array([
 					point.position + (Vector2.UP * chart_properties.point_radius * 1.3),
 					point.position + (Vector2.ONE * chart_properties.point_radius * 1.3),
 					point.position - (Vector2(1, -1) * chart_properties.point_radius * 1.3)
-				]), chart_properties.get_function_color(function_index), [], null, null, false
+				]), chart_properties.get_function_color(function_index), [], null
 			)
 		Point.Shape.CROSS:
 			draw_line(
@@ -118,6 +118,29 @@ func _calculate_points() -> void:
 		function_points.append(points)
 
 func _draw() -> void:
+	_clear()
+	_pre_process()
+	
+	if chart_properties.background:
+		_draw_background()
+	
+	if chart_properties.borders:
+		_draw_borders()
+	
+	if chart_properties.grid or chart_properties.ticks or chart_properties.labels:
+		_draw_grid()
+	
+	if chart_properties.bounding_box:
+		_draw_bounding_box()
+	
+	if chart_properties.origin:
+		_draw_origin()
+	
+	if chart_properties.labels:
+		_draw_xaxis_label()
+		_draw_yaxis_label()
+		_draw_title()
+		
 	_calculate_points()
 	
 	if chart_properties.points:

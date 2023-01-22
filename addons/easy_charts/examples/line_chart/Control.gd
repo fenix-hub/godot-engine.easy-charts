@@ -9,7 +9,6 @@ func _ready():
 		ArrayOperations.multiply_float(ArrayOperations.cos(x), 1.0),
 		ArrayOperations.multiply_float(ArrayOperations.sin(x), 1.0)
 	]
-	
 	# Add some labels for the x axis, we don't want to use our x values array
 	# they will be printed on the chart ticks instead of the value of the x axis.
 	var x_labels: Array = ArrayOperations.suffix(x, "s")
@@ -30,7 +29,6 @@ func _ready():
 	cp.use_splines = true
 	cp.interactive = false # false by default, it allows the chart to create a tooltip to show point values
 	# and interecept clicks on the plot
-	
 	# Set the x_labels
 #	$LineChart.x_labels = x_labels
 	
@@ -48,7 +46,7 @@ func _process(delta: float):
 	$LineChart.y[0].append(cos(new_val))
 	$LineChart.y[1].append(2 + sin(new_val))
 	$LineChart.x_labels.append(str(new_val) + "s")
-	$LineChart.update()
+	$LineChart.queue_redraw()
 
 
 func _on_CheckButton_pressed():

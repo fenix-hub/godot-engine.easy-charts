@@ -1,10 +1,4 @@
-"""
-A class representing a Pair (or Tuple) of values.
-It is a lightweight class that can easily replace the improper and/or
-unnecessary usage of a 2d Array (ex. `var arr: Array = [0.5, 0.6]`)
-or of a Vector2 (ex. `var v2: Vector2 = Vector2(0.6, 0.8)`).
-"""
-extends Reference
+extends RefCounted
 class_name Pair
 
 var left
@@ -17,7 +11,7 @@ func _init(left = null, right = null) -> void:
 func _format(val) -> String:
 	var format: String = "%s"
 	match typeof(val):
-		TYPE_REAL:
+		TYPE_FLOAT:
 			"%.2f"
 	return format % val
 

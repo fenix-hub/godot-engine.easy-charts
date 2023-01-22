@@ -43,4 +43,31 @@ func _draw_lines() -> void:
 				_draw_line(function_points[function][i - 1], function_points[function][i], function)
 
 func _draw() -> void:
+	_clear()
+	_pre_process()
+	
+	if chart_properties.background:
+		_draw_background()
+	
+	if chart_properties.borders:
+		_draw_borders()
+	
+	if chart_properties.grid or chart_properties.ticks or chart_properties.labels:
+		_draw_grid()
+	
+	if chart_properties.bounding_box:
+		_draw_bounding_box()
+	
+	if chart_properties.origin:
+		_draw_origin()
+	
+	if chart_properties.labels:
+		_draw_xaxis_label()
+		_draw_yaxis_label()
+		_draw_title()
+	_calculate_points()
+	
+	if chart_properties.points:
+		_draw_points()
+		
 	_draw_lines()

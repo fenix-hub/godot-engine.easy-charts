@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name ArrayOperations
 
 static func add_int(array: Array, _int: int) -> Array:

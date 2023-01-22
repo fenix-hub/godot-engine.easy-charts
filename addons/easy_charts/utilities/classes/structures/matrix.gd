@@ -1,5 +1,5 @@
-tool
-extends Resource
+@tool
+extends RefCounted
 class_name Matrix
 
 var values : Array = []
@@ -18,7 +18,7 @@ func update_row(row : Array, index : int) -> void:
 
 func remove_row(index: int) -> void:
 	assert(rows() > index, "the row size must match matrix row size")
-	values.remove(index)
+	values.remove_at(index)
 
 func insert_column(column : Array, index : int = values[0].size()) -> void:
 	if columns() != 0:
@@ -34,7 +34,7 @@ func update_column(column : Array, index : int) -> void:
 func remove_column(index: int) -> void:
 	assert(columns() > index, "the column index must be at least equals to the rows count")
 	for row in get_rows():
-		row.remove(index)
+		row.remove_at(index)
 
 func resize(rows: int, columns: int) -> void:
 	for row in range(rows):
@@ -154,21 +154,21 @@ func _to_string() -> String:
 	return string
 
 # ----
-func set(position: String, value) -> void:
+func set(position: StringName, value) -> void:
 	var t_pos: Array = position.split(",")
 	values[t_pos[0]][t_pos[1]] = value
 
 # --------------
-func _get(_property : String):
+func _get(_property : StringName):
 	# ":" --> Columns 
 	if ":" in _property:
-		var property : PoolStringArray = _property.split(":") 
-		var from : PoolStringArray = property[0].split(",")
-		var to : PoolStringArray = property[1].split(",")
+		var property : PackedStringArray = _property.split(":") 
+		var from : PackedStringArray = property[0].split(",")
+		var to : PackedStringArray = property[1].split(",")
 	elif "," in _property:
-		var property : PoolStringArray = _property.split(",")
+		var property : PackedStringArray = _property.split(",")
 		if property.size() == 2:
-			return get_row(property[0] as int)[property[1] as int]
+			return get_row(int(property[0]))[int(property[1])]
 	else:
-		if (_property as String).is_valid_integer():
-			return get_row(_property as int)
+		if (_property as String).is_valid_int():
+			return get_row(int(_property))
