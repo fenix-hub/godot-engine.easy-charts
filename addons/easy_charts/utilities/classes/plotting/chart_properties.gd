@@ -18,9 +18,8 @@ var bounding_box: bool = true
 var grid: bool = false
 var ticks: bool = true
 var labels: bool = true
-var origin: bool = true
+var origin: bool = false
 var points: bool = true
-var lines: bool = true
 var interactive: bool = false
 
 var use_splines: bool = false
@@ -33,6 +32,7 @@ var colors: Dictionary = {
 
 var point_radius: float = 3.0
 var line_width: float = 1.0
+var bar_width: float = 10.0
 var shapes: Array = [Point.Shape.CIRCLE, Point.Shape.SQUARE, Point.Shape.TRIANGLE, Point.Shape.CROSS]
 var font: BitmapFont = Label.new().get_font("")
 
