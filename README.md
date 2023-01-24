@@ -1,18 +1,6 @@
-<p align="right">
-<a href="https://discord.gg/KnJGY9S">
-<img src="https://github.com/fenix-hub/ColoredBadges/blob/master/svg/social/discord.svg" alt="react" style="vertical-align:top; margin:6px 4px">
-</a>
-</p>
+<img src="easy_charts.svg" align="center">
 
-# Notice, plugin under refactoring
-**This plugin is under refactoring an maintenance. The next official release will contain multiple updates and upgrades.**\
-**If you encounter any bug, please contact me on Discord.**
-
-
-<img src="addons/easy_charts/icon.png" align="left" width="64" height="64">
-
-# Easy Charts
-A library of Charts plotted in Control, 2D and 3D nodes to visualize general purpose datasets.  
+Charts for Godot Engine, made easy.
 
 ## How does it work?
 There is a [WIKI](https://github.com/fenix-hub/godot-engine.easy-charts/wiki) with some tutorials, even if it is a work in progress.  
@@ -50,10 +38,7 @@ This library offers a set of charts for each main Godot Node:
 [Chart.js](https://www.chartjs.org/samples/latest/)   
 [Google Charts](https://developers.google.com/chart)   
 
-# ⚠️ Disclaimer
-This addon was built for a **personal use** intention. It was released as an open source plugin in the hope that it could be useful to the Godot Engine Community.  
+> **Warning**
+This addon was built for a **personal use** intention. It was released as an open source plugin in the hope that it could be useful to the Godot Engine Community.
 As a "work in progress" project, there is *no warranty* for any eventual issue and bug that may broke your project.  
 I don't assume any responsibility for possible corruptions of your project. It is always advisable to keep a copy of your project and check any changes you make in your Github repository.  
------------------
-> This text file was created via [TextEditor Integration](https://github.com/fenix-hub/godot-engine.text-editor) inside Godot Engine's Editor.
-> This text file was pushed  via [GitHub Integration](https://github.com/fenix-hub/godot-engine.github-integretion) inside Godot Engine's Editor.
