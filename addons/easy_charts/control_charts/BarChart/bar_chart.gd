@@ -11,13 +11,21 @@ var bars: Array = []
 
 # List of all bars, grouped by function
 var function_bars: Array = []
+var function_bars_pos: Array = []
 
 # Currently focused bar
 var focused_bar: Bar = null
 
+
+func _draw() -> void:
+	# Draw Bars
+	_calculate_bars()
+	_draw_bars()
+
 func _clear_bars() -> void:
 	bars.clear()
 	function_bars.clear()
+	function_bars_pos.clear()
 
 func _clear() -> void:
 	_clear_bars()
@@ -73,11 +81,14 @@ func _get_vertical_tick_label_pos(base_position: Vector2, text: String) -> Vecto
 
 func _draw_vertical_grid() -> void:
 	# draw vertical lines
-	
+
 	# 1. the amount of lines is equals to the X_scale: it identifies in how many sectors the x domain
 	#    should be devided
 	# 2. calculate the spacing between each line in pixel. It is equals to x_sampled_domain / x_scale
 	# 3. calculate the offset in the real x domain, which is x_domain / x_scale.
+	
+	var vertical_grid: Array = []
+	var vertical_ticks: Array = []
 	for _x in x.size():
 		var top: Vector2 = Vector2(
 			(_x * x_sector_size) + plot_box.position.x,
@@ -87,27 +98,35 @@ func _draw_vertical_grid() -> void:
 			(_x * x_sector_size) + plot_box.position.x,
 			bounding_box.end.y
 		)
+		vertical_grid.append(top)
+		vertical_grid.append(bottom)
 		
-		_draw_vertical_gridline_component(top, bottom, _x, x_sector_size)
-	
+		vertical_ticks.append(bottom)
+		vertical_ticks.append(bottom + Vector2(0, _x_tick_size))
+
 	### Draw last gridline
-	var p1: Vector2 = Vector2(
+	var top: Vector2 = Vector2(
 		(x.size() * x_sector_size) + plot_box.position.x,
 		bounding_box.position.y
 	)
+	vertical_grid.append(top)
 	
-	var p2: Vector2 = Vector2(
+	var bottom: Vector2 = Vector2(
 		(x.size() * x_sector_size) + plot_box.position.x,
 		bounding_box.end.y
 	)
-	
-	# Draw V Ticks
-	if chart_properties.ticks:
-		_draw_tick(p2, p2 + Vector2(0, _x_tick_size), chart_properties.colors.bounding_box)
+	vertical_grid.append(bottom)
+	vertical_ticks.append(bottom)
+	vertical_ticks.append(bottom + Vector2(0, _x_tick_size))
 	
 	# Draw V Grid Lines
 	if chart_properties.grid:
-		draw_line(p1, p2, chart_properties.colors.grid, 1, true)
+		draw_multiline(vertical_grid, chart_properties.colors.grid, 1, true)
+	
+	# Draw V Ticks
+	if chart_properties.ticks:
+		draw_multiline(vertical_ticks, chart_properties.colors.bounding_box, 1, true)
+
 
 func _calculate_bars() -> void:
 	var validation: int = _validate_sampled_axis(x_sampled, y_sampled)
@@ -120,9 +139,13 @@ func _calculate_bars() -> void:
 			var _function_bars: Array = []
 			for i in y_sampled.values[yxi].size():
 				var real_bar_value: Pair = Pair.new(x[i], y[yxi][i])
-				var sampled_bar_pos: Vector2 = Vector2(
-					(x_sector_size * i) + x_sampled_domain.left + (x_sector_size / 2) - (chart_properties.bar_width / 2), 
+				var center_bar_pos: Vector2 = Vector2(
+					(x_sector_size * i) + (x_sector_size / 2) + x_sampled_domain.left,
 					y_sampled.values[yxi][i]
+				)
+				var sampled_bar_pos: Vector2 = center_bar_pos - Vector2(
+					chart_properties.bar_width / 2, 
+					0
 				)
 				var sampled_bar_size: Vector2 = Vector2(
 					chart_properties.bar_width,
@@ -135,9 +158,13 @@ func _calculate_bars() -> void:
 	else:
 		for i in y_sampled.values.size():
 			var real_bar_value: Pair = Pair.new(x[i], y[i])
-			var sampled_bar_pos: Vector2 = Vector2(
-				(x_sector_size * i) + x_sampled_domain.left + (x_sector_size / 2) - chart_properties.bar_width, 
+			var center_bar_pos: Vector2 = Vector2(
+				(x_sector_size * i) + (x_sector_size / 2) + x_sampled_domain.left,
 				y_sampled.values[i]
+			)
+			var sampled_bar_pos: Vector2 = center_bar_pos - Vector2(
+				chart_properties.bar_width / 2, 
+				0
 			)
 			var sampled_bar_size: Vector2 = Vector2(
 				chart_properties.bar_width,
@@ -147,10 +174,6 @@ func _calculate_bars() -> void:
 			bars.append(bar)
 		function_bars.append(bars)
 
-func _draw() -> void:
-	_calculate_bars()
-	
-	_draw_bars()
 
 func _get_function_bar(bar: Bar) -> int:
 	var bar_f_index: int = -1

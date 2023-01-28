@@ -10,6 +10,7 @@ var points: Array = []
 
 # List of all points, grouped by function
 var function_points: Array = []
+var function_points_pos: Array = []
 
 # Currently focused point
 var focused_point: Point = null
@@ -17,6 +18,7 @@ var focused_point: Point = null
 func _clear_points() -> void:
 	points.clear()
 	function_points.clear()
+	function_points_pos.clear()
 
 func _clear() -> void:
 	_clear_points()
@@ -102,19 +104,23 @@ func _calculate_points() -> void:
 	if y_sampled.values[0] is Array:
 		for yxi in y_sampled.values.size():
 			var _function_points: Array = []
+			var _function_points_pos: Array = []
 			for i in y_sampled.values[yxi].size():
 				var real_point_val: Pair = Pair.new(x[i], y[yxi][i])
 				var sampled_point_pos: Vector2 = Vector2(x_sampled.values[i], y_sampled.values[yxi][i])
 				var point: Point = Point.new(sampled_point_pos, real_point_val)
 				_function_points.append(point)
+				_function_points_pos.append(sampled_point_pos)
 				points.append(point)
 			function_points.append(_function_points)
+			function_points_pos.append(_function_points_pos)
 	else:
 		for i in y_sampled.values.size():
 			var real_point_val: Pair = Pair.new(x[i], y[i])
 			var sampled_point_pos: Vector2 = Vector2(x_sampled.values[i], y_sampled.values[i])
 			var point: Point = Point.new(sampled_point_pos, real_point_val)
 			points.append(point)
+			function_points_pos.append(point.position)
 		function_points.append(points)
 
 func _draw() -> void:

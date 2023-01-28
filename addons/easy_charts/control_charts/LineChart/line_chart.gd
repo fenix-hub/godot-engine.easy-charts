@@ -10,7 +10,7 @@ func _draw_line(from: Point, to: Point, function_index: int) -> void:
 		true
 		)
 
-func _draw_spline(points: Array, function: int, density: float = 10.0, tension: float = 1) -> void:
+func _get_spline_points(points: Array, density: float = 10.0, tension: float = 1) -> Array:
 	var spline_points: Array = []
 	
 	var augmented: Array = points.duplicate(true)
@@ -31,16 +31,24 @@ func _draw_spline(points: Array, function: int, density: float = 10.0, tension: 
 					f / density)
 				)
 	
-	for i in range(1, spline_points.size()):
-		draw_line(spline_points[i-1], spline_points[i], chart_properties.get_function_color(function), chart_properties.line_width, true)
+	return spline_points
 
 func _draw_lines() -> void:
-	for function in function_points.size():
+	for function_i in function_points_pos.size():
 		if chart_properties.use_splines:
-			_draw_spline(function_points[function], function)
+			draw_polyline(
+				_get_spline_points(function_points[function_i]),
+				_get_function_color(function_i),
+				chart_properties.line_width,
+				true
+			)
 		else:
-			for i in range(1, function_points[function].size()):
-				_draw_line(function_points[function][i - 1], function_points[function][i], function)
+			draw_polyline(
+				function_points_pos[function_i], 
+				_get_function_color(function_i), 
+				chart_properties.line_width,
+				true
+				)
 
 func _draw() -> void:
 	_draw_lines()
