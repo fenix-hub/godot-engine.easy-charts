@@ -14,6 +14,9 @@ func _init(left = null, right = null) -> void:
 	self.left = left
 	self.right = right
 
+func map(value: float, target: Pair) -> float:
+	return range_lerp(value, self.left, self.right, target.left, target.right)
+
 func _format(val) -> String:
 	var format: String = "%s"
 	match typeof(val):
