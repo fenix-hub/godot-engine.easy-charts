@@ -15,14 +15,6 @@ var function_points_pos: Array = []
 # Currently focused point
 var focused_point: Point = null
 
-func _clear_points() -> void:
-	points.clear()
-	function_points.clear()
-	function_points_pos.clear()
-
-func _clear() -> void:
-	_clear_points()
-
 func _get_point_box(point: Point, rad: int) -> Rect2:
 	return Rect2(point.position - (Vector2.ONE * rad), (Vector2.ONE * rad * 2))
 
@@ -47,8 +39,8 @@ func _input(event: InputEvent) -> void:
 					$Tooltip.update_values(
 						str(point.value.left),
 						str(point.value.right),
-						_get_function_name(func_index),
-						_get_function_color(func_index)
+						chart_properties.get_function_name(func_index),
+						chart_properties.get_function_color(func_index)
 					)
 					$Tooltip.show()
 					emit_signal("point_entered", point)
@@ -101,10 +93,14 @@ func _calculate_points() -> void:
 		printerr("Cannot plot points for invalid dataset! Error: %s" % validation)
 		return
 	
+	points.clear()
+	function_points.clear()
+	function_points_pos.clear()
+	
 	if y_sampled.values[0] is Array:
 		for yxi in y_sampled.values.size():
 			var _function_points: Array = []
-			var _function_points_pos: Array = []
+			var _function_points_pos: PoolVector2Array = []
 			for i in y_sampled.values[yxi].size():
 				var real_point_val: Pair = Pair.new(x[i], y[yxi][i])
 				var sampled_point_pos: Vector2 = Vector2(x_sampled.values[i], y_sampled.values[yxi][i])
@@ -115,13 +111,15 @@ func _calculate_points() -> void:
 			function_points.append(_function_points)
 			function_points_pos.append(_function_points_pos)
 	else:
+		var _function_points_pos: PoolVector2Array = []
 		for i in y_sampled.values.size():
 			var real_point_val: Pair = Pair.new(x[i], y[i])
 			var sampled_point_pos: Vector2 = Vector2(x_sampled.values[i], y_sampled.values[i])
 			var point: Point = Point.new(sampled_point_pos, real_point_val)
 			points.append(point)
-			function_points_pos.append(point.position)
+			_function_points_pos.push_back(point.position)
 		function_points.append(points)
+		function_points_pos.append(_function_points_pos)
 
 func _draw() -> void:
 	_calculate_points()

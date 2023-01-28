@@ -1,6 +1,6 @@
-<img src="easy_charts.svg" align="center">
+<img src="easy_charts.svg" align="middle">
 
-Charts for Godot Engine, made easy.
+> Charts for Godot Engine, made easy.
 
 ## How does it work?
 There is a [WIKI](https://github.com/fenix-hub/godot-engine.easy-charts/wiki) with some tutorials, even if it is a work in progress.  
@@ -19,7 +19,7 @@ This library offers a set of charts for each main Godot Node:
 | LineChart | ✅ | ❌ | ❌ |
 | BarChart | ✅ | ❌ | ❌ |
 | AreaChart | ❌ | ❌ | ❌ |
-| PieChart | ❌ | ❌ | ❌ |
+| PieChart | ✅ | ❌ | ❌ |
 | RadarChart | ❌ | ❌ | ❌ |
 | BubbleChart | ❌ | ❌ | ❌ |
 | DonutChart | ❌ | ❌ | ❌ |

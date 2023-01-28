@@ -1,4 +1,4 @@
-extends Control
+extends AbstractChart
 class_name Chart
 
 var x: Array
@@ -12,22 +12,7 @@ var y_domain: Pair = Pair.new()  # Rounded domain of values of @x
 var x_sampled: SampledAxis = SampledAxis.new()
 var y_sampled: SampledAxis = SampledAxis.new()
 
-var x_labels: Array = []
-var y_labels: Array = []
-var functions_names: Array = []
-
-###### STYLE
-var chart_properties: ChartProperties = ChartProperties.new()
-
 #### INTERNAL
-# The bounding_box of the chart
-var node_box: Rect2
-var bounding_box: Rect2
-var plot_offset: Vector2
-var plot_box: Rect2
-
-var _padding_offset: Vector2 = Vector2(20.0, 20.0)
-var _internal_offset: Vector2 = Vector2(15.0, 15.0)
 
 # The Reference Rectangle to plot samples
 # It is the @bounding_box Rectangle inverted on the Y axis
@@ -50,10 +35,6 @@ var _x_ticklabel_offset: int = 5 # offset only on the X axis
 var _x_tick_size: int = 7
 
 ###########
-func _ready() -> void:
-	set_process_input(false)
-	set_process(false)
-
 func plot(x: Array, y: Array, properties: ChartProperties = self.chart_properties) -> void:
 	self.x = x
 	self.y = y
@@ -76,28 +57,8 @@ func _draw():
 		printerr("Input samples are invalid!")
 		return 
 	
-	_clear()
-	_pre_process()
-	
-	if chart_properties.background:
-		_draw_background()
-	
-	if chart_properties.borders:
-		_draw_borders()
-	
-	if chart_properties.grid or chart_properties.ticks or chart_properties.labels:
-		_draw_grid()
-	
-	if chart_properties.bounding_box:
-		_draw_bounding_box()
-	
 	if chart_properties.origin:
 		_draw_origin()
-	
-	if chart_properties.labels:
-		_draw_xaxis_label()
-		_draw_yaxis_label()
-		_draw_title()
 
 func _has_decimals(values: Array) -> bool:
 	var temp: Array = values.duplicate(true)
@@ -205,19 +166,11 @@ func _sample_y() -> void:
 func _find_longest_x() -> String:
 	return ("%.2f" if x_has_decimals else "%s") % x_domain.right
 
-func _pre_process() -> void:
+func _calc_bounding_box() -> void:
 	_calc_x_domain()
 	_calc_y_domain()
 	
-	var frame: Rect2 = get_global_rect()
-	
-	
-	#### @node_box size, which is the whole "frame"
-	node_box = Rect2(Vector2.ZERO, frame.size - frame.position)
-	
-	#### calculating offset from the @node_box for the @bounding_box.
 	plot_offset = _padding_offset
-	
 	### if @labels drawing is enabled, calcualte offsets
 	if chart_properties.labels:
 		### labels (X, Y, Title)
@@ -262,34 +215,10 @@ func _pre_process() -> void:
 		plot_offset, 
 		frame.size - (plot_offset * 2)
 	)
-	
-	plot_box = Rect2(
-		bounding_box.position + _internal_offset,
-		bounding_box.size - (_internal_offset * 2)
-	)
-	
+
+func _post_process() -> void:
 	_sample_x()
 	_sample_y()
-
-
-func _draw_background() -> void:
-	draw_rect(node_box, Color.white, true, 1.0, false)
-	
-#	# (debug)
-#	var half: Vector2 = node_box.size / 2
-#	draw_line(Vector2(half.x, node_box.position.y), Vector2(half.x, node_box.size.y), Color.red, 3, false)
-#	draw_line(Vector2(node_box.position.x, half.y), Vector2(node_box.size.x, half.y), Color.red, 3, false)
-
-func _draw_borders() -> void:
-	draw_rect(node_box, Color.red, false, 1, true)
-
-func _draw_bounding_box() -> void:
-	draw_rect(bounding_box, chart_properties.colors.bounding_box, false, 1, true)
-	
-#	# (debug)
-#	var half: Vector2 = (bounding_box.size) / 2
-#	draw_line(bounding_box.position + Vector2(half.x, 0), bounding_box.position + Vector2(half.x, bounding_box.size.y), Color.red, 3, false)
-#	draw_line(bounding_box.position + Vector2(0, half.y), bounding_box.position + Vector2(bounding_box.size.x, half.y), Color.red, 3, false)
 
 func _draw_origin() -> void:
 	var xorigin: float = x_min_max.map(0.0, x_sampled_domain)
@@ -434,55 +363,6 @@ func _get_horizontal_tick_label(line_index: int, line_value: float) -> String:
 	
 	return tick_lbl
 
-
-func _create_canvas_label(text: String, position: Vector2, rotation: float = 0.0) -> Label:
-	var lbl: Label = Label.new()
-	$Canvas.add_child(lbl)
-	lbl.set("custom_fonts/font", chart_properties.font)
-	lbl.set_text(text)
-	lbl.modulate = chart_properties.colors.bounding_box
-	lbl.rect_rotation = rotation
-	lbl.rect_position = position
-	return lbl
-
-func _update_canvas_label(canvas_label: Label, text: String, position: Vector2, rotation: float = 0.0) -> void:
-	canvas_label.set_text(text)
-	canvas_label.modulate = chart_properties.colors.bounding_box
-	canvas_label.rect_rotation = rotation
-	canvas_label.rect_position = position
-
-func _draw_yaxis_label() -> void:
-	_update_canvas_label(
-		$Canvas/YLabel,
-		chart_properties.y_label,
-		Vector2(_padding_offset.x, (node_box.size.y / 2) + (_y_label_size.x / 2)),
-		-90
-	)
-
-func _draw_xaxis_label() -> void:
-	_update_canvas_label(
-		$Canvas/XLabel,
-		chart_properties.x_label,
-		Vector2(
-			node_box.size.x/2 - (_x_label_size.x / 2), 
-			node_box.size.y - _padding_offset.y - _x_label_size.y 
-		)
-	)
-
-func _draw_title() -> void:
-	_update_canvas_label(
-		$Canvas/Title,
-		chart_properties.title,
-		Vector2(node_box.size.x / 2, _padding_offset.y*2) - (chart_properties.font.get_string_size(chart_properties.title) / 2)
-	)
-
-func _clear_canvas_labels() -> void:
-	for label in $Canvas.get_children():
-		label.queue_free()
-
-func _clear() -> void:
-	_clear_canvas_labels()
-
 func _validate_sampled_axis(x_data: SampledAxis, y_data: SampledAxis) -> int:
 	var error: int = 0 # OK
 	if x_data.values.empty() or y_data.values.empty():
@@ -500,12 +380,6 @@ func _validate_sampled_axis(x_data: SampledAxis, y_data: SampledAxis) -> int:
 	return error
 
 # ----- utilities
-func _get_function_name(function_idx: int) -> String:
-	return functions_names[function_idx] if functions_names.size() > 0 else "Function %s" % function_idx
-
-func _get_function_color(function_idx: int) -> Color:
-	return chart_properties.colors.functions[function_idx] if chart_properties.colors.functions.size() > 0 else Color.black
-
 func validate_input_samples(samples: Array) -> bool:
 	if samples.size() > 1 and samples[0] is Array:
 		for sample in samples:

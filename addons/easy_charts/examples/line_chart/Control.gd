@@ -24,7 +24,7 @@ func _ready():
 	cp.x_scale = 10
 	cp.y_label = ("Sensor values")
 	cp.y_scale = 10
-	cp.points = true
+	cp.points = false
 	cp.line_width = 2.0
 	cp.point_radius = 2.5
 	cp.use_splines = true

@@ -22,14 +22,6 @@ func _draw() -> void:
 	_calculate_bars()
 	_draw_bars()
 
-func _clear_bars() -> void:
-	bars.clear()
-	function_bars.clear()
-	function_bars_pos.clear()
-
-func _clear() -> void:
-	_clear_bars()
-
 func _calc_x_domain() -> void:
 	pass
 
@@ -103,7 +95,17 @@ func _draw_vertical_grid() -> void:
 		
 		vertical_ticks.append(bottom)
 		vertical_ticks.append(bottom + Vector2(0, _x_tick_size))
-
+		
+		# Draw V Tick Labels
+		if chart_properties.labels:
+			var tick_lbl: String = x[_x]
+			draw_string(
+				chart_properties.font, 
+				_get_vertical_tick_label_pos(bottom, tick_lbl),
+				tick_lbl, 
+				chart_properties.colors.bounding_box
+			)
+	
 	### Draw last gridline
 	var top: Vector2 = Vector2(
 		(x.size() * x_sector_size) + plot_box.position.x,
@@ -133,6 +135,10 @@ func _calculate_bars() -> void:
 	if not validation == OK:
 		printerr("Cannot plot bars for invalid dataset! Error: %s" % validation)
 		return
+	
+	bars.clear()
+	function_bars.clear()
+	function_bars_pos.clear()
 	
 	if y_sampled.values[0] is Array:
 		for yxi in y_sampled.values.size():
@@ -196,8 +202,8 @@ func _input(event: InputEvent) -> void:
 					$Tooltip.update_values(
 						str(focused_bar.value.left),
 						str(focused_bar.value.right),
-						_get_function_name(func_index),
-						_get_function_color(func_index)
+						chart_properties.get_function_name(func_index),
+						chart_properties.get_function_color(func_index)
 					)
 					$Tooltip.show()
 					emit_signal("bar_entered", bar)

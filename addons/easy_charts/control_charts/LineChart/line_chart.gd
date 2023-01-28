@@ -38,14 +38,14 @@ func _draw_lines() -> void:
 		if chart_properties.use_splines:
 			draw_polyline(
 				_get_spline_points(function_points[function_i]),
-				_get_function_color(function_i),
+				chart_properties.get_function_color(function_i),
 				chart_properties.line_width,
 				true
 			)
 		else:
 			draw_polyline(
 				function_points_pos[function_i], 
-				_get_function_color(function_i), 
+				chart_properties.get_function_color(function_i), 
 				chart_properties.line_width,
 				true
 				)

@@ -9,12 +9,12 @@ content_margin_top = 8.0
 content_margin_bottom = 8.0
 bg_color = Color( 0.101961, 0.101961, 0.101961, 0.784314 )
 border_color = Color( 1, 1, 1, 1 )
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 corner_detail = 20
-anti_aliasing_size = 0.9
+anti_aliasing_size = 0.65
 
 [sub_resource type="StyleBoxFlat" id=2]
 corner_radius_top_left = 5
@@ -27,8 +27,9 @@ anti_aliasing_size = 0.7
 [sub_resource type="StyleBoxEmpty" id=3]
 
 [node name="DataTooltip" type="PanelContainer"]
-margin_right = 169.0
-margin_bottom = 49.0
+visible = false
+margin_right = 20.0
+margin_bottom = 16.0
 mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 1 )
@@ -51,7 +52,6 @@ margin_right = 55.0
 margin_bottom = 14.0
 size_flags_horizontal = 0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
-text = "{x value}"
 valign = 1
 
 [node name="Value" type="HBoxContainer" parent="PointData"]
@@ -84,7 +84,6 @@ margin_right = 78.0
 margin_bottom = 14.0
 size_flags_horizontal = 0
 size_flags_vertical = 5
-text = "{function}"
 valign = 1
 
 [node name="sep" type="Label" parent="PointData/Value"]
@@ -110,7 +109,6 @@ margin_bottom = 14.0
 size_flags_horizontal = 0
 size_flags_vertical = 5
 custom_colors/font_color = Color( 1, 1, 1, 1 )
-text = "{y value}"
 valign = 1
 
 [connection signal="visibility_changed" from="." to="." method="_on_DataTooltip_visibility_changed"]
