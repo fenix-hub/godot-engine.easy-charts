@@ -1,14 +1,17 @@
 extends Control
 
+onready var chart: AreaChart = $AreaChart
+
 func _ready():
 	# Let's create our @x values
-	var x: Array = ArrayOperations.multiply_float(range(-10, 10, 1), 0.5)
+	var x: Array = ArrayOperations.multiply_float(range(-2*PI, +2*PI, 1), 0.5)
 	# And our y values. It can be an n-size array of arrays.
 	# NOTE: `x.size() == y.size()` or `x.size() == y[n].size()`
 	var y: Array = [
-		ArrayOperations.multiply_int(ArrayOperations.cos(x), 20),
-		ArrayOperations.add_float(ArrayOperations.multiply_int(ArrayOperations.sin(x), 20), 20)
+		ArrayOperations.multiply_float(ArrayOperations.cos(x), 1.0),
+		ArrayOperations.multiply_float(ArrayOperations.sin(x), 1.0)
 	]
+	
 	# Add some labels for the x axis, we don't want to use our x values array
 	# they will be printed on the chart ticks instead of the value of the x axis.
 	var x_labels: Array = ArrayOperations.suffix(x, "s")
@@ -22,14 +25,17 @@ func _ready():
 	cp.x_label = ("Time")
 	cp.x_scale = 10
 	cp.y_label = ("Sensor values")
-	cp.y_scale = 30
+	cp.y_scale = 10
+	cp.points = true
+	cp.line_width = 2.0
+	cp.point_radius = 2.5
+	cp.use_splines = true
 	cp.interactive = true # false by default, it allows the chart to create a tooltip to show point values
 	# and interecept clicks on the plot
 	
-	# Set the x_labels
 	
 	# Plot our data
-	$ScatterChart.plot(x, y, cp)
+	chart.plot(x, y, cp)
 	
 	# Uncommenting this line will show how real time data plotting works
 	set_process(false)
@@ -37,11 +43,11 @@ func _ready():
 func _process(delta: float):
 	# This function updates the values of chart x, y, and x_labels array
 	# and updaptes the plot
-	var new_val: float = $ScatterChart.x.back() + 1
-	$ScatterChart.x.append(new_val)
-	$ScatterChart.y[0].append(cos(new_val) * 20)
-	$ScatterChart.y[1].append(20 + sin(new_val) * 20)
-	$ScatterChart.update()
+	var new_val: float = chart.x.back() + 1
+	chart.x.append(new_val)
+	chart.y[0].append(cos(new_val))
+	chart.y[1].append(2 + sin(new_val))
+	chart.update()
 
 
 func _on_CheckButton_pressed():

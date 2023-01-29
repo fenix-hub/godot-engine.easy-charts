@@ -47,7 +47,6 @@ func _process(delta: float):
 	$LineChart.x.append(new_val)
 	$LineChart.y[0].append(cos(new_val))
 	$LineChart.y[1].append(2 + sin(new_val))
-	$LineChart.x_labels.append(str(new_val) + "s")
 	$LineChart.update()
 
 

@@ -26,6 +26,7 @@ var interactive: bool = false
 var use_splines: bool = false
 
 var colors: Dictionary = {
+	background = Color.white,
 	bounding_box = Color.black,
 	grid = Color.gray,
 	functions = ["#36a2eb", "#ff6384", "#ff9f40", "#ffcd56", "#4bc0c0"]
