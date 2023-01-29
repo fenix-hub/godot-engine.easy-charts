@@ -81,7 +81,6 @@ func _calc_plot_box() -> void:
 
 func _draw_background() -> void:
 	draw_rect(frame, chart_properties.colors.background, true, 1.0, false)
-
 	
 #	# (debug)
 #	var half: Vector2 = node_box.size / 2
