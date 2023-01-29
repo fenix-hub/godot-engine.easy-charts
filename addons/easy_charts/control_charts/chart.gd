@@ -348,18 +348,18 @@ func _get_horizontal_tick_label_pos(base_position: Vector2, text: String) -> Vec
 func _get_vertical_tick_label(line_index: int, line_value: float) -> String:
 	var tick_lbl: String = ""
 	if x_labels.empty():
-		tick_lbl = ("%.2f" if x_has_decimals else "%s") % [x_min_max.left + (line_index * line_value)]
+		tick_lbl = ("%.2f" if x_has_decimals else "%s") % line_value
 	else:
-		tick_lbl = x_labels[clamp(line_value * line_index, 0, x_labels.size() - 1)]
+		tick_lbl = x_labels[line_index]
 	
 	return tick_lbl
 
 func _get_horizontal_tick_label(line_index: int, line_value: float) -> String:
 	var tick_lbl: String = ""
 	if y_labels.empty():
-		tick_lbl = ("%.2f" if y_has_decimals else "%s") % [y_domain.left + (line_index * line_value)]
+		tick_lbl = ("%.2f" if y_has_decimals else "%s") % line_value
 	else:
-		tick_lbl = y_labels[clamp(y_labels.size() * line_index, 0, y_labels.size() - 1)]
+		tick_lbl = y_labels[line_index]
 	
 	return tick_lbl
 
