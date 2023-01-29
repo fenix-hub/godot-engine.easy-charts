@@ -14,6 +14,9 @@ var y_sampled: SampledAxis = SampledAxis.new()
 
 #### INTERNAL
 
+var _padding_offset: Vector2 = Vector2(20.0, 20.0)
+var _internal_offset: Vector2 = Vector2(15.0, 15.0)
+
 # The Reference Rectangle to plot samples
 # It is the @bounding_box Rectangle inverted on the Y axis
 var x_sampled_domain: Pair
@@ -351,6 +354,7 @@ func _get_vertical_tick_label(line_index: int, line_value: float) -> String:
 		tick_lbl = ("%.2f" if x_has_decimals else "%s") % line_value
 	else:
 		tick_lbl = x_labels[line_index]
+  
 	return tick_lbl
 
 func _get_horizontal_tick_label(line_index: int, line_value: float) -> String:
