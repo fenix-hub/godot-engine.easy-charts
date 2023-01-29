@@ -4,7 +4,7 @@ onready var chart: PieChart = $PieChart
 
 func _ready():
 	# Let's create our @x values
-	var sizes: Array = [8, 16, 32, 64, 128]
+	var values: Array = [8, 16, 32, 64, 128]
 	
 	# Let's customize the chart properties, which specify how the chart
 	# should look, plus some additional elements like labels, the scale, etc...
@@ -15,7 +15,7 @@ func _ready():
 	# and interecept clicks on the plot
 	
 	# Plot our data
-	chart.plot(sizes, cp)
+	chart.plot(values, cp)
 	
 	# Uncommenting this line will show how real time data plotting works
 	set_process(false)
