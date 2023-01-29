@@ -351,6 +351,7 @@ func _get_vertical_tick_label(line_index: int, line_value: float) -> String:
 		tick_lbl = ("%.2f" if x_has_decimals else "%s") % line_value
 	else:
 		tick_lbl = x_labels[line_index]
+  
 	return tick_lbl
 
 func _get_horizontal_tick_label(line_index: int, line_value: float) -> String:
