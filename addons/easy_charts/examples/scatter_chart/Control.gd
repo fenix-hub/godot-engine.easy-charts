@@ -1,5 +1,7 @@
 extends Control
 
+onready var chart: ScatterChart = $ScatterChart
+
 func _ready():
 	# Let's create our @x values
 	var x: Array = ArrayOperations.multiply_float(range(-10, 10, 1), 0.5)
@@ -29,7 +31,7 @@ func _ready():
 	# Set the x_labels
 	
 	# Plot our data
-	$ScatterChart.plot(x, y, cp)
+	chart.plot(x, y, cp)
 	
 	# Uncommenting this line will show how real time data plotting works
 	set_process(false)
@@ -37,11 +39,11 @@ func _ready():
 func _process(delta: float):
 	# This function updates the values of chart x, y, and x_labels array
 	# and updaptes the plot
-	var new_val: float = $ScatterChart.x.back() + 1
-	$ScatterChart.x.append(new_val)
-	$ScatterChart.y[0].append(cos(new_val) * 20)
-	$ScatterChart.y[1].append(20 + sin(new_val) * 20)
-	$ScatterChart.update()
+	var new_val: float = chart.x.back() + 1
+	chart.x.append(new_val)
+	chart.y[0].append(cos(new_val) * 20)
+	chart.y[1].append(20 + sin(new_val) * 20)
+	chart.update()
 
 
 func _on_CheckButton_pressed():

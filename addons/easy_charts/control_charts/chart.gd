@@ -12,11 +12,6 @@ var y_domain: Pair = Pair.new()  # Rounded domain of values of @x
 var x_sampled: SampledAxis = SampledAxis.new()
 var y_sampled: SampledAxis = SampledAxis.new()
 
-#### INTERNAL
-
-var _padding_offset: Vector2 = Vector2(20.0, 20.0)
-var _internal_offset: Vector2 = Vector2(15.0, 15.0)
-
 # The Reference Rectangle to plot samples
 # It is the @bounding_box Rectangle inverted on the Y axis
 var x_sampled_domain: Pair
