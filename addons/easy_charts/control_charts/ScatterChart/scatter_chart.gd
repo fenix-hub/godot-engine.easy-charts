@@ -42,6 +42,7 @@ func _input(event: InputEvent) -> void:
 						chart_properties.get_function_name(func_index),
 						chart_properties.get_function_color(func_index)
 					)
+					_tooltip.update_position(point.position)
 					_tooltip.show()
 					emit_signal("point_entered", point)
 					return

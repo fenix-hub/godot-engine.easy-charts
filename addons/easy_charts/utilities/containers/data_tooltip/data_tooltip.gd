@@ -14,10 +14,13 @@ func _ready():
 	hide()
 	update_size()
 
-func _process(delta):
-	if Engine.editor_hint:
-		return
-	rect_position = get_global_mouse_position() + Vector2(15, - (get_rect().size.y / 2))
+func update_position(position: Vector2) -> void:
+	self.rect_position = position + Vector2(15, - (get_rect().size.y / 2))
+
+#func _process(delta):
+#	if Engine.editor_hint:
+#		return
+#	rect_position = get_global_mouse_position() + Vector2(15, - (get_rect().size.y / 2))
 
 func set_font(font: DynamicFont) -> void:
 	x_lbl.set("custom_fonts/font", font)
