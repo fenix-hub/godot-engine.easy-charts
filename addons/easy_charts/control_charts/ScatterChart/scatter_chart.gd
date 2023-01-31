@@ -36,18 +36,18 @@ func _input(event: InputEvent) -> void:
 				else:
 					focused_point = point
 					var func_index: int = _get_function_point(focused_point)
-					$Tooltip.update_values(
+					_tooltip.update_values(
 						str(point.value.left),
 						str(point.value.right),
 						chart_properties.get_function_name(func_index),
 						chart_properties.get_function_color(func_index)
 					)
-					$Tooltip.show()
+					_tooltip.show()
 					emit_signal("point_entered", point)
 					return
 		# Mouse is not in any point's box
 		focused_point = null
-		$Tooltip.hide()
+		_tooltip.hide()
 
 func _draw_point(point: Point, function_index: int) -> void:
 	match chart_properties.get_point_shape(function_index):

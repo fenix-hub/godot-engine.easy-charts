@@ -19,31 +19,41 @@ var plot_box: Rect2
 var _padding_offset: Vector2 = Vector2(20.0, 20.0)
 var _internal_offset: Vector2 = Vector2(15.0, 15.0)
 
+# Nodes
+onready var _canvas: Control = $Canvas
+onready var _tooltip: Control = $Tooltip
+
 ###########
 func _ready() -> void:
 	set_process_input(false)
 	set_process(false)
+	
+	_canvas.set_font(chart_properties.font)
+	_tooltip.set_font(chart_properties.font)
 
 func _draw() -> void:
-	_pre_process()
 	_calc_frame()
-
-	if chart_properties.background:
-		_draw_background()
-
 	_calc_node_box()
 	_calc_bounding_box()
 	_calc_plot_box()
-	_post_process()
 	
 	if chart_properties.borders:
 		_draw_borders()
 	
-	if chart_properties.grid or chart_properties.ticks or chart_properties.labels:
-		_draw_grid()
+	if chart_properties.frame:
+		_draw_frame()
+	
+	if chart_properties.background:
+		_draw_background()
 	
 	if chart_properties.bounding_box:
 		_draw_bounding_box()
+	
+	_pre_process()
+	_post_process()
+	
+	if chart_properties.grid or chart_properties.ticks or chart_properties.labels:
+		_draw_grid()
 	
 	if chart_properties.labels:
 		_draw_xaxis_label()
@@ -79,17 +89,14 @@ func _calc_plot_box() -> void:
 		bounding_box.size - (_internal_offset * 2)
 	)
 
-func _draw_background() -> void:
-	draw_rect(frame, chart_properties.colors.background, true, 1.0, false)
-	
-#	# (debug)
-#	var half: Vector2 = node_box.size / 2
-#	draw_line(Vector2(half.x, node_box.position.y), Vector2(half.x, node_box.size.y), Color.red, 3, false)
-#	draw_line(Vector2(node_box.position.x, half.y), Vector2(node_box.size.x, half.y), Color.red, 3, false)
-
-
 func _draw_borders() -> void:
-	draw_rect(node_box, Color.red, false, 1, true)
+	draw_rect(node_box, chart_properties.colors.borders, false, 1, true)
+
+func _draw_frame() -> void:
+	draw_rect(frame, chart_properties.colors.frame, true, 1.0, false)
+
+func _draw_background() -> void:
+	draw_rect(bounding_box, chart_properties.colors.background, true, 1, true)
 
 func _draw_bounding_box() -> void:
 	draw_rect(bounding_box, chart_properties.colors.bounding_box, false, 1, true)
@@ -113,34 +120,28 @@ func _draw_horizontal_grid() -> void:
 
 func _create_canvas_label(text: String, position: Vector2, rotation: float = 0.0) -> Label:
 	var lbl: Label = Label.new()
-	$Canvas.add_child(lbl)
+	_canvas.add_child(lbl)
 	lbl.set("custom_fonts/font", chart_properties.font)
 	lbl.set_text(text)
-	lbl.modulate = chart_properties.colors.bounding_box
+	lbl.modulate = chart_properties.colors.labels
 	lbl.rect_rotation = rotation
 	lbl.rect_position = position
 	return lbl
 
-func _update_canvas_label(canvas_label: Label, text: String, position: Vector2, rotation: float = 0.0) -> void:
-	canvas_label.set_text(text)
-	canvas_label.modulate = chart_properties.colors.bounding_box
-	canvas_label.rect_rotation = rotation
-	canvas_label.rect_position = position
-
 func _draw_yaxis_label() -> void:
 	var y_lbl_size: Vector2 = chart_properties.get_string_size(chart_properties.y_label)
-	_update_canvas_label(
-		$Canvas/YLabel,
+	_canvas.update_y_label(
 		chart_properties.y_label,
+		chart_properties.colors.labels,
 		Vector2(_padding_offset.x, (node_box.size.y / 2) + (y_lbl_size.x / 2)),
 		-90
 	)
 
 func _draw_xaxis_label() -> void:
 	var _x_label_size: Vector2 = chart_properties.get_string_size(chart_properties.x_label)
-	_update_canvas_label(
-		$Canvas/XLabel,
+	_canvas.update_x_label(
 		chart_properties.x_label,
+		chart_properties.colors.labels,
 		Vector2(
 			node_box.size.x/2 - (_x_label_size.x / 2), 
 			node_box.size.y - _padding_offset.y - _x_label_size.y 
@@ -148,8 +149,8 @@ func _draw_xaxis_label() -> void:
 	)
 
 func _draw_title() -> void:
-	_update_canvas_label(
-		$Canvas/Title,
+	_canvas.update_title(
 		chart_properties.title,
+		chart_properties.colors.labels,
 		Vector2(node_box.size.x / 2, _padding_offset.y*2) - (chart_properties.font.get_string_size(chart_properties.title) / 2)
 	)

@@ -24,7 +24,7 @@ func _ready():
 	cp.x_label = ("Time")
 	cp.x_scale = 10
 	cp.y_label = ("Sensor values")
-	cp.y_scale = 30
+	cp.y_scale = 10
 	cp.interactive = true # false by default, it allows the chart to create a tooltip to show point values
 	# and interecept clicks on the plot
 	

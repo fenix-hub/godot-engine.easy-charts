@@ -13,7 +13,8 @@ var y_scale: float = 2.0
 var x_scale_type: int = 0
 var y_scale_type: int = 0
 
-var borders: bool = false
+var borders: bool = true
+var frame: bool = true
 var background: bool = true
 var bounding_box: bool = true
 var grid: bool = false
@@ -26,8 +27,11 @@ var interactive: bool = false
 var use_splines: bool = false
 
 var colors: Dictionary = {
+	frame = Color.whitesmoke,
+	borders = Color.red,
 	background = Color.white,
 	bounding_box = Color.black,
+	labels = Color.black,
 	grid = Color.gray,
 	functions = ["#36a2eb", "#ff6384", "#ff9f40", "#ffcd56", "#4bc0c0"]
 }
@@ -36,7 +40,12 @@ var point_radius: float = 3.0
 var line_width: float = 1.0
 var bar_width: float = 10.0
 var shapes: Array = [Point.Shape.CIRCLE, Point.Shape.SQUARE, Point.Shape.TRIANGLE, Point.Shape.CROSS]
-var font: BitmapFont = Label.new().get_font("")
+var font_data: DynamicFontData = load("res://addons/easy_charts/utilities/assets/OpenSans-VariableFont_wdth,wght.ttf")
+var font: DynamicFont = DynamicFont.new()
+
+func _init() -> void:
+	font.set_font_data(font_data)
+	font.set_size(13)
 
 func get_function_color(function_index: int) -> Color:
 	return colors.functions[function_index] if function_index < colors.functions.size() else Color.black

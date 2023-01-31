@@ -19,6 +19,12 @@ func _process(delta):
 		return
 	rect_position = get_global_mouse_position() + Vector2(15, - (get_rect().size.y / 2))
 
+func set_font(font: DynamicFont) -> void:
+	x_lbl.set("custom_fonts/font", font)
+	y_lbl.set("custom_fonts/font", font)
+	func_lbl.set("custom_fonts/font", font)
+	$PointData/Value/sep.set("custom_fonts/font", font)
+
 func update_values(x: String, y: String, function: String, color: Color):
 	x_lbl.set_text(x)
 	y_lbl.set_text(y)

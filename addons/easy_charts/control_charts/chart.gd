@@ -224,7 +224,7 @@ func _draw_origin() -> void:
 	
 	draw_line(Vector2(xorigin, bounding_box.position.y), Vector2(xorigin, bounding_box.position.y + bounding_box.size.y), Color.black, 1, 0)
 	draw_line(Vector2(bounding_box.position.x, yorigin), Vector2(bounding_box.position.x + bounding_box.size.x, yorigin), Color.black, 1, 0)
-	draw_string(chart_properties.font, Vector2(xorigin, yorigin) - Vector2(15, -15), "O", chart_properties.colors.bounding_box)
+	draw_string(chart_properties.font, Vector2(xorigin, yorigin) - Vector2(15, -15), "O", chart_properties.colors.labels)
 
 func _draw_grid() -> void:
 	var validation: int = _validate_sampled_axis(x_sampled, y_sampled)
@@ -272,7 +272,7 @@ func _draw_vertical_grid() -> void:
 				chart_properties.font, 
 				_get_vertical_tick_label_pos(bottom, tick_lbl),
 				tick_lbl, 
-				chart_properties.colors.bounding_box
+				chart_properties.colors.labels
 			)
 	
 	# Draw V Grid
@@ -319,7 +319,7 @@ func _draw_horizontal_grid() -> void:
 				chart_properties.font, 
 				_get_horizontal_tick_label_pos(left, tick_lbl),
 				tick_lbl, 
-				chart_properties.colors.bounding_box
+				chart_properties.colors.labels
 			)
 	
 	# Draw H Grid

@@ -1,28 +1,17 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/easy_charts/control_charts/chart.gd" type="Script" id=1]
 [ext_resource path="res://addons/easy_charts/utilities/containers/data_tooltip/data_tooltip.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/easy_charts/utilities/containers/canvas/canvas.tscn" type="PackedScene" id=3]
 
 [node name="Chart" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
 
-[node name="Canvas" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="Title" type="Label" parent="Canvas"]
-margin_right = 40.0
-margin_bottom = 14.0
-
-[node name="XLabel" type="Label" parent="Canvas"]
-margin_right = 40.0
-margin_bottom = 14.0
-
-[node name="YLabel" type="Label" parent="Canvas"]
-margin_right = 40.0
-margin_bottom = 14.0
+[node name="Canvas" parent="." instance=ExtResource( 3 )]
 
 [node name="Tooltip" parent="." instance=ExtResource( 2 )]
 visible = false
+margin_right = 20.0
+margin_bottom = 16.0
