@@ -5,6 +5,7 @@ var title: String
 var x_label: String
 var y_label: String
 
+# {n}_scale defines in how many sectors the grid will be divided.
 var x_scale: float = 5.0
 var y_scale: float = 2.0
 
@@ -24,9 +25,11 @@ var draw_bounding_box: bool = true
 var draw_grid: bool = true
 var draw_ticks: bool = true
 var draw_origin: bool = false
-var draw_points: bool = true
-var show_labels: bool = true
-var show_legend: bool = true
+var show_tick_labels: bool = true
+var show_x_label: bool = true
+var show_y_label: bool = true
+var show_title: bool = true
+var show_legend: bool = false
 var interactive: bool = false
 
 var colors: Dictionary = {
@@ -35,6 +38,7 @@ var colors: Dictionary = {
 	borders = Color.red,
 	bounding_box = Color.black,
 	grid = Color.gray,
+	ticks = Color.black,
 	text = Color.black
 }
 
