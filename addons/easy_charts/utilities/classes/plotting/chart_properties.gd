@@ -22,9 +22,11 @@ var draw_borders: bool = true
 var draw_frame: bool = true
 var draw_background: bool = true
 var draw_bounding_box: bool = true
-var draw_grid: bool = true
+var draw_vertical_grid: bool = true
+var draw_horizontal_grid: bool = true
 var draw_ticks: bool = true
 var draw_origin: bool = false
+var draw_grid_box: bool = true 
 var show_tick_labels: bool = true
 var show_x_label: bool = true
 var show_y_label: bool = true
@@ -39,7 +41,8 @@ var colors: Dictionary = {
 	bounding_box = Color.black,
 	grid = Color.gray,
 	ticks = Color.black,
-	text = Color.black
+	text = Color.black,
+	origin = Color.dimgray
 }
 
 var font_data: DynamicFontData = load("res://addons/easy_charts/utilities/assets/OpenSans-VariableFont_wdth,wght.ttf")

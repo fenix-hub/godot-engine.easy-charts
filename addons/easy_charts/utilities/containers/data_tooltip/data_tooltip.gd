@@ -28,10 +28,10 @@ func update_position(position: Vector2) -> void:
 func set_font(font: DynamicFont) -> void:
 	theme.set("default_font", font)
 
-func update_values(x: String, y: String, function: String, color: Color):
+func update_values(x: String, y: String, function_name: String, color: Color):
 	x_lbl.set_text(x)
 	y_lbl.set_text(y)
-	func_lbl.set_text(function)
+	func_lbl.set_text(function_name)
 	color_rect.get("custom_styles/panel").set("bg_color", color)
 
 func update_size():

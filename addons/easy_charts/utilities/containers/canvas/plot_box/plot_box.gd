@@ -3,7 +3,6 @@ class_name PlotBox
 
 signal function_point_entered(point, function)
 signal function_point_exited(point, function)
-
 onready var tooltip: DataTooltip = $Tooltip
 
 var focused_point: Point
@@ -30,15 +29,14 @@ func get_plot_box() -> Rect2:
 	inner_box.end.y -= plot_inner_offset.y * 2
 	return inner_box
 
-func _on_point_entered(point: Point, function: Function) -> void:
+func _on_point_entered(point: Point, function: Function, props: Dictionary = {}) -> void:
 	self.focused_function = function
+	var x_value: String = point.value.x if point.value.x is String else ECUtilities._format_value(point.value.x, ECUtilities._is_decimal(point.value.x))
+	var y_value: String = point.value.y if point.value.y is String else ECUtilities._format_value(point.value.y, ECUtilities._is_decimal(point.value.y))
+	var color: Color = function.get_color() if function.get_type() != Function.Type.PIE \
+		else function.get_gradient().interpolate(props.interpolation_index)
 	tooltip.show()
-	tooltip.update_values(
-		ECUtilities._format_value(point.value.x, ECUtilities._is_decimal(point.value.x)),
-		ECUtilities._format_value(point.value.y, ECUtilities._is_decimal(point.value.y)),
-		function.name,
-		function.get_color()
-	)
+	tooltip.update_values(x_value, y_value, function.name, color)
 	tooltip.update_position(point.position)
 	emit_signal("function_point_entered", point, function)
 

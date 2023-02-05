@@ -1,6 +1,9 @@
 extends ScatterPlotter
 class_name LinePlotter
 
+func _init(function: Function).(function) -> void:
+	pass
+
 func _get_spline_points(density: float = 10.0, tension: float = 1) -> PoolVector2Array:
 	var spline_points: PoolVector2Array = []
 	

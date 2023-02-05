@@ -3,11 +3,9 @@ class_name GridBox
 
 var x_domain: Dictionary = { lb = 0, ub = 0 }
 var x_labels: Array
-var x_has_decimals: bool
 
 var y_domain: Dictionary = { lb = 0, ub = 0 }
 var y_labels: Array
-var y_has_decimals: float
 
 var box: Rect2
 var plot_box: Rect2
@@ -24,10 +22,6 @@ func set_labels(x_labels: Array, y_labels: Array) -> void:
 	self.x_labels = x_labels
 	self.y_labels = y_labels
 
-func set_has_decimals(x_has_decimals: bool, y_has_decimals: bool) -> void:
-	self.x_has_decimals = x_has_decimals
-	self.y_has_decimals = y_has_decimals
-
 func _draw() -> void:
 	self.box = get_parent().get_box()
 	self.plot_box = get_parent().get_plot_box()
@@ -35,8 +29,9 @@ func _draw() -> void:
 	if get_parent().chart_properties.draw_background:
 		_draw_background()
 	
-	if get_parent().chart_properties.draw_grid:
-		_draw_grid()
+	if get_parent().chart_properties.draw_grid_box:
+		_draw_vertical_grid()
+		_draw_horizontal_grid()
 	
 	if get_parent().chart_properties.draw_origin:
 		_draw_origin()
@@ -51,16 +46,13 @@ func _draw_bounding_box() -> void:
 	draw_rect(self.box, get_parent().chart_properties.colors.bounding_box, false, 1, true)
 
 func _draw_origin() -> void:
-	var xorigin: float = get_parent()._map_domain(0.0, x_domain, { lb = self.box.position.x, ub = self.box.end.x })
-	var yorigin: float = get_parent()._map_domain(0.0, y_domain, { lb = self.box.end.y, ub = self.box.position.y })
+	var xorigin: float = ECUtilities._map_domain(0.0, x_domain, { lb = self.plot_box.position.x, ub = self.plot_box.end.x })
+	var yorigin: float = ECUtilities._map_domain(0.0, y_domain, { lb = self.plot_box.end.y, ub = self.plot_box.position.y })
 	
-	draw_line(Vector2(xorigin, self.box.position.y), Vector2(xorigin, self.box.position.y + self.box.size.y), Color.black, 1, 0)
-	draw_line(Vector2(self.box.position.x, yorigin), Vector2(self.box.position.x + self.box.size.x, yorigin), Color.black, 1, 0)
-	draw_string(get_parent().chart_properties.font, Vector2(xorigin, yorigin) - Vector2(15, -15), "O", get_parent().chart_properties.colors.labels)
+	draw_line(Vector2(xorigin, self.plot_box.position.y), Vector2(xorigin, self.plot_box.position.y + self.plot_box.size.y), get_parent().chart_properties.colors.origin, 1, 0)
+	draw_line(Vector2(self.plot_box.position.x, yorigin), Vector2(self.plot_box.position.x + self.plot_box.size.x, yorigin), get_parent().chart_properties.colors.origin, 1, 0)
+	draw_string(get_parent().chart_properties.font, Vector2(xorigin, yorigin) - Vector2(15, -15), "O", get_parent().chart_properties.colors.text)
 
-func _draw_grid() -> void:
-	_draw_vertical_grid()
-	_draw_horizontal_grid()
 
 func _draw_vertical_grid() -> void:
 	# draw vertical lines
@@ -69,12 +61,13 @@ func _draw_vertical_grid() -> void:
 	#    should be devided
 	# 2. calculate the spacing between each line in pixel. It is equals to x_sampled_domain / x_scale
 	# 3. calculate the offset in the real x domain, which is x_domain / x_scale.
-	var x_pixel_dist: float = self.plot_box.size.x / get_parent().chart_properties.x_scale
+	var scaler: int = get_parent().chart_properties.x_scale if self.x_labels.empty() else (x_labels.size() - 1)
+	var x_pixel_dist: float = self.plot_box.size.x / scaler
 	
 	var vertical_grid: PoolVector2Array = []
 	var vertical_ticks: PoolVector2Array = []
 	 
-	for _x in get_parent().chart_properties.x_scale + 1:
+	for _x in (scaler + 1):
 		var x_sampled_val: float = (_x * x_pixel_dist) + self.plot_box.position.x
 		var x_val: float = ECUtilities._map_domain(x_sampled_val, { lb = self.plot_box.position.x, ub = self.plot_box.end.x }, x_domain)
 
@@ -89,7 +82,7 @@ func _draw_vertical_grid() -> void:
 		
 		# Draw V Tick Labels
 		if get_parent().chart_properties.show_tick_labels:
-			var tick_lbl: String = _get_tick_label(_x, x_val, x_has_decimals, x_labels)
+			var tick_lbl: String = _get_tick_label(_x, x_val, x_domain.has_decimals, self.x_labels)
 			draw_string(
 				get_parent().chart_properties.font, 
 				_get_vertical_tick_label_pos(bottom, tick_lbl),
@@ -98,7 +91,8 @@ func _draw_vertical_grid() -> void:
 			)
 	
 	# Draw V Grid
-	draw_multiline(vertical_grid, get_parent().chart_properties.colors.grid, 1, true)
+	if get_parent().chart_properties.draw_vertical_grid:
+		draw_multiline(vertical_grid, get_parent().chart_properties.colors.grid, 1, true)
 	
 	# Draw V Ticks
 	if get_parent().chart_properties.draw_ticks:
@@ -130,7 +124,7 @@ func _draw_horizontal_grid() -> void:
 		
 		# Draw H Tick Labels
 		if get_parent().chart_properties.show_tick_labels:
-			var tick_lbl: String = _get_tick_label(_y, y_val, y_has_decimals, y_labels)
+			var tick_lbl: String = _get_tick_label(_y, y_val, y_domain.has_decimals, y_labels)
 			draw_string(
 				get_parent().chart_properties.font, 
 				_get_horizontal_tick_label_pos(left, tick_lbl),
@@ -139,7 +133,8 @@ func _draw_horizontal_grid() -> void:
 			)
 	
 	# Draw H Grid
-	draw_multiline(horizontal_grid, get_parent().chart_properties.colors.grid, 1, true)
+	if get_parent().chart_properties.draw_horizontal_grid:
+		draw_multiline(horizontal_grid, get_parent().chart_properties.colors.grid, 1, true)
 	
 	# Draw H Ticks
 	if get_parent().chart_properties.draw_ticks:

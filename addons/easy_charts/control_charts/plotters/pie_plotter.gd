@@ -1,69 +1,67 @@
-extends AbstractChart
-class_name PieChart
+extends FunctionPlotter
+class_name PiePlotter
 
-signal slice_entered(slice)
-
-var values: Array = []
+signal point_entered(slice_mid_point, function, props)
+signal point_exited(slice_mid_point, function)
 
 var radius_multiplayer: float = 1.0
 
 #### INTERNAL
-var ratios: Array = []
-var total: float = 0.0
+var box: Rect2
+var radius: float
 
-var _slices_polygons: Array = []
-var _slices_dirs: Array = []
+var slices: Array = []
+var slices_dirs: PoolVector2Array = []
 
-var _radius: float
+var focused_point: Point
 
-var focused_slice: PoolVector2Array
-
-func _ready() -> void:
-	set_process_input(false)
-	set_process(false)
-
-func plot(values: Array, properties: ChartProperties = self.chart_properties) -> void:
-	self.values = values
-	
-	if properties != null:
-		self.chart_properties = properties
-		self.chart_properties.draw_bounding_box = false
-	
-	set_process_input(chart_properties.interactive)
+func _init(function: Function).(function) -> void:
+	pass
 
 func _draw() -> void:
-	_calc_slices()
+	box = get_box()
+	radius = min(box.size.x, box.size.y) * 0.5 * radius_multiplayer
+	var total: float = get_total()
+	var ratios: PoolRealArray = get_ratios(total)
+	sample(radius, box.get_center(), total, ratios)
 	_draw_pie()
+	_draw_labels(radius, box.get_center(), ratios)
 
-func _calc_slices() -> void:
-	_radius = min(plot_box.size.x, plot_box.size.y) * 0.5 * radius_multiplayer
+func get_total() -> float:
 	# Calculate total and ratios
 	var total: float = 0.0
-	for value in values:
+	for value in function.x:
 		total += float(value)
-	
-	ratios.clear()
-	for value in values:
-		ratios.append(value / total * 100)
-	
+	return total
+
+func get_ratios(total: float) -> PoolRealArray:
+	var ratios: PoolRealArray = []
+	for value in function.x:
+		ratios.push_back(value / total * 100)
+	return ratios
+
+func sample(radius: float, center: Vector2, total: float, ratios: PoolRealArray) -> void:
 	# Calculate directions
-	_slices_polygons.clear()
-	_slices_dirs.clear()
-	var center: Vector2 = plot_box.get_center()
+	slices.clear()
+	slices_dirs = []
+	
 	var start_angle: float = 0.0
-	for i in ratios.size():
-		var end_angle: float = start_angle + (2 * PI * float(ratios[i]) * 0.01)
-		_slices_polygons.append(
+	for ratio in ratios:
+		var end_angle: float = start_angle + (2 * PI * float(ratio) * 0.01)
+		slices.append(
 			_calc_circle_arc_poly(
-				plot_box.get_center(),
-				_radius,
+				center,
+				radius,
 				start_angle,
 				end_angle
 			)
 		)
-		var mid_point: Vector2 = ((center + (Vector2.RIGHT.rotated(start_angle).normalized() * _radius)) + (center + (Vector2.RIGHT.rotated(end_angle).normalized() * _radius))) / 2
-		_slices_dirs.append(center.direction_to(mid_point) * (-1 if (end_angle - start_angle) > PI else 1))
 		start_angle = end_angle
+	
+	for slice in slices:
+		var mid_point: Vector2 = (slice[-1] + slice[1]) / 2
+		draw_circle(mid_point, 5, Color.white)
+		slices_dirs.append(center.direction_to(mid_point))
 
 func _calc_circle_arc_poly(center: Vector2, radius: float, angle_from: float, angle_to: float) -> PoolVector2Array:
 	var nb_points: int = 64
@@ -77,25 +75,25 @@ func _calc_circle_arc_poly(center: Vector2, radius: float, angle_from: float, an
 	return points_arc
 
 func _draw_pie() -> void:
-	for i in _slices_polygons.size():
-		draw_polygon(_slices_polygons[i], [chart_properties.get_function_color(i)])
-		draw_polyline(_slices_polygons[i] + PoolVector2Array([_slices_polygons[i][0]]), Color.white, 2.0, true)
+	for i in slices.size():
+		draw_colored_polygon(slices[i], function.get_gradient().interpolate(float(i) / float(slices.size() - 1)))
+		draw_polyline(slices[i], Color.white, 2.0, true)
 
-func _draw_labels() -> void:
-	for i in _slices_dirs.size():
+func _draw_labels(radius: float, center: Vector2, ratios: PoolRealArray) -> void:
+	for i in slices_dirs.size():
 		var ratio_lbl: String = "%.1f%%" % ratios[i]
-		var value_lbl: String = "(%s)" % values[i]
-		var position: Vector2 = plot_box.get_center() + _slices_dirs[i] * _radius * 0.5
-		var ratio_lbl_size: Vector2 = chart_properties.get_string_size(ratio_lbl)
-		var value_lbl_size: Vector2 = chart_properties.get_string_size(value_lbl)
+		var value_lbl: String = "(%s)" % function.x[i]
+		var position: Vector2 = center + slices_dirs[i] * radius * 0.5
+		var ratio_lbl_size: Vector2 = get_chart_properties().get_string_size(ratio_lbl)
+		var value_lbl_size: Vector2 = get_chart_properties().get_string_size(value_lbl)
 		draw_string(
-			chart_properties.font,
+			get_chart_properties().font,
 			position - Vector2(ratio_lbl_size.x / 2, 0),
 			ratio_lbl,
 			Color.white
 		)
 		draw_string(
-			chart_properties.font,
+			get_chart_properties().font,
 			position - Vector2(value_lbl_size.x / 2, - value_lbl_size.y),
 			value_lbl,
 			Color.white
@@ -103,22 +101,15 @@ func _draw_labels() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
-		for slice_i in _slices_polygons.size():
-			var slice: PoolVector2Array = _slices_polygons[slice_i]
-			if Geometry.is_point_in_polygon(event.position, slice):
-				if focused_slice == slice:
+		for i in slices.size():
+			if Geometry.is_point_in_polygon(get_relative_position(event.position), slices[i]):
+				var point: Point = Point.new(self.box.get_center() + slices_dirs[i] * self.radius * 0.5, { x = function.x[i], y = function.y[i] })
+				if focused_point == point:
 					return
 				else:
-					focused_slice = slice
-					$Tooltip.update_values(
-						"%.1f%%" % ratios[slice_i],
-						"%s" % values[slice_i],
-						chart_properties.get_function_name(slice_i),
-						chart_properties.get_function_color(slice_i)
-					)
-					$Tooltip.show()
-					emit_signal("slice_entered", slice)
+					focused_point = point
+					emit_signal("point_entered", focused_point, function, { interpolation_index = float(i) / float(slices.size() - 1)})
 					return
 		# Mouse is not in any slice's box
-		focused_slice = PoolVector2Array()
-		$Tooltip.hide()
+		emit_signal("point_exited", focused_point, function)
+		focused_point = null

@@ -4,7 +4,9 @@ class_name Function
 enum Type {
 	SCATTER,
 	LINE,
-	AREA
+	AREA,
+	PIE,
+	BAR
 }
 
 enum Interpolation {
@@ -38,10 +40,13 @@ func add_point(x: float, y: float) -> void:
 	self.y.append(y)
 
 func get_color() -> Color:
-	return props.get("color", Color.greenyellow)
+	return props.get("color", Color.cornflower)
+
+func get_gradient() -> Gradient:
+	return props.get("gradient", Gradient.new())
 
 func get_marker() -> int:
-	return props.get("marker", Marker.CIRCLE)
+	return props.get("marker", Marker.NONE)
 
 func get_type() -> int:
 	return props.get("type", Type.SCATTER)

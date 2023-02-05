@@ -14,6 +14,12 @@ static func _format_value(value: float, is_decimal: bool) -> String:
 
 ### Utility Inner functions ###
 
+static func _contains_string(array: Array) -> bool:
+	for value in array:
+		if value is String:
+			return true
+	return false
+
 static func _is_decimal(value: float) -> bool:
 	return abs(fmod(value, 1)) > 0.0
 
@@ -39,8 +45,8 @@ static func _find_min_max(values: Array) -> Dictionary:
 	for dim in temp:
 		min_ts.append(dim.min())
 		max_ts.append(dim.max())
-	_min = min_ts.min()
-	_max = max_ts.max()
+	_min = min(min_ts.min(), 0)
+	_max = max(0, max_ts.max())
 	
 	return { min = _min, max = _max }
 

@@ -6,7 +6,7 @@ var marker: int
 var color: Color
 
 func _draw() -> void:
-	var center: Vector2 = get_rect().size / 2
+	var center: Vector2 = get_rect().get_center()
 	
 	match self.type:
 		Function.Type.SCATTER:
@@ -31,6 +31,11 @@ func _draw() -> void:
 				Vector2(get_rect().position.x, center.y), 
 				Vector2(get_rect().end.x, center.y), 
 				color, 3
+			)
+		Function.Type.PIE:
+			draw_rect(
+				Rect2(center - (Vector2.ONE * 3), (Vector2.ONE * 3 * 2)), 
+				color, true, 1.0, false
 			)
 	
 	match marker:
