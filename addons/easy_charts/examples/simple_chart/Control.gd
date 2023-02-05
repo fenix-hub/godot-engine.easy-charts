@@ -14,7 +14,7 @@ func _ready():
 	var y: Array = ArrayOperations.multiply_int(ArrayOperations.cos(x), 20)
 	
 	# Let's add values to our functions
-	f1 = Function.new(x, y, "Pressure")
+	f1 = Function.new(x, y, "Pressure", { marker = Function.Marker.CIRCLE })
 	
 	# Now let's plot our data
 	chart.plot([f1])
