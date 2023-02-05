@@ -26,6 +26,7 @@ func _ready():
 	cp.colors.ticks = Color("#283442")
 	cp.colors.text = Color.whitesmoke
 	cp.draw_bounding_box = false
+	cp.show_legend = true
 	cp.title = "Air Quality Monitoring"
 	cp.x_label = "Time"
 	cp.y_label = "Sensor values"
@@ -46,14 +47,14 @@ func _ready():
 			color = Color("#36a2eb"), 		# The color associated to this function
 			marker = Function.Marker.NONE, 	# The marker that will be displayed for each drawn point (x,y)
 											# since it is `NONE`, no marker will be shown.
-			type = Function.Type.LINE, 		# This defines what kind of plotting will be used, 
+			type = Function.Type.AREA, 		# This defines what kind of plotting will be used, 
 											# in this case it will be an Area Chart.
 			interpolation = Function.Interpolation.STAIR	# Interpolation mode, only used for 
 															# Line Charts and Area Charts.
 		}
 	)
-	f2 = Function.new(x, y2, "Humidity", { color = Color("#ff6384"), type = Function.Type.LINE, marker = Function.Marker.CROSS, interpolation = Function.Interpolation.SPLINE })
-	f3 = Function.new(x, y3, "CO2", { color = Color.green, type = Function.Type.LINE, marker = Function.Marker.TRIANGLE, interpolation = Function.Interpolation.LINEAR })
+	f2 = Function.new(x, y2, "Humidity", { color = Color("#ff6384"), marker = Function.Marker.CROSS })
+	f3 = Function.new(x, y3, "CO2", { color = Color.green, marker = Function.Marker.TRIANGLE })
 	
 	# Now let's plot our data
 	chart.plot([f1, f2, f3], cp)

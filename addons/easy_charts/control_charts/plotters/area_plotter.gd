@@ -18,7 +18,7 @@ func _draw_areas() -> void:
 	var base_color: Color = function.get_color()
 	var colors: PoolColorArray = []
 	for point in fp_augmented:
-		base_color.a = range_lerp(point.y, box.end.y, box.position.y, 0.0, 0.8)
+		base_color.a = range_lerp(point.y, box.end.y, box.position.y, 0.0, 0.5)
 		colors.push_back(base_color)
 	draw_polygon(fp_augmented, colors)
 
