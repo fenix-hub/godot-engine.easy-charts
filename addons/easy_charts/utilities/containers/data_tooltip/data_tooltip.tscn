@@ -27,8 +27,9 @@ anti_aliasing_size = 0.7
 [sub_resource type="StyleBoxEmpty" id=3]
 
 [node name="DataTooltip" type="PanelContainer"]
-margin_right = 47.0
-margin_bottom = 50.0
+visible = false
+margin_right = 20.0
+margin_bottom = 16.0
 mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 1 )

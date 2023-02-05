@@ -2,8 +2,8 @@ tool
 extends PanelContainer
 class_name DataTooltip
 
-var value : String = ""
 var position : Vector2 = Vector2()
+var gap: float = 15
 
 onready var x_lbl : Label = $PointData/x
 onready var y_lbl : Label = $PointData/Value/y
@@ -15,7 +15,10 @@ func _ready():
 	update_size()
 
 func update_position(position: Vector2) -> void:
-	self.rect_position = position + Vector2(15, - (get_rect().size.y / 2))
+	if (position.x + gap + rect_size.x) > get_parent().rect_size.x:
+		self.rect_position = position - Vector2(rect_size.x + gap, (get_rect().size.y / 2))
+	else:
+		self.rect_position = position + Vector2(15, - (get_rect().size.y / 2))
 
 #func _process(delta):
 #	if Engine.editor_hint:
@@ -23,10 +26,7 @@ func update_position(position: Vector2) -> void:
 #	rect_position = get_global_mouse_position() + Vector2(15, - (get_rect().size.y / 2))
 
 func set_font(font: DynamicFont) -> void:
-	x_lbl.set("custom_fonts/font", font)
-	y_lbl.set("custom_fonts/font", font)
-	func_lbl.set("custom_fonts/font", font)
-	$PointData/Value/sep.set("custom_fonts/font", font)
+	theme.set("default_font", font)
 
 func update_values(x: String, y: String, function: String, color: Color):
 	x_lbl.set_text(x)
