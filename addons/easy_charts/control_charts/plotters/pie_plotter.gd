@@ -27,7 +27,7 @@ func plot(values: Array, properties: ChartProperties = self.chart_properties) ->
 	
 	if properties != null:
 		self.chart_properties = properties
-		self.chart_properties.bounding_box = false
+		self.chart_properties.draw_bounding_box = false
 	
 	set_process_input(chart_properties.interactive)
 

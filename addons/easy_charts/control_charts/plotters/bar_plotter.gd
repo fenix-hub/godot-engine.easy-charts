@@ -28,7 +28,7 @@ func _calc_x_domain() -> void:
 func _sample_x() -> void:
 	### @sampled_domain, which are the domain relative to the sampled values
 	### x (real value) --> sampling --> x_sampled (pixel value in canvas)
-	x_sampled_domain = Pair.new(plot_box.position.x, plot_box.end.x)
+	x_sampled_domain = { left = plot_box.position.x, right = plot_box.end.x }
 	
 	# samples
 	x_sampled = SampledAxis.new(x, x_sampled_domain)
@@ -50,7 +50,7 @@ func _find_longest_x() -> String:
 func _draw_bar(bar: Bar, function_index: int) -> void:
 	draw_rect(
 		bar.rect, 
-		chart_properties.get_function_color(function_index),
+		functions[function_index].color,
 		true,
 		1,
 		false
@@ -97,7 +97,7 @@ func _draw_vertical_grid() -> void:
 		vertical_ticks.append(bottom + Vector2(0, _x_tick_size))
 		
 		# Draw V Tick Labels
-		if chart_properties.labels:
+		if chart_properties.draw_labels:
 			var tick_lbl: String = x[_x]
 			draw_string(
 				chart_properties.font, 
@@ -122,11 +122,11 @@ func _draw_vertical_grid() -> void:
 	vertical_ticks.append(bottom + Vector2(0, _x_tick_size))
 	
 	# Draw V Grid Lines
-	if chart_properties.grid:
+	if chart_properties.draw_grid:
 		draw_multiline(vertical_grid, chart_properties.colors.grid, 1, true)
 	
 	# Draw V Ticks
-	if chart_properties.ticks:
+	if chart_properties.draw_ticks:
 		draw_multiline(vertical_ticks, chart_properties.colors.bounding_box, 1, true)
 
 
@@ -144,7 +144,7 @@ func _calculate_bars() -> void:
 		for yxi in y_sampled.values.size():
 			var _function_bars: Array = []
 			for i in y_sampled.values[yxi].size():
-				var real_bar_value: Pair = Pair.new(x[i], y[yxi][i])
+				var real_bar_value: Pair = { x[i], y[yxi][i])
 				var center_bar_pos: Vector2 = Vector2(
 					(x_sector_size * i) + (x_sector_size / 2) + x_sampled_domain.left,
 					y_sampled.values[yxi][i]
@@ -163,7 +163,7 @@ func _calculate_bars() -> void:
 			function_bars.append(_function_bars)
 	else:
 		for i in y_sampled.values.size():
-			var real_bar_value: Pair = Pair.new(x[i], y[i])
+			var real_bar_value: Pair = { x[i], y[i])
 			var center_bar_pos: Vector2 = Vector2(
 				(x_sector_size * i) + (x_sector_size / 2) + x_sampled_domain.left,
 				y_sampled.values[i]
