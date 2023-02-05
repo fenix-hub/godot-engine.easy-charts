@@ -1,46 +1,71 @@
-tool
-extends Node
+extends Reference
+class_name ECUtilities
 
 var alphabet : String = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
 
 func _ready():
 	pass
-#	templates = _load_templates()
 
-func _print_message(message : String, type : int = 0):
-	pass
-#	match type:
-#		0:
-#			print("[%s] => %s" % [plugin_name, message])
-#		1:
-#			printerr("ERROR: [%s] => %s" % [plugin_name, message])
+static func _map_domain(value: float, from_domain: Dictionary, to_domain: Dictionary) -> float:
+	return range_lerp(value, from_domain.lb, from_domain.ub, to_domain.lb, to_domain.ub) 
 
-func _load_templates() -> Dictionary:
-	pass
-	return {}
-#	var template_file : File = File.new()
-#	template_file.open("res://addons/easy_charts/templates.json",File.READ)
-#	var templates = JSON.parse(template_file.get_as_text()).get_result()
-#	template_file.close()
-#	return templates
+static func _format_value(value: float, is_decimal: bool) -> String:
+	return ("%.2f" if is_decimal else "%s") % value 
 
-func get_template(template_index : int):
-	pass
-#	return templates.get(templates.keys()[template_index])
+### Utility Inner functions ###
 
-func get_chart_type(chart_type : int) -> Array:
-	pass
-	return []
-#	return chart_types.get(chart_types.keys()[chart_type])
+static func _contains_string(array: Array) -> bool:
+	for value in array:
+		if value is String:
+			return true
+	return false
 
-func get_letter_index(index : int) -> String:
-	return alphabet.split(" ")[index]
+static func _is_decimal(value: float) -> bool:
+	return abs(fmod(value, 1)) > 0.0
 
-func save_dataframe_to_file(dataframe: DataFrame, path: String, delimiter: String = ";") -> void:
-	pass
-#	var file = File.new()
-#	file.open(path, File.WRITE)
-#	for row in dataframe.get_dataset():
-#		file.store_line(PoolStringArray(row).join(delimiter))
-#	file.close()
+static func _has_decimals(values: Array) -> bool:
+	var temp: Array = values.duplicate(true)
+	
+	for dim in temp:
+		for val in dim:
+			if val is String:
+				return false
+			if abs(fmod(val, 1)) > 0.0:
+					 return true
+	
+	return false
 
+static func _find_min_max(values: Array) -> Dictionary:
+	var temp: Array = values.duplicate(true)
+	var _min: float
+	var _max: float
+	
+	var min_ts: Array
+	var max_ts: Array
+	for dim in temp:
+		min_ts.append(dim.min())
+		max_ts.append(dim.max())
+	_min = min(min_ts.min(), 0)
+	_max = max(0, max_ts.max())
+	
+	return { min = _min, max = _max }
+
+static func _sample_values(values: Array, from_domain: Dictionary, to_domain: Dictionary) -> PoolRealArray:
+	if values.empty():
+		printerr("Trying to plot an empty dataset!")
+		return PoolRealArray()
+	
+	# We are not considering String values here!!!
+	
+	var sampled: PoolRealArray = []
+	
+	for value in values:
+		sampled.push_back(_map_domain(value, from_domain, to_domain))
+	
+	return sampled
+
+static func _round_min(val: float) -> float:
+	return round(val) if abs(val) < 10 else floor(val / 10.0) * 10.0
+
+static func _round_max(val: float) -> float:
+	return round(val) if abs(val) < 10 else ceil(val / 10.0) * 10.0

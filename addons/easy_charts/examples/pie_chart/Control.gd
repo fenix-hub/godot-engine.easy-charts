@@ -1,32 +1,66 @@
 extends Control
 
-onready var chart: PieChart = $PieChart
+onready var chart: Chart = $VBoxContainer/Chart
+
+# This Chart will plot 3 different functions
+var f1: Function
 
 func _ready():
 	# Let's create our @x values
-	var sizes: Array = [8, 16, 32, 64, 128]
+	var x: Array = [10, 20, 30, 40]
+	
+	# And our y values. It can be an n-size array of arrays.
+	# NOTE: `x.size() == y.size()` or `x.size() == y[n].size()`
+	var y: Array = ["Java", "JavaScript", "C++", "GDScript"]
 	
 	# Let's customize the chart properties, which specify how the chart
 	# should look, plus some additional elements like labels, the scale, etc...
 	var cp: ChartProperties = ChartProperties.new()
-	cp.title = "Number of bits for operating systems"
-	cp.functions_names = ["AMD1", "AMD2", "AMD3", "AMD4", "AMD5"]
+	cp.colors.frame = Color("#161a1d")
+	cp.colors.background = Color.transparent
+	cp.colors.grid = Color("#283442")
+	cp.colors.ticks = Color("#283442")
+	cp.colors.text = Color.whitesmoke
+	cp.draw_bounding_box = false
+	cp.title = "Users preferences on programming languages"
+	cp.draw_grid_box = false
+	cp.show_legend = true
 	cp.interactive = true # false by default, it allows the chart to create a tooltip to show point values
 	# and interecept clicks on the plot
 	
-	# Plot our data
-	chart.plot(sizes, cp)
+	var gradient: Gradient = Gradient.new()
+	gradient.set_color(0, Color.aquamarine)
+	gradient.set_color(1, Color.deeppink)
+	
+	# Let's add values to our functions
+	f1 = Function.new(
+		x, y, "Language", # This will create a function with x and y values taken by the Arrays 
+						  # we have created previously. This function will also be named "Pressure"
+						  # as it contains 'pressure' values.
+						  # If set, the name of a function will be used both in the Legend
+						  # (if enabled thourgh ChartProperties) and on the Tooltip (if enabled).
+		{
+			gradient = gradient,
+			type = Function.Type.PIE
+		}
+	)
+	
+	# Now let's plot our data
+	chart.plot([f1], cp)
 	
 	# Uncommenting this line will show how real time data plotting works
 	set_process(false)
 
+
+var new_val: float = 4.5
+
 func _process(delta: float):
-	# This function updates the values of chart x, y, and x_labels array
-	# and updaptes the plot
-	var new_val: float = randi() % 64 + 64
-	chart.values.append(new_val)
-	chart.chart_properties.functions_names.append(str(new_val) + "s")
-	chart.update()
+	# This function updates the values of a function and then updates the plot
+	new_val += 5
+	
+	# we can use the `Function.add_point(x, y)` method to update a function
+	f1.add_point(new_val, cos(new_val) * 20)
+	chart.update() # This will force the Chart to be updated
 
 
 func _on_CheckButton_pressed():

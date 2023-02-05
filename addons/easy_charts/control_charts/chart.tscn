@@ -1,28 +1,133 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://addons/easy_charts/control_charts/chart.gd" type="Script" id=1]
 [ext_resource path="res://addons/easy_charts/utilities/containers/data_tooltip/data_tooltip.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/easy_charts/utilities/containers/canvas/canvas.gd" type="Script" id=3]
+[ext_resource path="res://addons/easy_charts/utilities/containers/canvas/plot_box/plot_box.gd" type="Script" id=4]
+[ext_resource path="res://addons/easy_charts/utilities/containers/canvas/plot_box/grid_box.gd" type="Script" id=5]
+[ext_resource path="res://addons/easy_charts/utilities/containers/legend/function_legend.tscn" type="PackedScene" id=6]
 
-[node name="Chart" type="Control"]
+[sub_resource type="Theme" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=8]
+
+[sub_resource type="StyleBoxFlat" id=5]
+content_margin_left = 15.0
+content_margin_right = 15.0
+content_margin_top = 15.0
+content_margin_bottom = 15.0
+draw_center = false
+
+[node name="Chart" type="PanelContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource( 4 )
+custom_styles/panel = SubResource( 8 )
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="Canvas" type="Control" parent="."]
+[node name="Canvas" type="PanelContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 5 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="CanvasContainer" type="VBoxContainer" parent="Canvas"]
+margin_left = 15.0
+margin_top = 15.0
+margin_right = 1009.0
+margin_bottom = 585.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 10
+
+[node name="Title" type="Label" parent="Canvas/CanvasContainer"]
+margin_right = 994.0
+margin_bottom = 14.0
+text = "{title}"
+align = 1
+
+[node name="DataContainer" type="HBoxContainer" parent="Canvas/CanvasContainer"]
+margin_top = 24.0
+margin_right = 994.0
+margin_bottom = 570.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 10
+
+[node name="YLabel" type="Label" parent="Canvas/CanvasContainer/DataContainer"]
+margin_top = 266.0
+margin_right = 48.0
+margin_bottom = 280.0
+text = "{ylabel}"
+
+[node name="PlotContainer" type="VBoxContainer" parent="Canvas/CanvasContainer/DataContainer"]
+margin_left = 58.0
+margin_right = 984.0
+margin_bottom = 546.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PlotBox" type="Control" parent="Canvas/CanvasContainer/DataContainer/PlotContainer"]
+unique_name_in_owner = true
+margin_right = 926.0
+margin_bottom = 528.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="GridBox" type="Control" parent="Canvas/CanvasContainer/DataContainer/PlotContainer/PlotBox"]
+unique_name_in_owner = true
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": true
+}
 
-[node name="Title" type="Label" parent="Canvas"]
-margin_right = 40.0
-margin_bottom = 14.0
+[node name="FunctionsBox" type="Control" parent="Canvas/CanvasContainer/DataContainer/PlotContainer/PlotBox"]
+unique_name_in_owner = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_default_cursor_shape = 3
+__meta__ = {
+"_edit_lock_": true
+}
 
-[node name="XLabel" type="Label" parent="Canvas"]
-margin_right = 40.0
-margin_bottom = 14.0
+[node name="Tooltip" parent="Canvas/CanvasContainer/DataContainer/PlotContainer/PlotBox" instance=ExtResource( 2 )]
+margin_left = -67.0
+margin_top = -33.0
+margin_right = -47.0
+margin_bottom = -17.0
 
-[node name="YLabel" type="Label" parent="Canvas"]
-margin_right = 40.0
-margin_bottom = 14.0
+[node name="XLabel" type="Label" parent="Canvas/CanvasContainer/DataContainer/PlotContainer"]
+margin_top = 532.0
+margin_right = 926.0
+margin_bottom = 546.0
+text = "{xlabel}"
+align = 1
 
-[node name="Tooltip" parent="." instance=ExtResource( 2 )]
-visible = false
+[node name="FunctionLegend" parent="Canvas/CanvasContainer/DataContainer" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+use_parent_material = true
+margin_left = 994.0
+margin_right = 994.0
+margin_bottom = 546.0

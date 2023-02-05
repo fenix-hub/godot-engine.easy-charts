@@ -1,7 +1,0 @@
-[gd_scene load_steps=3 format=2]
-
-[ext_resource path="res://addons/easy_charts/control_charts/LineChart/line_chart.gd" type="Script" id=1]
-[ext_resource path="res://addons/easy_charts/control_charts/chart.tscn" type="PackedScene" id=2]
-
-[node name="LineChart" instance=ExtResource( 2 )]
-script = ExtResource( 1 )
