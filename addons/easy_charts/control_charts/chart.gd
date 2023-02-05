@@ -16,7 +16,6 @@ var y_labels: PoolStringArray = []
 
 var chart_properties: ChartProperties = ChartProperties.new()
 
-
 ###########
 
 func plot(functions: Array, properties: ChartProperties = ChartProperties.new()) -> void:
