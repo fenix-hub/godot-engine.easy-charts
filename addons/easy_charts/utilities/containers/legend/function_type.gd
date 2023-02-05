@@ -18,12 +18,14 @@ func _draw() -> void:
 				color, 3
 			)
 		Function.Type.AREA:
+			var c2: Color = color
+			c2.a = 0.3
 			draw_rect(
 				Rect2(
 					Vector2(get_rect().position.x, center.y), 
 					Vector2(get_rect().end.x, get_rect().end.y / 2)
 				),
-				color.lightened(0.5), 3
+				c2, 3
 			)
 			draw_line(
 				Vector2(get_rect().position.x, center.y), 

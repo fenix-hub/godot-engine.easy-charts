@@ -5,13 +5,15 @@ func _draw_areas() -> void:
 	var box: Rect2 = get_parent().get_parent().get_plot_box()
 	var fp_augmented: PoolVector2Array = []
 	match function.get_interpolation():
-		Function.Interpolation.SPLINE:
-			fp_augmented = _get_spline_points()
 		Function.Interpolation.LINEAR:
 			fp_augmented = points_positions
+		Function.Interpolation.STAIR:
+			fp_augmented = _get_stair_points()
+		Function.Interpolation.SPLINE:
+			fp_augmented = _get_spline_points()
 	
+	fp_augmented.insert(0, Vector2(fp_augmented[0].x, box.end.y))
 	fp_augmented.push_back(Vector2(fp_augmented[-1].x, box.end.y))
-	fp_augmented.push_back(Vector2(fp_augmented[0].x, box.end.y))
 	
 	var base_color: Color = function.get_color()
 	var colors: PoolColorArray = []

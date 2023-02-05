@@ -14,6 +14,9 @@ var focused_point: Point
 
 var point_size: float
 
+func _ready() -> void:
+	set_process_input(get_parent().get_parent().chart_properties.interactive)
+
 func configure(function: Function) -> void:
 	self.function = function
 	self.point_size = function.props.get("point_size", 3.0)

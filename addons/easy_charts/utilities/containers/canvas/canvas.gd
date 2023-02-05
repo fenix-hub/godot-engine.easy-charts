@@ -17,15 +17,23 @@ func prepare_canvas(chart_properties: ChartProperties) -> void:
 	else:
 		set_frame_visible(false)
 	
-	if chart_properties.show_labels:
+	if chart_properties.show_title:
 		update_title(chart_properties.title, chart_properties.colors.text)
+	else:
+		_title_lbl.hide()
+	
+	if chart_properties.show_x_label:
 		update_x_label(chart_properties.x_label, chart_properties.colors.text)
+	else:
+		_x_lbl.hide()
+	
+	if chart_properties.show_y_label:
 		update_y_label(chart_properties.y_label, chart_properties.colors.text, -90)
 	else:
-		hide_labels()
+		_y_lbl.hide()
 	
 	if chart_properties.show_legend:
-		pass
+		_legend.show()
 	else:
 		hide_legend()
 
@@ -45,11 +53,6 @@ func _update_canvas_label(canvas_label: Label, text: String, color: Color, rotat
 	canvas_label.set_text(text)
 	canvas_label.modulate = color
 	canvas_label.rect_rotation = rotation
-
-func hide_labels() -> void:
-	_title_lbl.hide()
-	_y_lbl.hide()
-	_x_lbl.hide()
 
 func hide_legend() -> void:
 	_legend.hide()

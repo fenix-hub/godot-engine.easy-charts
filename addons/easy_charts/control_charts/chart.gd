@@ -1,4 +1,4 @@
-extends Control
+extends PanelContainer
 class_name Chart, "res://addons/easy_charts/utilities/icons/linechart.svg"
 
 onready var _canvas: Canvas = $Canvas
@@ -98,7 +98,7 @@ func calculate_plotbox_margins(x_domain: Dictionary, y_domain: Dictionary, x_has
 		chart_properties.y_tick_size
 	)
 	
-	if chart_properties.show_labels:
+	if chart_properties.show_tick_labels:
 		var x_ticklabel_size: Vector2
 		var y_ticklabel_size: Vector2
 		

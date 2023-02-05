@@ -88,7 +88,7 @@ func _draw_vertical_grid() -> void:
 		vertical_ticks.append(bottom + Vector2(0, get_parent().chart_properties.x_tick_size))
 		
 		# Draw V Tick Labels
-		if get_parent().chart_properties.show_labels:
+		if get_parent().chart_properties.show_tick_labels:
 			var tick_lbl: String = _get_tick_label(_x, x_val, x_has_decimals, x_labels)
 			draw_string(
 				get_parent().chart_properties.font, 
@@ -102,7 +102,7 @@ func _draw_vertical_grid() -> void:
 	
 	# Draw V Ticks
 	if get_parent().chart_properties.draw_ticks:
-		draw_multiline(vertical_ticks, get_parent().chart_properties.colors.bounding_box, 1, true)
+		draw_multiline(vertical_ticks, get_parent().chart_properties.colors.ticks, 1, true)
 
 
 func _draw_horizontal_grid() -> void:
@@ -129,7 +129,7 @@ func _draw_horizontal_grid() -> void:
 		horizontal_ticks.append(left - Vector2(get_parent().chart_properties.y_tick_size, 0))
 		
 		# Draw H Tick Labels
-		if get_parent().chart_properties.show_labels:
+		if get_parent().chart_properties.show_tick_labels:
 			var tick_lbl: String = _get_tick_label(_y, y_val, y_has_decimals, y_labels)
 			draw_string(
 				get_parent().chart_properties.font, 
@@ -143,7 +143,7 @@ func _draw_horizontal_grid() -> void:
 	
 	# Draw H Ticks
 	if get_parent().chart_properties.draw_ticks:
-		draw_multiline(horizontal_ticks, get_parent().chart_properties.colors.bounding_box, 1, true)
+		draw_multiline(horizontal_ticks, get_parent().chart_properties.colors.ticks, 1, true)
 		
 
 func _get_vertical_tick_label_pos(base_position: Vector2, text: String) -> Vector2:

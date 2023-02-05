@@ -23,12 +23,29 @@ func _get_spline_points(density: float = 10.0, tension: float = 1) -> PoolVector
 	
 	return spline_points
 
+
+func _get_stair_points() -> PoolVector2Array:
+	var stair_points: PoolVector2Array = points_positions
+	
+	for i in range(points_positions.size() - 1, 0, -1):
+		stair_points.insert(i, Vector2(points_positions[i].x, points_positions[i-1].y))
+	
+	return stair_points
+
+
 func _draw() -> void:
 	match function.get_interpolation():
 		Function.Interpolation.LINEAR:
 			draw_polyline(
 				points_positions, 
 				function.get_color(), 
+				function.get_line_width(),
+				true
+			)
+		Function.Interpolation.STAIR:
+			draw_polyline(
+				_get_stair_points(),
+				function.get_color(),
 				function.get_line_width(),
 				true
 			)
