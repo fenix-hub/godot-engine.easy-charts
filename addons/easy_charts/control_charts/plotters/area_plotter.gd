@@ -5,7 +5,7 @@ func _init(function: Function).(function) -> void:
 	pass
 
 func _draw_areas() -> void:
-	var box: Rect2 = get_plot_box()
+	var box: Rect2 = get_box()
 	var fp_augmented: PoolVector2Array = []
 	match function.get_interpolation():
 		Function.Interpolation.LINEAR:

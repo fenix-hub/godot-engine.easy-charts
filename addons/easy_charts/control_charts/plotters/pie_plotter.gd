@@ -7,6 +7,7 @@ signal point_exited(slice_mid_point, function)
 var radius_multiplayer: float = 1.0
 
 #### INTERNAL
+var box: Rect2
 var radius: float
 
 var slices: Array = []
@@ -18,7 +19,7 @@ func _init(function: Function).(function) -> void:
 	pass
 
 func _draw() -> void:
-	var box: Rect2 = get_plot_box()
+	box = get_box()
 	radius = min(box.size.x, box.size.y) * 0.5 * radius_multiplayer
 	var total: float = get_total()
 	var ratios: PoolRealArray = get_ratios(total)
@@ -102,7 +103,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
 		for i in slices.size():
 			if Geometry.is_point_in_polygon(get_relative_position(event.position), slices[i]):
-				var point: Point = Point.new(slices_dirs[i] * self.radius * 0.5, { x = function.x[i], y = function.y[i] })
+				var point: Point = Point.new(self.box.get_center() + slices_dirs[i] * self.radius * 0.5, { x = function.x[i], y = function.y[i] })
 				if focused_point == point:
 					return
 				else:

@@ -4,21 +4,18 @@ onready var chart: Chart = $VBoxContainer/Chart
 
 # This Chart will plot 3 different functions
 var f1: Function
-var f2: Function
 
 func _ready():
 	# Let's create our @x values
-	var x: Array = ["Apples", "Pears", "Banans"]
+	var x: Array = ["Day 1", "Day 2", "Day 3", "Day 4"]
 	
 	# And our y values. It can be an n-size array of arrays.
 	# NOTE: `x.size() == y.size()` or `x.size() == y[n].size()`
 	var y: Array = [20, 10, 50, 30]
-	var y2: Array = [10, 30, 60, 40]
 	
 	# Let's customize the chart properties, which specify how the chart
 	# should look, plus some additional elements like labels, the scale, etc...
 	var cp: ChartProperties = ChartProperties.new()
-	cp.title = "Fruit consumptions in the world"
 	cp.colors.frame = Color("#161a1d")
 	cp.colors.background = Color.transparent
 	cp.colors.grid = Color("#283442")
@@ -33,26 +30,19 @@ func _ready():
 	
 	# Let's add values to our functions
 	f1 = Function.new(
-		x, y, "Ovest", # This will create a function with x and y values taken by the Arrays 
+		x, y, "User", # This will create a function with x and y values taken by the Arrays 
 						  # we have created previously. This function will also be named "Pressure"
 						  # as it contains 'pressure' values.
 						  # If set, the name of a function will be used both in the Legend
 						  # (if enabled thourgh ChartProperties) and on the Tooltip (if enabled).
 		{
 			type = Function.Type.BAR,
-		}
-	)
-	
-	f2 = Function.new(
-		x, y2, "West",
-		{
-			type = Function.Type.BAR,
-			color = Color.red
+			bar_size = 5
 		}
 	)
 	
 	# Now let's plot our data
-	chart.plot([f1, f2], cp)
+	chart.plot([f1], cp)
 	
 	# Uncommenting this line will show how real time data plotting works
 	set_process(false)
@@ -66,7 +56,6 @@ func _process(delta: float):
 	
 	# we can use the `Function.add_point(x, y)` method to update a function
 	f1.add_point(new_val, cos(new_val) * 20)
-	f2.add_point(new_val, sin(new_val) * 20)
 	chart.update() # This will force the Chart to be updated
 
 
