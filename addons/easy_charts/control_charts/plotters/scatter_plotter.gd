@@ -14,7 +14,7 @@ func _init(function: Function).(function) -> void:
 	self.point_size = function.props.get("point_size", 3.0)
 
 func _draw() -> void:
-	var box: Rect2 = get_box()
+	var box: Rect2 = get_plot_box()
 	var x_sampled_domain: Dictionary = { lb = box.position.x, ub = box.end.x }
 	var y_sampled_domain: Dictionary = { lb = box.end.y, ub = box.position.y }
 	sample(x_sampled_domain, y_sampled_domain)
