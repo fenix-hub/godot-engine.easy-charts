@@ -28,10 +28,6 @@ func _ready():
 	cp.interactive = true # false by default, it allows the chart to create a tooltip to show point values
 	# and interecept clicks on the plot
 	
-	var gradient: Gradient = Gradient.new()
-	gradient.set_color(0, Color.aquamarine)
-	gradient.set_color(1, Color.deeppink)
-	
 	# Let's add values to our functions
 	f1 = Function.new(
 		x, y, "Language", # This will create a function with x and y values taken by the Arrays 
@@ -40,7 +36,7 @@ func _ready():
 						  # If set, the name of a function will be used both in the Legend
 						  # (if enabled thourgh ChartProperties) and on the Tooltip (if enabled).
 		{
-			gradient = gradient,
+			gradient = ColorMaps.get_colormap(ColorMaps.Type.VIRIDIS),
 			type = Function.Type.PIE
 		}
 	)

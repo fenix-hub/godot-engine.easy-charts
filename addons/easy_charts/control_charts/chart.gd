@@ -11,8 +11,8 @@ var functions: Array = []
 var x: Array = []
 var y: Array = []
 
-var x_labels: PoolStringArray = []
-var y_labels: PoolStringArray = []
+var x_labels: Array = []
+var y_labels: Array = []
 
 var chart_properties: ChartProperties = ChartProperties.new()
 
@@ -51,14 +51,12 @@ func load_functions(functions: Array) -> void:
 	function_legend.clear()
 	
 	for function in functions:
+		if function.x == null or function.y == null:
+			continue
+		
 		# Load x and y values
 		self.x.append(function.x)
 		self.y.append(function.y)
-		
-		# Load Labels
-		if self.x_labels.empty():
-			if ECUtilities._contains_string(function.x):
-				self.x_labels = function.x
 		
 		# Create FunctionPlotter
 		var function_plotter: FunctionPlotter = get_function_plotter(function)
@@ -72,6 +70,13 @@ func load_functions(functions: Array) -> void:
 				for i in function.x.size():
 					var interp_color: Color = function.get_gradient().interpolate(float(i) / float(function.x.size()))
 					function_legend.add_label(function.get_type(), interp_color, Function.Marker.NONE, function.y[i])
+			Function.Type.BAR:
+				# Load Labels
+				if self.x_labels.empty():
+					if ECUtilities._contains_string(function.x):
+						self.x_labels = function.x
+				grid_box.vertical_grid_aligned = true
+				function_legend.add_function(function)
 			_:
 				function_legend.add_function(function)
 
