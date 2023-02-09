@@ -10,6 +10,8 @@ var y_labels: Array
 var box: Rect2
 var plot_box: Rect2
 
+var vertical_grid_aligned: bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -30,7 +32,10 @@ func _draw() -> void:
 		_draw_background()
 	
 	if get_parent().chart_properties.draw_grid_box:
-		_draw_vertical_grid()
+		if self.vertical_grid_aligned:
+			_draw_aligned_vertical_grid()
+		else:
+			_draw_vertical_grid()
 		_draw_horizontal_grid()
 	
 	if get_parent().chart_properties.draw_origin:
@@ -53,6 +58,49 @@ func _draw_origin() -> void:
 	draw_line(Vector2(self.plot_box.position.x, yorigin), Vector2(self.plot_box.position.x + self.plot_box.size.x, yorigin), get_parent().chart_properties.colors.origin, 1, 0)
 	draw_string(get_parent().chart_properties.font, Vector2(xorigin, yorigin) - Vector2(15, -15), "O", get_parent().chart_properties.colors.text)
 
+func _draw_aligned_vertical_grid() -> void:
+	# draw vertical lines
+	
+	# 1. the amount of lines is equals to the X_scale: it identifies in how many sectors the x domain
+	#    should be devided
+	# 2. calculate the spacing between each line in pixel. It is equals to x_sampled_domain / x_scale
+	# 3. calculate the offset in the real x domain, which is x_domain / x_scale.
+	var scaler: int = get_parent().chart_properties.x_scale if self.x_labels.empty() else (x_labels.size() + 1)
+	var x_pixel_dist: float = self.box.size.x / scaler
+	
+	var vertical_grid: PoolVector2Array = []
+	var vertical_ticks: PoolVector2Array = []
+	 
+	for _x in range(0, scaler - 1):
+		var x_sampled_val: float = (_x * x_pixel_dist) + self.box.position.x + x_pixel_dist
+		var x_val: float = ECUtilities._map_domain(x_sampled_val, { lb = self.box.position.x, ub = self.box.end.x }, x_domain)
+
+		var top: Vector2 = Vector2(x_sampled_val, self.box.position.y)
+		var bottom: Vector2 = Vector2(x_sampled_val, self.box.end.y)
+		
+		vertical_grid.append(top)
+		vertical_grid.append(bottom)
+		
+		vertical_ticks.append(bottom)
+		vertical_ticks.append(bottom + Vector2(0, get_parent().chart_properties.x_tick_size))
+		
+		# Draw V Tick Labels
+		if get_parent().chart_properties.show_tick_labels:
+			var tick_lbl: String = _get_tick_label(_x, x_val, x_domain.has_decimals, self.x_labels)
+			draw_string(
+				get_parent().chart_properties.font, 
+				_get_vertical_tick_label_pos(bottom, tick_lbl),
+				tick_lbl, 
+				get_parent().chart_properties.colors.text
+			)
+	
+	# Draw V Grid
+	if get_parent().chart_properties.draw_vertical_grid:
+		draw_multiline(vertical_grid, get_parent().chart_properties.colors.grid, 1, true)
+	
+	# Draw V Ticks
+	if get_parent().chart_properties.draw_ticks:
+		draw_multiline(vertical_ticks, get_parent().chart_properties.colors.ticks, 1, true)
 
 func _draw_vertical_grid() -> void:
 	# draw vertical lines

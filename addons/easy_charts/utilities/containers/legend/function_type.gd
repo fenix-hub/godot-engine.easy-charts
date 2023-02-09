@@ -32,11 +32,12 @@ func _draw() -> void:
 				Vector2(get_rect().end.x, center.y), 
 				color, 3
 			)
-		Function.Type.PIE:
+		Function.Type.PIE, Function.Type.BAR:
 			draw_rect(
-				Rect2(center - (Vector2.ONE * 3), (Vector2.ONE * 3 * 2)), 
+				Rect2(center - (Vector2.ONE * 4), (Vector2.ONE * 4 * 2)), 
 				color, true, 1.0, false
 			)
+			return
 	
 	match marker:
 		Function.Marker.NONE:
