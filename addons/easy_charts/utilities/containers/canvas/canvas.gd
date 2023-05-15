@@ -1,10 +1,10 @@
 extends Control
 class_name Canvas
 
-onready var _title_lbl: Label = $CanvasContainer/Title
-onready var _x_lbl: Label = $CanvasContainer/DataContainer/PlotContainer/XLabel
-onready var _y_lbl: Label = $CanvasContainer/DataContainer/YLabel
-onready var _legend: FunctionLegend = $CanvasContainer/DataContainer/FunctionLegend
+@onready var _title_lbl: Label = $CanvasContainer/Title
+@onready var _x_lbl: Label = $CanvasContainer/DataContainer/PlotContainer/XLabel
+@onready var _y_lbl: Label = $CanvasContainer/DataContainer/YLabel
+@onready var _legend: FunctionLegend = $CanvasContainer/DataContainer/FunctionLegend
 
 func _ready():
 	pass # Replace with function body.
@@ -12,7 +12,7 @@ func _ready():
 func prepare_canvas(chart_properties: ChartProperties) -> void:
 	
 	if chart_properties.draw_frame:
-		set_frame_color(chart_properties.colors.frame)
+		set_color(chart_properties.colors.frame)
 		set_frame_visible(true)
 	else:
 		set_frame_visible(false)
@@ -52,13 +52,13 @@ func update_x_label(text: String, color: Color, rotation: float = 0.0) -> void:
 func _update_canvas_label(canvas_label: Label, text: String, color: Color, rotation: float = 0.0) -> void:
 	canvas_label.set_text(text)
 	canvas_label.modulate = color
-	canvas_label.rect_rotation = rotation
+	canvas_label.rotation = rotation
 
 func hide_legend() -> void:
 	_legend.hide()
 
-func set_frame_color(color: Color) -> void:
-	get("custom_styles/panel").set("bg_color", color)
+func set_color(color: Color) -> void:
+	get("theme_override_styles/panel").set("bg_color", color)
 
 func set_frame_visible(visible: bool) -> void:
-	get("custom_styles/panel").set("draw_center", visible)
+	get("theme_override_styles/panel").set("draw_center", visible)

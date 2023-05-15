@@ -1,0 +1,8 @@
+res://addons/easy_charts/examples/scatter_chart/Control.tscn
+res://addons/easy_charts/examples/simple_chart/Control.tscn
+res://addons/easy_charts/examples/multiplot/Control.tscn
+res://addons/easy_charts/examples/pie_chart/Control.tscn
+res://addons/easy_charts/examples/line_chart/Control.tscn
+res://addons/easy_charts/examples/bar_chart/Control.tscn
+res://addons/easy_charts/examples/area_chart/Control.tscn
+res://addons/easy_charts/utilities/scripts/ec_utilities.gd

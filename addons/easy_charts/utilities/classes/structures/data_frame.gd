@@ -1,47 +1,47 @@
-tool
+@tool
 extends Resource
 class_name DataFrame
 
 var table_name : String = ""
-var labels : PoolStringArray = []
-var headers : PoolStringArray = []
+var labels : PackedStringArray = []
+var headers : PackedStringArray = []
 var datamatrix : Matrix = null
 var dataset : Array = []
 
-func _init(datamatrix : Matrix, headers : PoolStringArray = [], labels : PoolStringArray = [] , table_name : String = "") -> void:
-	if datamatrix.empty(): datamatrix.resize(labels.size(), headers.size())
-	if labels.empty() : for label in range(datamatrix.get_size().x) : labels.append(label as String)
-	if headers.empty() : for header in range(datamatrix.get_size().y) : headers.append(MatrixGenerator.get_letter_index(header))
+func _init(datamatrix : Matrix, headers : PackedStringArray = [], labels : PackedStringArray = [] , table_name : String = "") -> void:
+	if datamatrix.is_empty(): datamatrix.resize(labels.size(), headers.size())
+	if labels.is_empty() : for label in range(datamatrix.get_size().x) : labels.append(label as String)
+	if headers.is_empty() : for header in range(datamatrix.get_size().y) : headers.append(MatrixGenerator.get_letter_index(header))
 	build_dataframe(datamatrix, headers, labels, table_name)
 
-func build_dataframe(datamatrix : Matrix, headers : PoolStringArray = [], labels : PoolStringArray = [] , table_name : String = "") -> void:
+func build_dataframe(datamatrix : Matrix, headers : PackedStringArray = [], labels : PackedStringArray = [] , table_name : String = "") -> void:
 	self.datamatrix = datamatrix
 	self.headers = headers
 	self.labels = labels
 	self.table_name = table_name
 	self.dataset = build_dataset_from_matrix(datamatrix, headers, labels)
 
-func build_dataset_from_matrix(datamatrix : Matrix, headers : PoolStringArray, labels : PoolStringArray) -> Array:
+func build_dataset_from_matrix(datamatrix : Matrix, headers : PackedStringArray, labels : PackedStringArray) -> Array:
 	var data : Array = datamatrix.to_array()
 	return build_dataset(data, headers, labels)
 
-func build_dataset(data : Array, headers : PoolStringArray, labels : PoolStringArray) -> Array:
+func build_dataset(data : Array, headers : PackedStringArray, labels : PackedStringArray) -> Array:
 	var dataset : Array = [Array([" "]) + Array(headers)]
-	for row_i in range(labels.size()): dataset.append(([labels[row_i]] + data[row_i]) if not data.empty() else [labels[row_i]])
+	for row_i in range(labels.size()): dataset.append(([labels[row_i]] + data[row_i]) if not data.is_empty() else [labels[row_i]])
 	return dataset
 
 func insert_column(column : Array, header : String = "", index : int = dataset[0].size() - 1) -> void:
-	assert(column.size() == (datamatrix.rows() if not datamatrix.empty() else labels.size()), "error: the column size must match the dataset column size")
+	assert(column.size() == (datamatrix.rows() if not datamatrix.is_empty() else labels.size())) #,"error: the column size must match the dataset column size")
 	headers.insert(index, header if header != "" else MatrixGenerator.get_letter_index(index))
 	datamatrix.insert_column(column, index)
 	dataset = build_dataset_from_matrix(datamatrix, headers, labels)
 
-func insert_row(row : Array, label : String = "", index : int = dataset.size() - 1) -> PoolStringArray:
-	assert(row.size() == (datamatrix.columns() if not datamatrix.empty() else headers.size()), "error: the row size must match the dataset row size")
+func insert_row(row : Array, label : String = "", index : int = dataset.size() - 1) -> PackedStringArray:
+	assert(row.size() == (datamatrix.columns() if not datamatrix.is_empty() else headers.size())) #,"error: the row size must match the dataset row size")
 	labels.insert(index, label if label != "" else str(index))
 	datamatrix.insert_row(row, index)
 	dataset = build_dataset_from_matrix(datamatrix, headers, labels)
-	return PoolStringArray([label] + row)
+	return PackedStringArray([label] + row)
 
 func get_datamatrix() -> Matrix:
 	return datamatrix
@@ -49,7 +49,7 @@ func get_datamatrix() -> Matrix:
 func get_dataset() -> Array:
 	return dataset
 
-func get_labels() -> PoolStringArray:
+func get_labels() -> PackedStringArray:
 	return labels
 
 func transpose():
@@ -75,8 +75,8 @@ func _to_string() -> String:
 # ...............................................................................
 
 # Return a list of headers corresponding to a list of indexes
-func get_headers_names(indexes : PoolIntArray) -> PoolStringArray:
-	var headers : PoolStringArray = []
+func get_headers_names(indexes : PackedInt32Array) -> PackedStringArray:
+	var headers : PackedStringArray = []
 	for index in indexes:
 		headers.append(dataset[0][index])
 	return headers
@@ -97,7 +97,7 @@ func get_column(header : String) -> Array:
 		return []
 
 # Get a list of columns by their headers
-func columns(headers : PoolStringArray) -> Matrix:
+func columns(headers : PackedStringArray) -> Matrix:
 	var values : Array = []
 	for header in headers:
 		values.append(get_column(header))
@@ -109,15 +109,15 @@ func get_icolumn(index : int) -> Array:
 	return datamatrix.get_column(index)
 
 # Get a list of columns by their indexes
-func get_icolumns(indexes : PoolIntArray) -> Array:
+func get_icolumns(indexes : PackedInt32Array) -> Array:
 	var values : Array = []
 	for index in indexes:
 		values.append(datamatrix.get_column(index))
 	return values
 
 # Returns the list of labels corresponding to the list of indexes
-func get_labels_names(indexes : PoolIntArray) -> PoolStringArray:
-	var headers : PoolStringArray = []
+func get_labels_names(indexes : PackedInt32Array) -> PackedStringArray:
+	var headers : PackedStringArray = []
 	for index in indexes:
 		headers.append(dataset[index][0])
 	return headers
@@ -149,7 +149,7 @@ func get_irow(index : int) -> Array:
 	return datamatrix.get_row(index)
 
 # Get a list of rows by their indexes
-func get_irows(indexes : PoolIntArray) -> Array:
+func get_irows(indexes : PackedInt32Array) -> Array:
 	var values : Array = []
 	for index in indexes:
 		values.append(datamatrix.get_row(index))
@@ -160,11 +160,11 @@ func get_irows(indexes : PoolIntArray) -> Array:
 # dataset["0:5"] ---> Returns an array containing all columns from the 1st to the 4th
 # dataset["label0;label5"] ---> Returns an array containing all row from the one with label == "label0" to the one with label == "label5"
 # dataset["header0:header0"] ---> Returns an array containing all columns from the one with label == "label0" to the one with label == "label5"
-func _get(_property : String):
+func _get(_property : StringName):
 	# ":" --> Columns 
 	if ":" in _property:
-		var property : PoolStringArray = _property.split(":")
-		if (property[0]).is_valid_integer(): 
+		var property : PackedStringArray = _property.split(":")
+		if (property[0]).is_valid_int(): 
 			if property[1] == "*":
 				return get_icolumns(range(property[0] as int, headers.size()-1))
 			else:
@@ -176,15 +176,15 @@ func _get(_property : String):
 				return get_icolumns(range(get_column_index(property[0]), get_column_index(property[1])))    
 	# ";" --> Rows 
 	elif ";" in _property:
-		var property : PoolStringArray = _property.split(";")
-		if (property[0]).is_valid_integer(): 
+		var property : PackedStringArray = _property.split(";")
+		if (property[0]).is_valid_int(): 
 			return get_irows(range(property[0] as int, property[1] as int + 1 ))
 		else: 
 			return get_irows(range(get_row_index(property[0]), get_row_index(property[1])))
 	elif "," in _property:
-		var property : PoolStringArray = _property.split(",")
+		var property : PackedStringArray = _property.split(",")
 	else:
-		if (_property as String).is_valid_integer():
-			return get_icolumn(_property as int)
+		if (_property as String).is_valid_int():
+			return get_icolumn(int(_property))
 		else:
 			return get_column(_property)

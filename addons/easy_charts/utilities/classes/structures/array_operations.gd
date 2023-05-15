@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name ArrayOperations
 
 static func add_int(array: Array, _int: int) -> Array:
@@ -19,8 +19,8 @@ static func multiply_int(array: Array, _int: int) -> Array:
 		t[ti] = int(t[ti] * _int)
 	return t
 
-static func multiply_float(array: Array, _float: float) -> Array:
-	var t: Array = array.duplicate(true)
+static func multiply_float(array: Array, _float: float) -> PackedFloat32Array:
+	var t: PackedFloat32Array = array.duplicate(true)
 	for ti in t.size():
 		t[ti] = float(t[ti] * _float)
 	return t

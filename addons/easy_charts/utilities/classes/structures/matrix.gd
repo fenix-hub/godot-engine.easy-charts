@@ -1,4 +1,4 @@
-tool
+@tool
 extends Resource
 class_name Matrix
 
@@ -9,30 +9,30 @@ func _init(matrix : Array = [], size : int = 0) -> void:
 
 func insert_row(row : Array, index : int = values.size()) -> void:
 	if rows() != 0:
-		assert(row.size() == columns(), "the row size must match matrix row size")
+		assert(row.size() == columns()) #,"the row size must match matrix row size")
 	values.insert(index, row)
 
 func update_row(row : Array, index : int) -> void:
-	assert(rows() > index, "the row size must match matrix row size")
+	assert(rows() > index) #,"the row size must match matrix row size")
 	values[index] = row
 
 func remove_row(index: int) -> void:
-	assert(rows() > index, "the row size must match matrix row size")
-	values.remove(index)
+	assert(rows() > index) #,"the row size must match matrix row size")
+	values.remove_at(index)
 
 func insert_column(column : Array, index : int = values[0].size()) -> void:
 	if columns() != 0:
-		assert(column.size() == rows(), "the column size must match matrix column size")
+		assert(column.size() == rows()) #,"the column size must match matrix column size")
 	for row_idx in column.size():
 		values[row_idx].insert(index, column[row_idx])
 
 func update_column(column : Array, index : int) -> void:
-	assert(columns() > index, "the column size must match matrix column size")
+	assert(columns() > index) #,"the column size must match matrix column size")
 	for row_idx in column.size():
 		values[row_idx][index] = column[row_idx]
 
 func remove_column(index: int) -> void:
-	assert(columns() > index, "the column index must be at least equals to the rows count")
+	assert(columns() > index) #,"the column index must be at least equals to the rows count")
 	for row in get_rows():
 		row.remove(index)
 
@@ -61,7 +61,7 @@ func set_value(value: float, row: int, column: int) -> void:
 	values[row][column] = value
 
 func get_column(column : int) -> Array:
-	assert(column < columns(), "index of the column requested (%s) exceedes matrix columns (%s)"%[column, columns()])
+	assert(column < columns()) #,"index of the column requested (%s) exceedes matrix columns (%s)"%[column, columns()])
 	var column_array : Array = []
 	for row in values: 
 		column_array.append(row[column])
@@ -75,7 +75,7 @@ func get_columns(from : int = 0, to : int = columns()-1) -> Array:
 #    return MatrixGenerator.from_array(values)
 
 func get_row(row : int) -> Array:
-	assert(row < rows(), "index of the row requested (%s) exceedes matrix rows (%s)"%[row, rows()])
+	assert(row < rows()) #,"index of the row requested (%s) exceedes matrix rows (%s)"%[row, rows()])
 	return values[row]
 
 func get_rows(from : int = 0, to : int = rows()-1) -> Array:
@@ -154,21 +154,21 @@ func _to_string() -> String:
 	return string
 
 # ----
-func set(position: String, value) -> void:
+func set(position: StringName, value: Variant) -> void:
 	var t_pos: Array = position.split(",")
 	values[t_pos[0]][t_pos[1]] = value
 
 # --------------
-func _get(_property : String):
+func _get(_property : StringName):
 	# ":" --> Columns 
 	if ":" in _property:
-		var property : PoolStringArray = _property.split(":") 
-		var from : PoolStringArray = property[0].split(",")
-		var to : PoolStringArray = property[1].split(",")
+		var property : PackedStringArray = _property.split(":") 
+		var from : PackedStringArray = property[0].split(",")
+		var to : PackedStringArray = property[1].split(",")
 	elif "," in _property:
-		var property : PoolStringArray = _property.split(",")
+		var property : PackedStringArray = _property.split(",")
 		if property.size() == 2:
 			return get_row(property[0] as int)[property[1] as int]
 	else:
-		if (_property as String).is_valid_integer():
-			return get_row(_property as int)
+		if (_property as String).is_valid_int():
+			return get_row(int(_property))

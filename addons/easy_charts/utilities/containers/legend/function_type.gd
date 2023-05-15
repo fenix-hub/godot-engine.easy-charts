@@ -9,8 +9,6 @@ func _draw() -> void:
 	var center: Vector2 = get_rect().get_center()
 	
 	match self.type:
-		Function.Type.SCATTER:
-			pass
 		Function.Type.LINE:
 			draw_line(
 				Vector2(get_rect().position.x, center.y), 
@@ -35,24 +33,26 @@ func _draw() -> void:
 		Function.Type.PIE:
 			draw_rect(
 				Rect2(center - (Vector2.ONE * 3), (Vector2.ONE * 3 * 2)), 
-				color, true, 1.0, false
+				color, true, 1.0
 			)
+		Function.Type.SCATTER, _:
+			pass
 	
-	match marker:
+	match self.marker:
 		Function.Marker.NONE:
 			pass
 		Function.Marker.SQUARE:
 			draw_rect(
 				Rect2(center - (Vector2.ONE * 3), (Vector2.ONE * 3 * 2)), 
-				color, true, 1.0, false
+				color, true, 1.0
 			)
 		Function.Marker.TRIANGLE:
 			draw_colored_polygon(
-				PoolVector2Array([
+				PackedVector2Array([
 					center + (Vector2.UP * 3 * 1.3),
 					center + (Vector2.ONE * 3 * 1.3),
 					center - (Vector2(1, -1) * 3 * 1.3)
-				]), color, [], null, null, false
+				]), color, [], null
 			)
 		Function.Marker.CROSS:
 			draw_line(
@@ -65,5 +65,5 @@ func _draw() -> void:
 				center + (Vector2(-1, 1) * 3),
 				color, 3 / 2, true
 			)
-		_, Function.Marker.CIRCLE:
+		Function.Marker.CIRCLE, _:
 			draw_circle(center, 3, color)

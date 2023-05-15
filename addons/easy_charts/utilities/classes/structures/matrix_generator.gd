@@ -1,5 +1,5 @@
-tool
-extends Reference
+@tool
+extends RefCounted
 class_name MatrixGenerator
 
 static func zeros(rows: int, columns: int) -> Matrix:
@@ -18,7 +18,7 @@ static func random_float_range(from : float, to : float, size : Vector2, _seed :
 	var array : Array = []
 	for row in range(size.x):
 		var matrix_row : Array = []
-		for column in range(size.y): matrix_row.append(rand_range(from,to))
+		for column in range(size.y): matrix_row.append(randf_range(from,to))
 		array.append(matrix_row)
 	return Matrix.new(array)
 
@@ -29,7 +29,7 @@ static func from_array(array : Array = []) -> Matrix:
 	return Matrix.new(matrix)
 
 # Generates a sub-Matrix giving a Matrix, a @from Array [row_i, column_i] and a @to Array [row_j, column_j]
-static func sub_matrix(_matrix : Matrix, from : PoolIntArray, to : PoolIntArray) -> Matrix:
+static func sub_matrix(_matrix : Matrix, from : PackedInt32Array, to : PackedInt32Array) -> Matrix:
 	assert( not (to[0] > _matrix.rows() or to[1] > _matrix.columns()), 
 		"%s is not an acceptable size for the submatrix, giving a matrix of size %s"%[to, _matrix.get_size()])
 	var array : Array = []
@@ -44,7 +44,7 @@ static func duplicate(_matrix : Matrix) -> Matrix:
 
 # Calculate the determinant of a matrix
 static func determinant(matrix: Matrix) -> float:
-	assert(matrix.is_square(), "Expected square matrix")
+	assert(matrix.is_square()) #,"Expected square matrix")
 	
 	var determinant: float = 0.0
 	
@@ -129,7 +129,7 @@ static func hadamard(_matrix1 : Matrix, _matrix2 : Matrix) -> Matrix:
 	for x in range(_matrix1.to_array().size()):
 		var row : Array = []
 		for y in range(_matrix1.to_array()[x].size()):
-			assert(typeof(_matrix1.to_array()[x][y]) != TYPE_STRING and typeof(_matrix2.to_array()[x][y]) != TYPE_STRING, "can't apply operations over a Matrix of Strings")
+			assert(typeof(_matrix1.to_array()[x][y]) != TYPE_STRING and typeof(_matrix2.to_array()[x][y]) != TYPE_STRING) #,"can't apply operations over a Matrix of Strings")
 			row.append(_matrix1.to_array()[x][y] * _matrix2.to_array()[x][y])
 		array.append(row)
 	return Matrix.new(array)

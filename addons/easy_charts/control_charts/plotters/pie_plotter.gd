@@ -11,18 +11,20 @@ var box: Rect2
 var radius: float
 
 var slices: Array = []
-var slices_dirs: PoolVector2Array = []
+var slices_dirs: PackedVector2Array = []
 
 var focused_point: Point
 
-func _init(function: Function).(function) -> void:
+func _init(function: Function) -> void:
+	super(function)
 	pass
 
 func _draw() -> void:
+	super._draw()
 	box = get_box()
 	radius = min(box.size.x, box.size.y) * 0.5 * radius_multiplayer
 	var total: float = get_total()
-	var ratios: PoolRealArray = get_ratios(total)
+	var ratios: PackedFloat32Array = get_ratios(total)
 	sample(radius, box.get_center(), total, ratios)
 	_draw_pie()
 	_draw_labels(radius, box.get_center(), ratios)
@@ -34,13 +36,13 @@ func get_total() -> float:
 		total += float(value)
 	return total
 
-func get_ratios(total: float) -> PoolRealArray:
-	var ratios: PoolRealArray = []
+func get_ratios(total: float) -> PackedFloat32Array:
+	var ratios: PackedFloat32Array = []
 	for value in function.x:
 		ratios.push_back(value / total * 100)
 	return ratios
 
-func sample(radius: float, center: Vector2, total: float, ratios: PoolRealArray) -> void:
+func sample(radius: float, center: Vector2, total: float, ratios: PackedFloat32Array) -> void:
 	# Calculate directions
 	slices.clear()
 	slices_dirs = []
@@ -60,12 +62,12 @@ func sample(radius: float, center: Vector2, total: float, ratios: PoolRealArray)
 	
 	for slice in slices:
 		var mid_point: Vector2 = (slice[-1] + slice[1]) / 2
-		draw_circle(mid_point, 5, Color.white)
+		draw_circle(mid_point, 5, Color.WHITE)
 		slices_dirs.append(center.direction_to(mid_point))
 
-func _calc_circle_arc_poly(center: Vector2, radius: float, angle_from: float, angle_to: float) -> PoolVector2Array:
+func _calc_circle_arc_poly(center: Vector2, radius: float, angle_from: float, angle_to: float) -> PackedVector2Array:
 	var nb_points: int = 64
-	var points_arc: PoolVector2Array = PoolVector2Array()
+	var points_arc: PackedVector2Array = PackedVector2Array()
 	points_arc.push_back(center)
 	
 	for i in range(nb_points + 1):
@@ -76,10 +78,10 @@ func _calc_circle_arc_poly(center: Vector2, radius: float, angle_from: float, an
 
 func _draw_pie() -> void:
 	for i in slices.size():
-		draw_colored_polygon(slices[i], function.get_gradient().interpolate(float(i) / float(slices.size() - 1)))
-		draw_polyline(slices[i], Color.white, 2.0, true)
+		draw_colored_polygon(slices[i], function.get_gradient().sample(float(i) / float(slices.size() - 1)))
+		draw_polyline(slices[i], Color.WHITE, 2.0, true)
 
-func _draw_labels(radius: float, center: Vector2, ratios: PoolRealArray) -> void:
+func _draw_labels(radius: float, center: Vector2, ratios: PackedFloat32Array) -> void:
 	for i in slices_dirs.size():
 		var ratio_lbl: String = "%.1f%%" % ratios[i]
 		var value_lbl: String = "(%s)" % function.x[i]
@@ -90,19 +92,29 @@ func _draw_labels(radius: float, center: Vector2, ratios: PoolRealArray) -> void
 			get_chart_properties().font,
 			position - Vector2(ratio_lbl_size.x / 2, 0),
 			ratio_lbl,
-			Color.white
+			HORIZONTAL_ALIGNMENT_CENTER,
+			ratio_lbl_size.x,
+			16,
+			Color.WHITE,
+			3,
+			TextServer.DIRECTION_AUTO,
+			TextServer.ORIENTATION_HORIZONTAL
 		)
 		draw_string(
 			get_chart_properties().font,
 			position - Vector2(value_lbl_size.x / 2, - value_lbl_size.y),
 			value_lbl,
-			Color.white
+			HORIZONTAL_ALIGNMENT_CENTER,
+			value_lbl_size.x,
+			16,
+			Color.WHITE,
+			3,TextServer.DIRECTION_AUTO,TextServer.ORIENTATION_HORIZONTAL
 		)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
 		for i in slices.size():
-			if Geometry.is_point_in_polygon(get_relative_position(event.position), slices[i]):
+			if Geometry2D.is_point_in_polygon(get_relative_position(event.position), slices[i]):
 				var point: Point = Point.new(self.box.get_center() + slices_dirs[i] * self.radius * 0.5, { x = function.x[i], y = function.y[i] })
 				if focused_point == point:
 					return

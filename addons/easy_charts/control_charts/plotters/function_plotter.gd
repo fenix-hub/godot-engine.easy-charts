@@ -14,7 +14,7 @@ func _ready() -> void:
 func update_values(x_domain: Dictionary, y_domain: Dictionary) -> void:
 	self.x_domain = x_domain
 	self.y_domain = y_domain
-	update()
+	queue_redraw()
 
 func _draw() -> void:
 	pass
@@ -26,4 +26,4 @@ func get_chart_properties() -> ChartProperties:
 	return get_parent().get_parent().chart_properties
 
 func get_relative_position(position: Vector2) -> Vector2:
-	return position - rect_global_position
+	return position - global_position

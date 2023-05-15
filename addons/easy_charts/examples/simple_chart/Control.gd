@@ -1,6 +1,6 @@
 extends Control
 
-onready var chart: Chart = $VBoxContainer/Chart
+@onready var chart: Chart = $VBoxContainer/Chart
 
 # This Chart will plot 1 function
 var f1: Function
@@ -31,7 +31,7 @@ func _process(delta: float):
 	
 	# we can use the `Function.add_point(x, y)` method to update a function
 	f1.add_point(new_val, cos(new_val) * 20)
-	chart.update() # This will force the Chart to be updated
+	chart.queue_redraw() # This will force the Chart to be updated
 
 
 func _on_CheckButton_pressed():

@@ -1,6 +1,6 @@
 extends Control
 
-onready var chart: Chart = $VBoxContainer/Chart
+@onready var chart: Chart = $VBoxContainer/Chart
 
 # This Chart will plot 3 different functions
 var f1: Function
@@ -17,10 +17,10 @@ func _ready():
 	# should look, plus some additional elements like labels, the scale, etc...
 	var cp: ChartProperties = ChartProperties.new()
 	cp.colors.frame = Color("#161a1d")
-	cp.colors.background = Color.transparent
+	cp.colors.background = Color.TRANSPARENT
 	cp.colors.grid = Color("#283442")
 	cp.colors.ticks = Color("#283442")
-	cp.colors.text = Color.whitesmoke
+	cp.colors.text = Color.WHITE_SMOKE
 	cp.draw_bounding_box = false
 	cp.title = "Air Quality Monitoring"
 	cp.x_label = "Time"
@@ -33,10 +33,10 @@ func _ready():
 	# Let's add values to our functions
 	f1 = Function.new(
 		x, y, "Pressure", # This will create a function with x and y values taken by the Arrays 
-						  # we have created previously. This function will also be named "Pressure"
-						  # as it contains 'pressure' values.
-						  # If set, the name of a function will be used both in the Legend
-						  # (if enabled thourgh ChartProperties) and on the Tooltip (if enabled).
+						# we have created previously. This function will also be named "Pressure"
+						# as it contains 'pressure' values.
+						# If set, the name of a function will be used both in the Legend
+						# (if enabled thourgh ChartProperties) and on the Tooltip (if enabled).
 		# Let's also provide a dictionary of configuration parameters for this specific function.
 		{ 
 			color = Color("#36a2eb"), 		# The color associated to this function
@@ -62,7 +62,7 @@ func _process(delta: float):
 	
 	# we can use the `Function.add_point(x, y)` method to update a function
 	f1.add_point(new_val, cos(new_val) * 20)
-	chart.update() # This will force the Chart to be updated
+	chart.queue_redraw() # This will force the Chart to be updated
 
 
 func _on_CheckButton_pressed():

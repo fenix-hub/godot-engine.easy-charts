@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name Function
 
 enum Type {
@@ -10,11 +10,13 @@ enum Type {
 }
 
 enum Interpolation {
+	NONE,
 	LINEAR,
 	STAIR,
 	SPLINE
 }
 
+# TODO: add new markers, like an empty circle, an empty box, etc.
 enum Marker {
 	NONE,
 	CIRCLE,
@@ -32,7 +34,7 @@ func _init(x: Array, y: Array, name: String = "", props: Dictionary = {}) -> voi
 	self.x = x.duplicate()
 	self.y = y.duplicate()
 	self.name = name
-	if not props.empty() and props != null:
+	if not props.is_empty() and props != null:
 		self.props = props
 
 func add_point(x: float, y: float) -> void:
@@ -40,7 +42,7 @@ func add_point(x: float, y: float) -> void:
 	self.y.append(y)
 
 func get_color() -> Color:
-	return props.get("color", Color.cornflower)
+	return props.get("color", Color.DARK_SLATE_GRAY)
 
 func get_gradient() -> Gradient:
 	return props.get("gradient", Gradient.new())
