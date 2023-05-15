@@ -43,7 +43,7 @@ func sort_ascending(a: String, b: String):
 func _find_longest_x() -> String:
 	var longest_x: String = ""
 	var x_str: Array = x.duplicate(true)
-	x_str.sort_custom(self, "sort_ascending")
+	x_str.sort_custom(sort_ascending)
 	return x_str.back()
 
 
@@ -51,9 +51,7 @@ func _draw_bar(bar: Bar, function_index: int) -> void:
 	draw_rect(
 		bar.rect, 
 		chart_properties.get_function_color(function_index),
-		true,
-		1,
-		false
+		true
 	)
 
 func _draw_bars() -> void:
@@ -68,7 +66,10 @@ func _get_tick_label(line_index: int, line_value: float) -> String:
 	return x[line_index]
 
 func _get_vertical_tick_label_pos(base_position: Vector2, text: String) -> Vector2:
-	return ._get_vertical_tick_label_pos(base_position, text) + Vector2(x_sector_size / 2, 0)
+	return  base_position + Vector2(
+		- chart_properties.font.get_string_size(text).x / 2,
+		_x_label_size.y + _x_tick_size
+	)
 
 
 func _draw_vertical_grid() -> void:
@@ -148,6 +149,29 @@ func _calculate_bars() -> void:
 		function_bars.append(bars)
 
 func _draw() -> void:
+	_clear()
+	_pre_process()
+	
+	if chart_properties.background:
+		_draw_background()
+	
+	if chart_properties.borders:
+		_draw_borders()
+	
+	if chart_properties.grid or chart_properties.ticks or chart_properties.labels:
+		_draw_grid()
+	
+	if chart_properties.bounding_box:
+		_draw_bounding_box()
+	
+	if chart_properties.origin:
+		_draw_origin()
+	
+	if chart_properties.labels:
+		_draw_xaxis_label()
+		_draw_yaxis_label()
+		_draw_title()
+		
 	_calculate_bars()
 	
 	_draw_bars()

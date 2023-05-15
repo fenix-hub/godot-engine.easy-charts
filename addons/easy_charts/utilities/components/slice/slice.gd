@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name Slice
 
 var x_value : String

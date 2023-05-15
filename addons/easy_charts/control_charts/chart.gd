@@ -69,10 +69,10 @@ func plot(x: Array, y: Array, properties: ChartProperties = self.chart_propertie
 	
 	set_process_input(chart_properties.interactive)
 	
-	update()
+	queue_redraw()
 
 func _map_pair(val: float, rel: Pair, ref: Pair) -> float:
-	return range_lerp(val, rel.left, rel.right, ref.left, ref.right)
+	return remap(val, rel.left, rel.right, ref.left, ref.right)
 
 func _has_decimals(values: Array) -> bool:
 	var temp: Array = values.duplicate(true)
@@ -83,13 +83,13 @@ func _has_decimals(values: Array) -> bool:
 				if val is String:
 					return false
 				if abs(fmod(val, 1)) > 0.0:
-					 return true
+					return true
 	else:
 		for val in temp:
 			if val is String:
 				return false
 			if abs(fmod(val, 1)) > 0.0:
-				 return true
+				return true
 	
 	return false
 
@@ -113,7 +113,7 @@ func _find_min_max(values: Array) -> Pair:
 	return Pair.new(_min, _max)
 
 func _sample_values(values: Array, rel_values: Pair, ref_values: Pair) -> SampledAxis:
-	if values.empty():
+	if values.is_empty():
 		printerr("Trying to plot an empty dataset!")
 		return SampledAxis.new()
 	
@@ -219,7 +219,7 @@ func _pre_process() -> void:
 			# negative number
 			var y_min_formatted: String = ("%.2f" if y_has_decimals else "%s") % y_domain.left
 			if y_min_formatted.length() >= y_max_formatted.length():
-				 _y_ticklabel_size = chart_properties.font.get_string_size(y_min_formatted)
+				_y_ticklabel_size = chart_properties.font.get_string_size(y_min_formatted)
 			else:
 				_y_ticklabel_size = chart_properties.font.get_string_size(y_max_formatted)
 		else:
@@ -247,10 +247,10 @@ func _pre_process() -> void:
 	_sample_y()
 
 func _draw_borders() -> void:
-	draw_rect(node_box, Color.red, false, 1, true)
+	draw_rect(node_box, Color.RED, false, 1)
 
 func _draw_bounding_box() -> void:
-	draw_rect(bounding_box, chart_properties.colors.bounding_box, false, 1, true)
+	draw_rect(bounding_box, chart_properties.colors.bounding_box, false, )
 	
 #	# (debug)
 #	var half: Vector2 = (bounding_box.size) / 2
@@ -260,12 +260,12 @@ func _draw_bounding_box() -> void:
 func _draw_origin() -> void:
 	var xorigin: float = _map_pair(0.0, x_min_max, x_sampled_domain)
 	var yorigin: float = _map_pair(0.0, y_domain, y_sampled_domain)
-	draw_line(Vector2(xorigin, bounding_box.position.y), Vector2(xorigin, bounding_box.position.y + bounding_box.size.y), Color.black, 1, 0)
-	draw_line(Vector2(bounding_box.position.x, yorigin), Vector2(bounding_box.position.x + bounding_box.size.x, yorigin), Color.black, 1, 0)
-	draw_string(chart_properties.font, Vector2(xorigin, yorigin) - Vector2(15, -15), "O", chart_properties.colors.bounding_box)
+	draw_line(Vector2(xorigin, bounding_box.position.y), Vector2(xorigin, bounding_box.position.y + bounding_box.size.y), Color.BLACK, 1.0, false)
+	draw_line(Vector2(bounding_box.position.x, yorigin), Vector2(bounding_box.position.x + bounding_box.size.x, yorigin), Color.BLACK, 1.0, false)
+	draw_string(chart_properties.font, Vector2(xorigin, yorigin) - Vector2(15, -15), "O",0,-1,12, chart_properties.colors.bounding_box)
 
 func _draw_background() -> void:
-	draw_rect(node_box, Color.white, true, 1.0, false)
+	draw_rect(node_box, Color.WHITE, true)
 	
 #	# (debug)
 #	var half: Vector2 = node_box.size / 2
@@ -284,7 +284,7 @@ func _get_vertical_tick_label_pos(base_position: Vector2, text: String) -> Vecto
 
 func _get_tick_label(line_index: int, line_value: float) -> String:
 	var tick_lbl: String = ""
-	if x_labels.empty():
+	if x_labels.is_empty():
 		tick_lbl = ("%.2f" if x_has_decimals else "%s") % [x_min_max.left + (line_index * line_value)]
 	else:
 		tick_lbl = x_labels[clamp(line_value * line_index, 0, x_labels.size() - 1)]
@@ -297,7 +297,10 @@ func _draw_vertical_gridline_component(p1: Vector2, p2: Vector2, line_index: int
 		draw_string(
 			chart_properties.font, 
 			_get_vertical_tick_label_pos(p2, tick_lbl),
-			tick_lbl, 
+			tick_lbl,
+			0,
+			-1,
+			12,
 			chart_properties.colors.bounding_box
 		)
 	
@@ -312,7 +315,7 @@ func _draw_vertical_gridline_component(p1: Vector2, p2: Vector2, line_index: int
 
 func _draw_horizontal_tick_label(font: Font, position: Vector2, color: Color, line_index: int, line_value: float) -> void:
 	var tick_lbl: String = ""
-	if y_labels.empty():
+	if y_labels.is_empty():
 		tick_lbl = ("%.2f" if y_has_decimals else "%s") % [y_domain.left + (line_index * line_value)]
 	else:
 		tick_lbl = y_labels[clamp(y_labels.size() * line_index, 0, y_labels.size() - 1)]
@@ -323,7 +326,10 @@ func _draw_horizontal_tick_label(font: Font, position: Vector2, color: Color, li
 			chart_properties.font.get_string_size(tick_lbl).x + _y_ticklabel_offset + _y_tick_size, 
 			- _y_ticklabel_size.y * 0.35
 		), 
-		tick_lbl, 
+		tick_lbl,
+		0,
+		-1,
+		12, 
 		chart_properties.colors.bounding_box
 	)
 
@@ -359,11 +365,11 @@ func _draw_vertical_grid() -> void:
 	for _x in chart_properties.x_scale + 1:
 		var x_val: float = _x * x_pixel_dist + x_sampled.min_max.left
 		var top: Vector2 = Vector2(
-			range_lerp(x_val, x_sampled.min_max.left, x_sampled.min_max.right, x_sampled_domain.left, x_sampled_domain.right),
+			remap(x_val, x_sampled.min_max.left, x_sampled.min_max.right, x_sampled_domain.left, x_sampled_domain.right),
 			bounding_box.position.y
 		)
 		var bottom: Vector2 = Vector2(
-			range_lerp(x_val, x_sampled.min_max.left, x_sampled.min_max.right, x_sampled_domain.left, x_sampled_domain.right),
+			remap(x_val, x_sampled.min_max.left, x_sampled.min_max.right, x_sampled_domain.left, x_sampled_domain.right),
 			bounding_box.size.y + bounding_box.position.y
 		)
 		
@@ -380,11 +386,11 @@ func _draw_horizontal_grid() -> void:
 		var y_val: float = (_y * y_pixel_dist) + y_sampled.min_max.left
 		var left: Vector2 = Vector2(
 			bounding_box.position.x,
-			range_lerp(y_val, y_sampled.min_max.left, y_sampled.min_max.right, y_sampled_domain.left, y_sampled_domain.right)
+			remap(y_val, y_sampled.min_max.left, y_sampled.min_max.right, y_sampled_domain.left, y_sampled_domain.right)
 		)
 		var right: Vector2 = Vector2(
 			bounding_box.size.x + bounding_box.position.x,
-			range_lerp(y_val, y_sampled.min_max.left, y_sampled.min_max.right, y_sampled_domain.left, y_sampled_domain.right)
+			remap(y_val, y_sampled.min_max.left, y_sampled.min_max.right, y_sampled_domain.left, y_sampled_domain.right)
 		)
 		
 		_draw_horizontal_gridline_component(left, right, _y, y_lbl_val)
@@ -404,15 +410,15 @@ func _create_canvas_label(text: String, position: Vector2, rotation: float = 0.0
 	lbl.set("custom_fonts/font", chart_properties.font)
 	lbl.set_text(text)
 	lbl.modulate = chart_properties.colors.bounding_box
-	lbl.rect_rotation = rotation
-	lbl.rect_position = position
+	lbl.rotation_degrees = rotation
+	lbl.position = position
 	return lbl
 
 func _update_canvas_label(canvas_label: Label, text: String, position: Vector2, rotation: float = 0.0) -> void:
 	canvas_label.set_text(text)
 	canvas_label.modulate = chart_properties.colors.bounding_box
-	canvas_label.rect_rotation = rotation
-	canvas_label.rect_position = position
+	canvas_label.rotation_degrees = rotation
+	canvas_label.position = position
 
 func _draw_yaxis_label() -> void:
 	_update_canvas_label(
@@ -481,7 +487,7 @@ func _draw():
 
 func _validate_sampled_axis(x_data: SampledAxis, y_data: SampledAxis) -> int:
 	var error: int = 0 # OK
-	if x_data.values.empty() or y_data.values.empty():
+	if x_data.values.is_empty() or y_data.values.is_empty():
 		# Either there are no X or Y
 		error = 1
 	elif y_data.values[0] is Array:
@@ -500,4 +506,4 @@ func _get_function_name(function_idx: int) -> String:
 	return functions_names[function_idx] if functions_names.size() > 0 else "Function %s" % function_idx
 
 func _get_function_color(function_idx: int) -> Color:
-	return chart_properties.colors.functions[function_idx] if chart_properties.colors.functions.size() > 0 else Color.black
+	return chart_properties.colors.functions[function_idx] if chart_properties.colors.functions.size() > 0 else Color.BLACK

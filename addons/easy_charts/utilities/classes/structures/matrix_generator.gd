@@ -1,5 +1,5 @@
-tool
-extends Reference
+@tool
+extends RefCounted
 class_name MatrixGenerator
 
 static func zeros(rows: int, columns: int) -> Matrix:
@@ -18,7 +18,7 @@ static func random_float_range(from : float, to : float, size : Vector2, _seed :
 	var array : Array = []
 	for row in range(size.x):
 		var matrix_row : Array = []
-		for column in range(size.y): matrix_row.append(rand_range(from,to))
+		for column in range(size.y): matrix_row.append(randf_range(from,to))
 		array.append(matrix_row)
 	return Matrix.new(array)
 
@@ -29,7 +29,7 @@ static func from_array(array : Array = []) -> Matrix:
 	return Matrix.new(matrix)
 
 # Generates a sub-Matrix giving a Matrix, a @from Array [row_i, column_i] and a @to Array [row_j, column_j]
-static func sub_matrix(_matrix : Matrix, from : PoolIntArray, to : PoolIntArray) -> Matrix:
+static func sub_matrix(_matrix : Matrix, from : PackedInt64Array, to : PackedInt64Array) -> Matrix:
 	assert( not (to[0] > _matrix.rows() or to[1] > _matrix.columns()), 
 		"%s is not an acceptable size for the submatrix, giving a matrix of size %s"%[to, _matrix.get_size()])
 	var array : Array = []

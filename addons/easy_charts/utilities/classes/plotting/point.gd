@@ -1,5 +1,5 @@
-tool
-extends Reference
+@tool
+extends RefCounted
 class_name Point
 
 enum Shape {

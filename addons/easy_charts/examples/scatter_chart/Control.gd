@@ -25,7 +25,6 @@ func _ready():
 	cp.y_scale = 30
 	cp.interactive = true # false by default, it allows the chart to create a tooltip to show point values
 	# and interecept clicks on the plot
-	
 	# Set the x_labels
 #	$ScatterChart.x_labels = x_labels
 	
@@ -43,7 +42,7 @@ func _process(delta: float):
 	$ScatterChart.y[0].append(cos(new_val) * 20)
 	$ScatterChart.y[1].append(20 + sin(new_val) * 20)
 	$ScatterChart.x_labels.append(str(new_val) + "s")
-	$ScatterChart.update()
+	$ScatterChart.queue_redraw()
 
 
 func _on_CheckButton_pressed():

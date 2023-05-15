@@ -1,7 +1,28 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://c6fu0644pc8sv"]
 
-[ext_resource path="res://addons/easy_charts/control_charts/ScatterChart/scatter_chart.gd" type="Script" id=1]
-[ext_resource path="res://addons/easy_charts/control_charts/chart.tscn" type="PackedScene" id=2]
+[ext_resource type="Script" path="res://addons/easy_charts/control_charts/ScatterChart/scatter_chart.gd" id="1"]
+[ext_resource type="PackedScene" path="res://addons/easy_charts/control_charts/chart.tscn" id="2"]
 
-[node name="ScatterChart" instance=ExtResource( 2 )]
-script = ExtResource( 1 )
+[node name="ScatterChart" instance=ExtResource("2")]
+layout_mode = 3
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Canvas" parent="." index="0"]
+anchors_preset = 0
+
+[node name="Title" parent="Canvas" index="0"]
+layout_mode = 0
+
+[node name="XLabel" parent="Canvas" index="1"]
+layout_mode = 0
+
+[node name="YLabel" parent="Canvas" index="2"]
+layout_mode = 0
+
+[node name="Tooltip" parent="." index="1"]
+layout_mode = 0
+offset_right = 167.0
+offset_bottom = 73.0
