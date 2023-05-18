@@ -5,3 +5,5 @@ res://addons/easy_charts/examples/pie_chart/Control.tscn
 res://addons/easy_charts/examples/line_chart/Control.tscn
 res://addons/easy_charts/examples/bar_chart/Control.tscn
 res://addons/easy_charts/examples/area_chart/Control.tscn
+res://addons/easy_charts/examples/multiplot/Control.gd
+res://README.md
