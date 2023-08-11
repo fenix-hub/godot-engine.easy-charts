@@ -3,8 +3,6 @@ class_name FunctionLegend
 
 @onready var f_label_scn: PackedScene = preload("res://addons/easy_charts/utilities/containers/legend/function_label.tscn")
 
-var chart_properties: ChartProperties
-
 func _ready() -> void:
 	pass
 
@@ -21,3 +19,7 @@ func add_label(type: int, color: Color, marker: int, name: String) -> void:
 	var f_label: FunctionLabel = f_label_scn.instantiate()
 	add_child(f_label)
 	f_label.init_clabel(type, color, marker, name)
+
+# Meta
+func get_chart_properties() -> ChartProperties:
+	return get_owner().chart_properties

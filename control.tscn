@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://cgb74tybisnap"]
+
+[ext_resource type="Script" path="res://example.gd" id="1_xvh6n"]
+[ext_resource type="PackedScene" uid="uid://bxxodsfec3icg" path="res://addons/easy_charts/control_charts/chart.tscn" id="2_2i0ah"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xvh6n")
+
+[node name="Chart" parent="." instance=ExtResource("2_2i0ah")]
+layout_mode = 1
+grow_horizontal = 2
+grow_vertical = 2

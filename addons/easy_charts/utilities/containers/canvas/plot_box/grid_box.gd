@@ -1,4 +1,4 @@
-extends Control
+extends PanelContainer
 class_name GridBox
 
 var x_domain: Dictionary = { lb = 0, ub = 0 }
@@ -9,6 +9,7 @@ var y_labels: Array
 
 var box: Rect2
 var plot_box: Rect2
+var chart_properties: ChartProperties = ChartProperties.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -23,37 +24,41 @@ func set_labels(x_labels: Array, y_labels: Array) -> void:
 	self.y_labels = y_labels
 
 func _draw() -> void:
+	set_domains(owner.x_domain, owner.y_domain)
+	set_labels(owner.x_labels, owner.y_labels)
+	
 	self.box = get_parent().get_box()
 	self.plot_box = get_parent().get_plot_box()
+	chart_properties = get_owner().chart_properties
 	
-	if get_parent().chart_properties.draw_background:
+	if chart_properties.draw_background:
 		_draw_background()
 	
-	if get_parent().chart_properties.draw_grid_box:
+	if chart_properties.draw_grid_box:
 		_draw_vertical_grid()
 		_draw_horizontal_grid()
 	
-	if get_parent().chart_properties.draw_origin:
+	if chart_properties.draw_origin:
 		_draw_origin()
 	
-	if get_parent().chart_properties.draw_bounding_box:
+	if chart_properties.draw_bounding_box:
 		_draw_bounding_box()
 
 func _draw_background() -> void:
-	draw_rect(self.box, get_parent().chart_properties.colors.background, true)# false) TODOGODOT4 Antialiasing argument is missing
+	draw_rect(self.box, get_owner().chart_properties.colors.background, true)# false) TODOGODOT4 Antialiasing argument is missing
 
 func _draw_bounding_box() -> void:
-	draw_rect(self.box, get_parent().chart_properties.colors.bounding_box, false, 1)# true) TODOGODOT4 Antialiasing argument is missing
+	draw_rect(self.box, get_owner().chart_properties.colors.bounding_box, false, 1)# true) TODOGODOT4 Antialiasing argument is missing
 
 func _draw_origin() -> void:
 	var xorigin: float = ECUtilities._map_domain(0.0, x_domain, { lb = self.plot_box.position.x, ub = self.plot_box.end.x })
 	var yorigin: float = ECUtilities._map_domain(0.0, y_domain, { lb = self.plot_box.end.y, ub = self.plot_box.position.y })
 	
-	draw_line(Vector2(xorigin, self.plot_box.position.y), Vector2(xorigin, self.plot_box.position.y + self.plot_box.size.y), get_parent().chart_properties.colors.origin, 1)
-	draw_line(Vector2(self.plot_box.position.x, yorigin), Vector2(self.plot_box.position.x + self.plot_box.size.x, yorigin), get_parent().chart_properties.colors.origin, 1)
+	draw_line(Vector2(xorigin, self.plot_box.position.y), Vector2(xorigin, self.plot_box.position.y + self.plot_box.size.y), chart_properties.colors.origin, 1)
+	draw_line(Vector2(self.plot_box.position.x, yorigin), Vector2(self.plot_box.position.x + self.plot_box.size.x, yorigin), chart_properties.colors.origin, 1)
 	draw_string(
-		get_parent().chart_properties.font, Vector2(xorigin, yorigin) - Vector2(15, -15), "O", HORIZONTAL_ALIGNMENT_CENTER, -1, 
-		ThemeDB.fallback_font_size, get_parent().chart_properties.colors.text, TextServer.JUSTIFICATION_NONE, TextServer.DIRECTION_AUTO, TextServer.ORIENTATION_HORIZONTAL
+		chart_properties.font, Vector2(xorigin, yorigin) - Vector2(15, -15), "O", HORIZONTAL_ALIGNMENT_CENTER, -1, 
+		ThemeDB.fallback_font_size, chart_properties.colors.text, TextServer.JUSTIFICATION_NONE, TextServer.DIRECTION_AUTO, TextServer.ORIENTATION_HORIZONTAL
 		)
 
 
@@ -64,7 +69,7 @@ func _draw_vertical_grid() -> void:
 	#    should be devided
 	# 2. calculate the spacing between each line in pixel. It is equals to x_sampled_domain / x_scale
 	# 3. calculate the offset in the real x domain, which is x_domain / x_scale.
-	var scaler: int = get_parent().chart_properties.x_scale if self.x_labels.is_empty() else (x_labels.size() - 1)
+	var scaler: int = chart_properties.x_scale if self.x_labels.is_empty() else (x_labels.size() - 1)
 	var x_pixel_dist: float = self.plot_box.size.x / scaler
 	
 	var vertical_grid: PackedVector2Array = []
@@ -81,26 +86,26 @@ func _draw_vertical_grid() -> void:
 		vertical_grid.append(bottom)
 		
 		vertical_ticks.append(bottom)
-		vertical_ticks.append(bottom + Vector2(0, get_parent().chart_properties.x_tick_size))
+		vertical_ticks.append(bottom + Vector2(0, chart_properties.x_tick_size))
 		
 		# Draw V Tick Labels
-		if get_parent().chart_properties.show_tick_labels:
+		if chart_properties.show_tick_labels:
 			var tick_lbl: String = _get_tick_label(_x, x_val, x_domain.has_decimals, self.x_labels)
 			draw_string(
-				get_parent().chart_properties.font, 
+				chart_properties.font, 
 				_get_vertical_tick_label_pos(bottom, tick_lbl),
 				tick_lbl,HORIZONTAL_ALIGNMENT_CENTER, -1, ThemeDB.fallback_font_size,
-				get_parent().chart_properties.colors.text, TextServer.JUSTIFICATION_NONE, TextServer.DIRECTION_AUTO,
+				chart_properties.colors.text, TextServer.JUSTIFICATION_NONE, TextServer.DIRECTION_AUTO,
 				TextServer.ORIENTATION_HORIZONTAL
 			)
 	
 	# Draw V Grid
-	if get_parent().chart_properties.draw_vertical_grid:
-		draw_multiline(vertical_grid, get_parent().chart_properties.colors.grid, 1)
+	if chart_properties.draw_vertical_grid:
+		draw_multiline(vertical_grid, chart_properties.colors.grid, 1)
 	
 	# Draw V Ticks
-	if get_parent().chart_properties.draw_ticks:
-		draw_multiline(vertical_ticks, get_parent().chart_properties.colors.ticks, 1)
+	if chart_properties.draw_ticks:
+		draw_multiline(vertical_ticks, chart_properties.colors.ticks, 1)
 
 
 func _draw_horizontal_grid() -> void:
@@ -108,12 +113,12 @@ func _draw_horizontal_grid() -> void:
 	#    should be devided
 	# 2. calculate the spacing between each line in pixel. It is equals to y_sampled_domain / y_scale
 	# 3. calculate the offset in the real y domain, which is y_domain / y_scale.
-	var y_pixel_dist: float = self.plot_box.size.y / get_parent().chart_properties.y_scale
+	var y_pixel_dist: float = self.plot_box.size.y / chart_properties.y_scale
 	
 	var horizontal_grid: PackedVector2Array = []
 	var horizontal_ticks: PackedVector2Array = []
 	
-	for _y in get_parent().chart_properties.y_scale + 1:
+	for _y in chart_properties.y_scale + 1:
 		var y_sampled_val: float = (_y * y_pixel_dist) + self.plot_box.position.y
 		var y_val: float = ECUtilities._map_domain(y_sampled_val, { lb = self.plot_box.end.y, ub = self.plot_box.position.y }, y_domain)
 
@@ -124,39 +129,39 @@ func _draw_horizontal_grid() -> void:
 		horizontal_grid.append(right)
 		
 		horizontal_ticks.append(left)
-		horizontal_ticks.append(left - Vector2(get_parent().chart_properties.y_tick_size, 0))
+		horizontal_ticks.append(left - Vector2(chart_properties.y_tick_size, 0))
 		
 		# Draw H Tick Labels
-		if get_parent().chart_properties.show_tick_labels:
+		if chart_properties.show_tick_labels:
 			var tick_lbl: String = _get_tick_label(_y, y_val, y_domain.has_decimals, y_labels)
 			draw_string(
-				get_parent().chart_properties.font, 
+				chart_properties.font, 
 				_get_horizontal_tick_label_pos(left, tick_lbl),
 				tick_lbl,
 				HORIZONTAL_ALIGNMENT_CENTER,
 				-1, ThemeDB.fallback_font_size,
-				get_parent().chart_properties.colors.text,
+				chart_properties.colors.text,
 				TextServer.JUSTIFICATION_NONE, TextServer.DIRECTION_AUTO, TextServer.ORIENTATION_HORIZONTAL
 			)
 	
 	# Draw H Grid
-	if get_parent().chart_properties.draw_horizontal_grid:
-		draw_multiline(horizontal_grid, get_parent().chart_properties.colors.grid, 1)
+	if chart_properties.draw_horizontal_grid:
+		draw_multiline(horizontal_grid, chart_properties.colors.grid, 1)
 	
 	# Draw H Ticks
-	if get_parent().chart_properties.draw_ticks:
-		draw_multiline(horizontal_ticks, get_parent().chart_properties.colors.ticks, 1)
+	if chart_properties.draw_ticks:
+		draw_multiline(horizontal_ticks, chart_properties.colors.ticks, 1)
 		
 
 func _get_vertical_tick_label_pos(base_position: Vector2, text: String) -> Vector2:
 	return  base_position + Vector2(
-		- get_parent().chart_properties.font.get_string_size(text).x / 2,
-		ThemeDB.fallback_font_size + get_parent().chart_properties.x_tick_size
+		- chart_properties.font.get_string_size(text).x / 2,
+		ThemeDB.fallback_font_size + chart_properties.x_tick_size
 	)
 
 func _get_horizontal_tick_label_pos(base_position: Vector2, text: String) -> Vector2:
 	return base_position - Vector2(
-		get_parent().chart_properties.font.get_string_size(text).x + get_parent().chart_properties.y_tick_size + get_parent().chart_properties.x_ticklabel_space, 
+		chart_properties.font.get_string_size(text).x + chart_properties.y_tick_size + chart_properties.x_ticklabel_space, 
 		- ThemeDB.fallback_font_size * 0.35
 	)
 

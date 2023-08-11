@@ -10,7 +10,7 @@ func _draw_areas() -> void:
 	var fp_augmented: PackedVector2Array = []
 	match function.get_interpolation():
 		Function.Interpolation.LINEAR:
-			fp_augmented = points_positions
+			fp_augmented = get_points_positions()
 		Function.Interpolation.STAIR:
 			fp_augmented = _get_stair_points()
 		Function.Interpolation.SPLINE:

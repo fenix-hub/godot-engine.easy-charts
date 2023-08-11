@@ -28,7 +28,15 @@ enum Marker {
 var x: Array
 var y: Array
 var name: String
-var props: Dictionary = {}
+var props: Dictionary = {
+	color = null,
+	marker = null,
+	gradient = null,
+	type = null,
+	interpolation = null,
+	line_width = null,
+	point_size = null
+}
 
 func _init(x: Array, y: Array, name: String = "", props: Dictionary = {}) -> void:
 	self.x = x.duplicate()
@@ -42,7 +50,7 @@ func add_point(x: float, y: float) -> void:
 	self.y.append(y)
 
 func get_color() -> Color:
-	return props.get("color", Color.DARK_SLATE_GRAY)
+	return props.get("color", Color("#222222"))
 
 func get_gradient() -> Gradient:
 	return props.get("gradient", Gradient.new())
@@ -58,3 +66,9 @@ func get_interpolation() -> int:
 
 func get_line_width() -> float:
 	return props.get("line_width", 2.0)
+
+func get_point_size() -> float:
+	return props.get("point_size", 2.0)
+
+func _to_string() -> String:
+	return "Function: %s %s\n" % [name, props]

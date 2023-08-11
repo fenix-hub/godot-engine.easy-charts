@@ -7,7 +7,7 @@ var y_label: String
 
 # {n}_scale defines in how many sectors the grid will be divided.
 var x_scale: float = 5.0
-var y_scale: float = 2.0
+var y_scale: float = 3.0
 
 var x_tick_size: float = 7
 var x_ticklabel_space: float = 5
@@ -33,6 +33,10 @@ var show_y_label: bool = true
 var show_title: bool = true
 var show_legend: bool = false
 var interactive: bool = false
+var animated: bool = false
+## Use Control nodes to draw point instead of native _draw methods.
+## Will woresn performances on the long term or with complex and populated chards.
+var use_nodes: bool = false
 
 var colors: Dictionary = {
 	frame = Color.WHITE_SMOKE,

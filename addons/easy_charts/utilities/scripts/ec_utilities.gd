@@ -2,6 +2,7 @@ extends RefCounted
 class_name ECUtilities
 
 var alphabet : String = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
+var debug: bool = false
 
 func _ready():
 	pass
@@ -15,10 +16,7 @@ static func _format_value(value: float, is_decimal: bool) -> String:
 ### Utility Inner functions ###
 
 static func _contains_string(array: Array) -> bool:
-	for value in array:
-		if value is String:
-			return true
-	return false
+	return array.all(func(val: Variant): val is String)
 
 static func _is_decimal(value: float) -> bool:
 	return abs(fmod(value, 1)) > 0.0
@@ -27,11 +25,10 @@ static func _has_decimals(values: Array) -> bool:
 	var temp: Array = values.duplicate(true)
 	
 	for dim in temp:
-		for val in dim:
-			if val is String:
-				return false
-			if abs(fmod(val, 1)) > 0.0:
-				return true
+		var any_string: bool = dim.any(func(val: Variant): val is String)
+		var any_dec: bool = dim.any(func(val: Variant): abs(fmod(val, 1)) > 0.0)
+		if any_string: return false
+		elif any_dec: return true
 	
 	return false
 

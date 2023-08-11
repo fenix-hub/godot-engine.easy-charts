@@ -115,7 +115,11 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
 		for i in slices.size():
 			if Geometry2D.is_point_in_polygon(get_relative_position(event.position), slices[i]):
-				var point: Point = Point.new(self.box.get_center() + slices_dirs[i] * self.radius * 0.5, { x = function.x[i], y = function.y[i] })
+				var point: Point = Point.new(
+					{ x = function.x[i], y = function.y[i] },
+					function.get_marker(), function.get_point_size(), function.get_color()
+				)
+				point.move_to_position(box.get_center() + slices_dirs[i] * radius * 0.5)
 				if focused_point == point:
 					return
 				else:

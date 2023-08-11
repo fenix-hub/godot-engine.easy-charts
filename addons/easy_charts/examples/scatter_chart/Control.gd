@@ -29,8 +29,11 @@ func _ready():
 	cp.y_label = "Sensor values"
 	cp.x_scale = 5
 	cp.y_scale = 10
-	cp.interactive = true # false by default, it allows the chart to create a tooltip to show point values
-	# and interecept clicks on the plot
+	# allows the chart to create a tooltip to show point values and interecept clicks on the plot
+	cp.interactive = true 
+	# make it animated
+	cp.animated = true
+	cp.use_nodes = true
 	
 	# Let's add values to our functions
 	f1 = Function.new(
@@ -59,8 +62,7 @@ func _process(delta: float):
 	# we can use the `Function.add_point(x, y)` method to update a function
 	f1.add_point(new_val, cos(new_val) * 20)
 	f2.add_point(new_val, (sin(new_val) * 20) + 20)
-	chart.queue_redraw() # This will force the Chart to be updated
-
+	chart.update() # This will force the Chart to be updated
 
 func _on_CheckButton_pressed():
 	set_process(not is_processing())

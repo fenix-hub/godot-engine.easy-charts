@@ -44,7 +44,7 @@ func _ready():
 											# since it is `NONE`, no marker will be shown.
 			type = Function.Type.LINE, 		# This defines what kind of plotting will be used, 
 											# in this case it will be a Linear Chart.
-			interpolation = Function.Interpolation.STAIR	# Interpolation mode, only used for 
+			interpolation = Function.Interpolation.LINEAR	# Interpolation mode, only used for 
 															# Line Charts and Area Charts.
 		}
 	)
@@ -64,7 +64,7 @@ func _process(delta: float):
 	
 	# we can use the `Function.add_point(x, y)` method to update a function
 	f1.add_point(new_val, cos(new_val) * 20)
-	chart.queue_redraw() # This will force the Chart to be updated
+	chart.update() # This will force the Chart to be updated
 
 
 func _on_CheckButton_pressed():
