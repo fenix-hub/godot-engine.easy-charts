@@ -110,7 +110,11 @@ func calculate_domain(values: Array) -> Dictionary:
 		if ECUtilities._contains_string(value_array):
 			return { lb = 0.0, ub = (value_array.size() - 1), has_decimals = false }
 	var min_max: Dictionary = ECUtilities._find_min_max(values)
-	return { lb = ECUtilities._round_min(min_max.min), ub = ECUtilities._round_max(min_max.max), has_decimals = ECUtilities._has_decimals(values) }
+	
+	if chart_properties.smooth_domain:
+		return { lb = min_max.min, ub = min_max.max, has_decimals = ECUtilities._has_decimals(values) }
+	else:
+		return { lb = ECUtilities._round_min(min_max.min), ub = ECUtilities._round_max(min_max.max), has_decimals = ECUtilities._has_decimals(values) }
 
 func update_gridbox(x_domain: Dictionary, y_domain: Dictionary, x_labels: PackedStringArray, y_labels: PackedStringArray) -> void:
 	grid_box.set_domains(x_domain, y_domain)
