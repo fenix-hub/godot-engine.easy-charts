@@ -34,6 +34,8 @@ var show_title: bool = true
 var show_legend: bool = false
 var interactive: bool = false
 
+var max_samples: int = 50
+
 var colors: Dictionary = {
 	frame = Color.WHITE_SMOKE,
 	background = Color.WHITE,
