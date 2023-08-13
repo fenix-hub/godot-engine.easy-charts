@@ -60,11 +60,6 @@ func load_functions(functions: Array[Function]) -> void:
 		self.x.append(function.__x)
 		self.y.append(function.__y)
 		
-		# Load Labels
-		if self.x_labels.is_empty():
-			if ECUtilities._contains_string(self.x):
-				self.x_labels = self.x
-		
 		# Create FunctionPlotter
 		var function_plotter: FunctionPlotter = get_function_plotter(function)
 		function_plotter.connect("point_entered", Callable(plot_box, "_on_point_entered"))
@@ -85,9 +80,18 @@ func _draw() -> void:
 		printerr("Cannot plot an empty function!")
 		return
 	
+	var _x: Array = []
+	_x.resize(x.size())
+	var _y: Array = []
+	_y.resize(y.size())
+	
+	for i in x.size():
+		_x[i] = x[i].slice(max(0, x[i].size() - chart_properties.max_samples), x[i].size())
+		_y[i] = y[i].slice(max(0, y[i].size() - chart_properties.max_samples), y[i].size())
+	
 	# GridBox
-	var x_domain: Dictionary = calculate_domain(x)
-	var y_domain: Dictionary = calculate_domain(y)
+	var x_domain: Dictionary = calculate_domain(_x)
+	var y_domain: Dictionary = calculate_domain(_y)
 	
 	var plotbox_margins: Vector2 = calculate_plotbox_margins(x_domain, y_domain)
 	
@@ -95,7 +99,7 @@ func _draw() -> void:
 	plot_box.box_margins = plotbox_margins
 	
 	# Update GridBox
-	update_gridbox(x_domain, y_domain, self.x_labels, self.y_labels)
+	update_gridbox(x_domain, y_domain, x_labels, y_labels)
 	
 	# Update each FunctionPlotter in FunctionsBox
 	for function_plotter in functions_box.get_children():

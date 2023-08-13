@@ -50,7 +50,7 @@ func _ready():
 	)
 	
 	# Now let's plot our data
-	chart.plot([f1])
+	chart.plot([f1], cp)
 	
 	# Uncommenting this line will show how real time data plotting works
 	set_process(false)
