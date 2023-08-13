@@ -15,9 +15,13 @@ var y: Array = []
 var x_labels: PackedStringArray = []
 var y_labels: PackedStringArray = []
 
-var chart_properties: ChartProperties = ChartProperties.new()
+var chart_properties: ChartProperties = null
 
 ###########
+
+func _ready() -> void:
+	if theme == null:
+		theme = Theme.new()
 
 func plot(functions: Array[Function], properties: ChartProperties = ChartProperties.new()) -> void:
 	self.functions = functions
@@ -53,13 +57,13 @@ func load_functions(functions: Array[Function]) -> void:
 	
 	for function in functions:
 		# Load x and y values
-		self.x.append(function.x)
-		self.y.append(function.y)
+		self.x.append(function.__x)
+		self.y.append(function.__y)
 		
 		# Load Labels
 		if self.x_labels.is_empty():
-			if ECUtilities._contains_string(function.x):
-				self.x_labels = function.x
+			if ECUtilities._contains_string(self.x):
+				self.x_labels = self.x
 		
 		# Create FunctionPlotter
 		var function_plotter: FunctionPlotter = get_function_plotter(function)
@@ -77,6 +81,10 @@ func load_functions(functions: Array[Function]) -> void:
 				function_legend.add_function(function)
 
 func _draw() -> void:
+	if (x.size() == 1 and x[0].is_empty()) or (y.size() == 1 and y[0].is_empty()):
+		printerr("Cannot plot an empty function!")
+		return
+	
 	# GridBox
 	var x_domain: Dictionary = calculate_domain(x)
 	var y_domain: Dictionary = calculate_domain(y)
