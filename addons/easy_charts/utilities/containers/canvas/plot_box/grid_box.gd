@@ -23,20 +23,25 @@ func set_labels(x_labels: Array, y_labels: Array) -> void:
 	self.y_labels = y_labels
 
 func _draw() -> void:
+	var cp: ChartProperties = get_parent().chart_properties
+	if cp == null:
+		printerr("Cannot draw the gridbox with a null ChartProperties object!")
+		return
+	
 	self.box = get_parent().get_box()
 	self.plot_box = get_parent().get_plot_box()
 	
-	if get_parent().chart_properties.draw_background:
+	if cp.draw_background:
 		_draw_background()
 	
-	if get_parent().chart_properties.draw_grid_box:
+	if cp.draw_grid_box:
 		_draw_vertical_grid()
 		_draw_horizontal_grid()
 	
-	if get_parent().chart_properties.draw_origin:
+	if cp.draw_origin:
 		_draw_origin()
 	
-	if get_parent().chart_properties.draw_bounding_box:
+	if cp.draw_bounding_box:
 		_draw_bounding_box()
 
 func _draw_background() -> void:

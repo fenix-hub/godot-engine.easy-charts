@@ -1,11 +1,17 @@
+# This example shows how to instantiate a Chart node at runtime and plot a single function
+
 extends Control
 
-@onready var chart: Chart = $VBoxContainer/Chart
+@onready var chart_scn: PackedScene = load("res://addons/easy_charts/control_charts/chart.tscn")
+var chart: Chart
 
 # This Chart will plot 1 function
 var f1: Function
 
 func _ready():
+	chart = chart_scn.instantiate()
+	$VBoxContainer.add_child(chart)
+	
 	# Let's create our @x values
 	var x: Array = ArrayOperations.multiply_float(range(-10, 11, 1), 0.5)
 	

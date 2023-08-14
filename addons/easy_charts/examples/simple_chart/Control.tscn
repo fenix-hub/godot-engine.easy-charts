@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://v4c2f17q8a1o"]
+[gd_scene load_steps=3 format=3 uid="uid://v4c2f17q8a1o"]
 
 [ext_resource type="Script" path="res://addons/easy_charts/examples/simple_chart/Control.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="2"]
 
 [sub_resource type="StyleBoxFlat" id="1"]
 content_margin_right = 5.0
@@ -34,9 +33,6 @@ theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
 text = "Start Relatime Plotting"
-
-[node name="Chart" parent="VBoxContainer" instance=ExtResource("2")]
-layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
