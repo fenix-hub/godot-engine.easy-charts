@@ -35,7 +35,7 @@ var show_legend: bool = false
 var interactive: bool = false
 
 var smooth_domain: bool = false
-var max_samples: int = 50
+var max_samples: int = 100
 
 var colors: Dictionary = {
 	frame = Color.WHITE_SMOKE,

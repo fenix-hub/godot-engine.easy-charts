@@ -64,6 +64,7 @@ func _process(delta: float):
 	
 	# we can use the `Function.add_point(x, y)` method to update a function
 	f1.add_point(new_val, cos(new_val) * 20)
+	f1.remove_point(0)
 	chart.queue_redraw() # This will force the Chart to be updated
 
 

@@ -75,14 +75,15 @@ func load_functions(functions: Array[Function]) -> void:
 			_:
 				function_legend.add_function(function)
 
+var _x: Array = []
+var _y: Array = []
+
 func _draw() -> void:
 	if (x.size() == 1 and x[0].is_empty()) or (y.size() == 1 and y[0].is_empty()):
 		printerr("Cannot plot an empty function!")
 		return
 	
-	var _x: Array = []
 	_x.resize(x.size())
-	var _y: Array = []
 	_y.resize(y.size())
 	
 	for i in x.size():
