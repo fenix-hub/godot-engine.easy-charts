@@ -79,7 +79,6 @@ var _x: Array = []
 var _y: Array = []
 
 func _draw() -> void:
-	print_debug("draw chart")
 	if (x.size() == 0) or (y.size() == 0) or (x.size() == 1 and x[0].is_empty()) or (y.size() == 1 and y[0].is_empty()):
 		printerr("Cannot plot an empty function!")
 		return

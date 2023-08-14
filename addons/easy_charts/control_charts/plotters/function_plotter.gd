@@ -17,7 +17,7 @@ func update_values(x_domain: Dictionary, y_domain: Dictionary) -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	print_debug("draw function plotter")
+	pass
 
 func get_box() -> Rect2:
 	return get_parent().get_parent().get_plot_box()
