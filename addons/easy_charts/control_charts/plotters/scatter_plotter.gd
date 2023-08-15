@@ -16,6 +16,7 @@ func _init(function: Function) -> void:
 
 func _draw() -> void:
 	super._draw()
+	
 	var box: Rect2 = get_box()
 	var x_sampled_domain: Dictionary = { lb = box.position.x, ub = box.end.x }
 	var y_sampled_domain: Dictionary = { lb = box.end.y, ub = box.position.y }
@@ -30,11 +31,11 @@ func _draw() -> void:
 func sample(x_sampled_domain: Dictionary, y_sampled_domain: Dictionary) -> void:
 	points = []
 	points_positions = []
-	var r0: int = max(0, function.__x.size() - get_chart_properties().max_samples) \
+	var lower_bound: int = max(0, function.__x.size() - get_chart_properties().max_samples) \
 	#disable sample display limits
 		if get_chart_properties().max_samples > 0 \
 		else 0
-	for i in range(r0, function.__x.size()):
+	for i in range(lower_bound, function.__x.size()):
 		var _position: Vector2 = Vector2(
 			ECUtilities._map_domain(float(function.__x[i]), x_domain, x_sampled_domain),
 			ECUtilities._map_domain(float(function.__y[i]), y_domain, y_sampled_domain)

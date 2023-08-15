@@ -22,7 +22,8 @@ func _ready():
 	# Let's add values to our functions
 	f1 = Function.new(x, y, "Pressure", { marker = Function.Marker.CIRCLE })
 	
-	chart.set_x_domain(-1000, 1000)
+	# Set fixed Y domain
+	chart.set_y_domain(-50, 50)
 	
 	# Now let's plot our data
 	chart.plot([f1])
