@@ -27,7 +27,13 @@ func _draw() -> void:
 func sample(x_sampled_domain: Dictionary, y_sampled_domain: Dictionary) -> void:
 	points = []
 	points_positions = []
-	for i in range(max(0, function.__x.size() - get_chart_properties().max_samples), function.__x.size()):
+	
+	var lower_bound : int = max(0, function.__x.size() - get_chart_properties().max_samples)
+	#disable sample display limits
+	if get_chart_properties().max_samples == -1:
+		lower_bound = 0
+	
+	for i in range(lower_bound, function.__x.size()):
 		var _position: Vector2 = Vector2(
 			ECUtilities._map_domain(float(function.__x[i]), x_domain, x_sampled_domain),
 			ECUtilities._map_domain(float(function.__y[i]), y_domain, y_sampled_domain)

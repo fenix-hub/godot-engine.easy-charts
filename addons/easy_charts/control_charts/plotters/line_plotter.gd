@@ -38,6 +38,11 @@ func _get_stair_points() -> PackedVector2Array:
 
 func _draw() -> void:
 	super._draw()
+	
+	#prevent error when drawing with no data.
+	if points_positions.size() < 2:
+		return
+	
 	match function.get_interpolation():
 		Function.Interpolation.LINEAR:
 			draw_polyline(
