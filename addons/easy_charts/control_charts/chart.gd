@@ -85,9 +85,15 @@ func _draw() -> void:
 	var _y: Array = []
 	_y.resize(y.size())
 	
-	for i in x.size():
-		_x[i] = x[i].slice(max(0, x[i].size() - chart_properties.max_samples), x[i].size())
-		_y[i] = y[i].slice(max(0, y[i].size() - chart_properties.max_samples), y[i].size())
+	#disable sample display limits
+	if chart_properties.max_samples == -1:
+		for i in x.size():
+			_x[i] = x[i]
+			_y[i] = y[i]
+	else:
+		for i in x.size():
+			_x[i] = x[i].slice(max(0, x[i].size() - chart_properties.max_samples), x[i].size())
+			_y[i] = y[i].slice(max(0, y[i].size() - chart_properties.max_samples), y[i].size())
 	
 	# GridBox
 	var x_domain: Dictionary = calculate_domain(_x)
