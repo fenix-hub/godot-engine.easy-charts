@@ -31,6 +31,7 @@ func sample(x_sampled_domain: Dictionary, y_sampled_domain: Dictionary) -> void:
 	points = []
 	points_positions = []
 	var r0: int = max(0, function.__x.size() - get_chart_properties().max_samples) \
+	#disable sample display limits
 		if get_chart_properties().max_samples > 0 \
 		else 0
 	for i in range(r0, function.__x.size()):
