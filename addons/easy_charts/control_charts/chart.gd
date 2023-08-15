@@ -15,6 +15,9 @@ var y: Array = []
 var x_labels: PackedStringArray = []
 var y_labels: PackedStringArray = []
 
+var x_domain: Dictionary = {}
+var y_domain: Dictionary = {}
+
 var chart_properties: ChartProperties = null
 
 ###########
@@ -75,24 +78,39 @@ func load_functions(functions: Array[Function]) -> void:
 			_:
 				function_legend.add_function(function)
 
-var _x: Array = []
-var _y: Array = []
-
 func _draw() -> void:
 	if (x.size() == 0) or (y.size() == 0) or (x.size() == 1 and x[0].is_empty()) or (y.size() == 1 and y[0].is_empty()):
 		printerr("Cannot plot an empty function!")
 		return
 	
-	_x.resize(x.size())
-	_y.resize(y.size())
-	
-	for i in x.size():
-		_x[i] = x[i].slice(max(0, x[i].size() - chart_properties.max_samples), x[i].size())
-		_y[i] = y[i].slice(max(0, y[i].size() - chart_properties.max_samples), y[i].size())
+	var is_x_fixed: bool = x_domain.get("fixed", false)
+	var is_y_fixed: bool = y_domain.get("fixed", false)
 	
 	# GridBox
-	var x_domain: Dictionary = calculate_domain(_x)
-	var y_domain: Dictionary = calculate_domain(_y)
+	if not is_x_fixed or not is_y_fixed :
+		if chart_properties.max_samples > 0 :
+			var _x: Array = []
+			var _y: Array = []
+			
+			_x.resize(x.size())
+			_y.resize(y.size())
+			
+			for i in x.size():
+				if not is_x_fixed:
+					_x[i] = x[i].slice(max(0, x[i].size() - chart_properties.max_samples), x[i].size())
+				if not is_y_fixed:
+					_y[i] = y[i].slice(max(0, y[i].size() - chart_properties.max_samples), y[i].size())
+			
+			if not is_x_fixed:
+				x_domain = calculate_domain(_x)
+			if not is_y_fixed:
+				y_domain = calculate_domain(_y)
+		else:
+			if not is_x_fixed:
+				x_domain = calculate_domain(x)
+			if not is_y_fixed:
+				y_domain = calculate_domain(y)
+	
 	
 	var plotbox_margins: Vector2 = calculate_plotbox_margins(x_domain, y_domain)
 	
@@ -104,18 +122,25 @@ func _draw() -> void:
 	
 	# Update each FunctionPlotter in FunctionsBox
 	for function_plotter in functions_box.get_children():
-		function_plotter.update_values(x_domain, y_domain)
+		if function_plotter is FunctionPlotter:
+			function_plotter.update_values(x_domain, y_domain)
 
 func calculate_domain(values: Array) -> Dictionary:
 	for value_array in values:
 		if ECUtilities._contains_string(value_array):
-			return { lb = 0.0, ub = (value_array.size() - 1), has_decimals = false }
+			return { lb = 0.0, ub = (value_array.size() - 1), has_decimals = false , fixed = false }
 	var min_max: Dictionary = ECUtilities._find_min_max(values)
 	
 	if chart_properties.smooth_domain:
-		return { lb = min_max.min, ub = min_max.max, has_decimals = ECUtilities._has_decimals(values) }
+		return { lb = min_max.min, ub = min_max.max, has_decimals = ECUtilities._has_decimals(values), fixed = false }
 	else:
-		return { lb = ECUtilities._round_min(min_max.min), ub = ECUtilities._round_max(min_max.max), has_decimals = ECUtilities._has_decimals(values) }
+		return { lb = ECUtilities._round_min(min_max.min), ub = ECUtilities._round_max(min_max.max), has_decimals = ECUtilities._has_decimals(values) , fixed = false }
+
+func set_x_domain(lb: Variant, ub: Variant) -> void:
+	x_domain = { lb = lb, ub = ub, has_decimals = ECUtilities._has_decimals([lb, ub]), fixed = true }
+
+func set_y_domain(lb: Variant, ub: Variant) -> void:
+	y_domain = { lb = lb, ub = ub, has_decimals = ECUtilities._has_decimals([lb, ub]), fixed = true }
 
 func update_gridbox(x_domain: Dictionary, y_domain: Dictionary, x_labels: PackedStringArray, y_labels: PackedStringArray) -> void:
 	grid_box.set_domains(x_domain, y_domain)

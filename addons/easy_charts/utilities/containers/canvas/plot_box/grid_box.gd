@@ -47,7 +47,9 @@ func _draw_background() -> void:
 	draw_rect(self.box, get_parent().chart_properties.colors.background, true)# false) TODOGODOT4 Antialiasing argument is missing
 
 func _draw_bounding_box() -> void:
-	draw_rect(self.box, get_parent().chart_properties.colors.bounding_box, false, 1)# true) TODOGODOT4 Antialiasing argument is missing
+	var box: Rect2 = self.box
+	box.position.y += 1
+	draw_rect(box, get_parent().chart_properties.colors.bounding_box, false, 1)# true) TODOGODOT4 Antialiasing argument is missing
 
 func _draw_origin() -> void:
 	var xorigin: float = ECUtilities._map_domain(0.0, x_domain, { lb = self.plot_box.position.x, ub = self.plot_box.end.x })

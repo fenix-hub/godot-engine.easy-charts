@@ -4,7 +4,7 @@ class_name ScatterPlotter
 signal point_entered(point, function)
 signal point_exited(point, function)
 
-var points: Array
+var points: Array[Point]
 var points_positions: PackedVector2Array
 var focused_point: Point
 
@@ -23,7 +23,9 @@ func _draw() -> void:
 	
 	if function.get_marker() != Function.Marker.NONE:
 		for point in points:
-			draw_function_point(point.position)
+			# Don't plot points outside domain upper and lower bounds!
+			if point.position.y <= y_sampled_domain.lb and point.position.y >= y_sampled_domain.ub: 
+				draw_function_point(point.position)
 
 func sample(x_sampled_domain: Dictionary, y_sampled_domain: Dictionary) -> void:
 	points = []
