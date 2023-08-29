@@ -72,9 +72,9 @@ func load_functions(functions: Array[Function]) -> void:
 		# Create legend
 		match function.get_type():
 			Function.Type.PIE:
-				for i in function.x.size():
-					var interp_color: Color = function.get_gradient().sample(float(i) / float(function.x.size()))
-					function_legend.add_label(function.get_type(), interp_color, Function.Marker.NONE, function.y[i])
+				for i in function.__x.size():
+					var interp_color: Color = function.get_gradient().sample(float(i) / float(function.__x.size()))
+					function_legend.add_label(function.get_type(), interp_color, Function.Marker.NONE, function.__y[i])
 			_:
 				function_legend.add_function(function)
 

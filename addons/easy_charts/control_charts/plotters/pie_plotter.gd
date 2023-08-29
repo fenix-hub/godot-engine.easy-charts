@@ -32,13 +32,13 @@ func _draw() -> void:
 func get_total() -> float:
 	# Calculate total and ratios
 	var total: float = 0.0
-	for value in function.x:
+	for value in function.__x:
 		total += float(value)
 	return total
 
 func get_ratios(total: float) -> PackedFloat32Array:
 	var ratios: PackedFloat32Array = []
-	for value in function.x:
+	for value in function.__x:
 		ratios.push_back(value / total * 100)
 	return ratios
 
@@ -84,7 +84,7 @@ func _draw_pie() -> void:
 func _draw_labels(radius: float, center: Vector2, ratios: PackedFloat32Array) -> void:
 	for i in slices_dirs.size():
 		var ratio_lbl: String = "%.1f%%" % ratios[i]
-		var value_lbl: String = "(%s)" % function.x[i]
+		var value_lbl: String = "(%s)" % function.__x[i]
 		var position: Vector2 = center + slices_dirs[i] * radius * 0.5
 		var ratio_lbl_size: Vector2 = get_chart_properties().get_string_size(ratio_lbl)
 		var value_lbl_size: Vector2 = get_chart_properties().get_string_size(value_lbl)
@@ -115,7 +115,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
 		for i in slices.size():
 			if Geometry2D.is_point_in_polygon(get_relative_position(event.position), slices[i]):
-				var point: Point = Point.new(self.box.get_center() + slices_dirs[i] * self.radius * 0.5, { x = function.x[i], y = function.y[i] })
+				var point: Point = Point.new(self.box.get_center() + slices_dirs[i] * self.radius * 0.5, { x = function.__x[i], y = function.__y[i] })
 				if focused_point == point:
 					return
 				else:
