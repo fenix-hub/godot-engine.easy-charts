@@ -26,10 +26,10 @@ func _draw() -> void:
 func sample(x_sampled_domain: Dictionary, y_sampled_domain: Dictionary) -> void:
 	bars = []
 	bars_rects = []
-	for i in function.x.size():
+	for i in function.__x.size():
 		var top: Vector2 = Vector2(
 			ECUtilities._map_domain(i, x_domain, x_sampled_domain),
-			ECUtilities._map_domain(function.y[i], y_domain, y_sampled_domain)
+			ECUtilities._map_domain(function.__y[i], y_domain, y_sampled_domain)
 		)
 		var base: Vector2 = Vector2(top.x, ECUtilities._map_domain(0.0, y_domain, y_sampled_domain))
 		bars.push_back(top)
@@ -44,7 +44,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
 		for i in bars_rects.size():
 			if bars_rects[i].grow(5).abs().has_point(get_relative_position(event.position)):
-				var point: Point = Point.new(bars_rects[i].get_center(), { x = function.x[i], y = function.y[i]})
+				var point: Point = Point.new(bars_rects[i].get_center(), { x = function.__x[i], y = function.__y[i]})
 				if focused_bar_midpoint == point:
 					return
 				else:
