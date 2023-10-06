@@ -63,6 +63,11 @@ func load_functions(functions: Array[Function]) -> void:
 		self.x.append(function.__x)
 		self.y.append(function.__y)
 		
+		# Load Labels
+		if self.x_labels.is_empty():
+			if ECUtilities._contains_string(function.__x):
+				self.x_labels = function.__x
+		
 		# Create FunctionPlotter
 		var function_plotter: FunctionPlotter = get_function_plotter(function)
 		function_plotter.connect("point_entered", Callable(plot_box, "_on_point_entered"))
