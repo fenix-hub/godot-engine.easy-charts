@@ -57,6 +57,11 @@ func load_functions(functions: Array[Function]) -> void:
 	self.y = []
 	
 	function_legend.clear()
+
+	# Remove existing function_plotters
+	for function_plotter in functions_box.get_children():
+		functions_box.remove_child(function_plotter)
+		function_plotter.queue_free()
 	
 	for function in functions:
 		# Load x and y values
