@@ -125,7 +125,9 @@ func _draw() -> void:
     # Update each FunctionPlotter in FunctionsBox
     for function_plotter in functions_box.get_children():
         if function_plotter is FunctionPlotter:
-            function_plotter.update_values(x_domain, y_domain)
+            function_plotter.visible = function_plotter.function.get_visibility()
+            if function_plotter.function.get_visibility():
+                function_plotter.update_values(x_domain, y_domain)
 
 func calculate_domain(values: Array) -> Dictionary:
     for value_array in values:

@@ -81,6 +81,9 @@ func get_interpolation() -> int:
 func get_line_width() -> float:
     return props.get("line_width", 2.0)
 
+func get_visibility() -> bool:
+    return props.get("visible", true)
+
 func copy() -> Function:
     return Function.new(
         self.__x.duplicate(),
