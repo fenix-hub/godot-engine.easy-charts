@@ -48,28 +48,28 @@ var smooth_domain: bool = false
 ## instead older points will be just ignored. This will make your Function object x and y arrays 
 ## grow linearly, but won't interfere with your own data.
 ## If you instead prefer to improve performances by completely remove older data from your Function
-## object, consider calling the Function.remote_point(0) method before adding a new point and plotting
+## object, consider calling the Function.remove_point(0) method before adding a new point and plotting
 ## again.
 var max_samples: int = 100
 
 ## Dictionary of colors for all of the Chart elements.
 var colors: Dictionary = {
-	frame = Color.WHITE_SMOKE,
-	background = Color.WHITE,
-	borders = Color.RED,
-	bounding_box = Color.BLACK,
-	grid = Color.GRAY,
-	ticks = Color.BLACK,
-	text = Color.BLACK,
-	origin = Color.DIM_GRAY
+    frame = Color.WHITE_SMOKE,
+    background = Color.WHITE,
+    borders = Color.RED,
+    bounding_box = Color.BLACK,
+    grid = Color.GRAY,
+    ticks = Color.BLACK,
+    text = Color.BLACK,
+    origin = Color.DIM_GRAY
 }
 
 var font: FontFile = load("res://addons/easy_charts/utilities/assets/OpenSans-VariableFont_wdth,wght.ttf")
 var font_size: int = 13
 
 func _init() -> void:
-	ThemeDB.set_fallback_font(font)
-	ThemeDB.set_fallback_font_size(font_size)
+    ThemeDB.set_fallback_font(font)
+    ThemeDB.set_fallback_font_size(font_size)
 
 func get_string_size(text: String) -> Vector2:
-	return font.get_string_size(text)
+    return font.get_string_size(text)
