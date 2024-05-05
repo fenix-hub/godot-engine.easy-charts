@@ -12,8 +12,8 @@ var functions: Array = []
 var x: Array = []
 var y: Array = []
 
-var x_labels: PackedStringArray = []
-var y_labels: PackedStringArray = []
+var x_labels_function: Callable = Callable()
+var y_labels_function: Callable = Callable()
 
 var x_domain: Dictionary = {}
 var y_domain: Dictionary = {}
@@ -68,11 +68,6 @@ func load_functions(functions: Array[Function]) -> void:
         self.x.append(function.__x)
         self.y.append(function.__y)
         
-        # Load Labels
-        if self.x_labels.is_empty():
-            if ECUtilities._contains_string(function.__x):
-                self.x_labels = function.__x
-        
         # Create FunctionPlotter
         var function_plotter: FunctionPlotter = get_function_plotter(function)
         function_plotter.connect("point_entered", Callable(plot_box, "_on_point_entered"))
@@ -121,14 +116,11 @@ func _draw() -> void:
             if not is_y_fixed:
                 y_domain = calculate_domain(y)
     
-    
-    var plotbox_margins: Vector2 = calculate_plotbox_margins(x_domain, y_domain)
-    
     # Update values for the PlotBox in order to propagate them to the children
-    plot_box.box_margins = plotbox_margins
+    update_plotbox(x_domain, y_domain, x_labels_function, y_labels_function)
     
     # Update GridBox
-    update_gridbox(x_domain, y_domain, x_labels, y_labels)
+    update_gridbox(x_domain, y_domain, x_labels_function, y_labels_function)
     
     # Update each FunctionPlotter in FunctionsBox
     for function_plotter in functions_box.get_children():
@@ -152,15 +144,19 @@ func set_x_domain(lb: Variant, ub: Variant) -> void:
 func set_y_domain(lb: Variant, ub: Variant) -> void:
     y_domain = { lb = lb, ub = ub, has_decimals = ECUtilities._has_decimals([lb, ub]), fixed = true }
 
-func update_gridbox(x_domain: Dictionary, y_domain: Dictionary, x_labels: PackedStringArray, y_labels: PackedStringArray) -> void:
+func update_plotbox(x_domain: Dictionary, y_domain: Dictionary, x_labels_function: Callable, y_labels_function: Callable) -> void:
+    plot_box.box_margins = calculate_plotbox_margins(x_domain, y_domain)
+    plot_box.set_labels_functions(x_labels_function, y_labels_function)
+
+func update_gridbox(x_domain: Dictionary, y_domain: Dictionary, x_labels_function: Callable, y_labels_function: Callable) -> void:
     grid_box.set_domains(x_domain, y_domain)
-    grid_box.set_labels(x_labels, y_labels)
+    grid_box.set_labels_functions(x_labels_function, y_labels_function)
     grid_box.queue_redraw()
 
 func calculate_plotbox_margins(x_domain: Dictionary, y_domain: Dictionary) -> Vector2:
     var plotbox_margins: Vector2 = Vector2(
         chart_properties.x_tick_size,
-    chart_properties.y_tick_size
+        chart_properties.y_tick_size
     )
     
     if chart_properties.show_tick_labels:

@@ -47,6 +47,9 @@ func _ready():
         }
     )
     
+    # Let's give our chart a custom labelling on the X axis, by passing a function
+    #chart.x_labels_function = func(n: float) -> String: return "%s (s)" % str( log(n / 10) ) 
+    
     # Now let's plot our data
     chart.plot([f1], cp)
     
