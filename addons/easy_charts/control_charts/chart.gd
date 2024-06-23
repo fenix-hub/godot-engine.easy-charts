@@ -147,7 +147,7 @@ func set_y_domain(lb: Variant, ub: Variant) -> void:
     y_domain = { lb = lb, ub = ub, has_decimals = ECUtilities._has_decimals([lb, ub]), fixed = true }
 
 func update_plotbox(x_domain: Dictionary, y_domain: Dictionary, x_labels_function: Callable, y_labels_function: Callable) -> void:
-    plot_box.box_margins = calculate_plotbox_margins(x_domain, y_domain)
+    plot_box.box_margins = calculate_plotbox_margins(x_domain, y_domain, y_labels_function)
     plot_box.set_labels_functions(x_labels_function, y_labels_function)
 
 func update_gridbox(x_domain: Dictionary, y_domain: Dictionary, x_labels_function: Callable, y_labels_function: Callable) -> void:
@@ -155,7 +155,7 @@ func update_gridbox(x_domain: Dictionary, y_domain: Dictionary, x_labels_functio
     grid_box.set_labels_functions(x_labels_function, y_labels_function)
     grid_box.queue_redraw()
 
-func calculate_plotbox_margins(x_domain: Dictionary, y_domain: Dictionary) -> Vector2:
+func calculate_plotbox_margins(x_domain: Dictionary, y_domain: Dictionary, y_labels_function: Callable) -> Vector2:
     var plotbox_margins: Vector2 = Vector2(
         chart_properties.x_tick_size,
         chart_properties.y_tick_size
@@ -165,9 +165,11 @@ func calculate_plotbox_margins(x_domain: Dictionary, y_domain: Dictionary) -> Ve
         var x_ticklabel_size: Vector2
         var y_ticklabel_size: Vector2
         
-        var y_max_formatted: String = ECUtilities._format_value(y_domain.ub, y_domain.has_decimals)
+        var y_max_formatted: String = y_labels_function.call(y_domain.ub) if not y_labels_function.is_null() else \
+            ECUtilities._format_value(y_domain.ub, y_domain.has_decimals)
         if y_domain.lb < 0: # negative number
-            var y_min_formatted: String = ECUtilities._format_value(y_domain.lb, y_domain.has_decimals)
+            var y_min_formatted: String = y_labels_function.call(y_domain.ub) if not y_labels_function.is_null() else \
+                ECUtilities._format_value(y_domain.lb, y_domain.has_decimals)
             if y_min_formatted.length() >= y_max_formatted.length():
                 y_ticklabel_size = chart_properties.get_string_size(y_min_formatted)
             else:
