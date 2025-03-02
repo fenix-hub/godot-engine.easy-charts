@@ -102,3 +102,5 @@ text = "{xlabel}"
 unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
+
+[connection signal="resized" from="Canvas/CanvasContainer/DataContainer/PlotContainer/PlotBox" to="." method="_on_plot_box_resized"]
