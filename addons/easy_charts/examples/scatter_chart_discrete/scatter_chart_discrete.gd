@@ -2,17 +2,13 @@ extends Control
 
 @onready var chart: Chart = $VBoxContainer/Chart
 
-# This Chart will plot 3 different functions
-var f1: Function
-var f2: Function
-
 func _ready():
-	# Let's create our @x values
-	var x: Array = ["City 1", "City 2", "City 3", "City 4", "City 5"]
- 
-	# And our y values. It can be an n-size array of arrays.
-	# NOTE: `x.size() == y.size()` or `x.size() == y[n].size()`
-	var y: Array = [10, 15, 4, 8, 15]
+	# X values will be the hours of the day, starting with 0 ending on 23.
+	var x: Array = range(0, 24)
+
+	# Arrays contain how many animals have been seen in each hour.
+	var blackbird_spots: Array =   [0, 0, 0, 0, 0, 0, 0, 4, 5, 3, 6, 0, 0, 0, 2, 0, 0, 4, 5, 0, 0, 0, 0, 0]
+	var nightingale_spots: Array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 2, 1, 0, 4, 4, 0, 3, 0, 0]
 
 	# Let's customize the chart properties, which specify how the chart
 	# should look, plus some additional elements like labels, the scale, etc...
@@ -23,42 +19,47 @@ func _ready():
 	cp.colors.ticks = Color("#283442")
 	cp.colors.text = Color.WHITE_SMOKE
 	cp.draw_bounding_box = false
-	cp.title = "Population chart"
-	cp.x_label = "Cities"
-	cp.y_label = "Inhabitants"
-	cp.x_scale = 5
-	cp.y_scale = 10
-	cp.interactive = true # false by default, it allows the chart to create a tooltip to show point values
-	# and interecept clicks on the plot
+	cp.title = "Animal spots"
+	cp.x_label = "Time"
+	cp.y_label = "Spots"
+	cp.interactive = true
+	cp.show_legend = true
  
 	# Let's add values to our functions
-	f1 = Function.new(
-		x, y, "Foo", # This will create a function with x and y values taken by the Arrays 
-					# we have created previously. This function will also be named "Pressure"
-					# as it contains 'pressure' values.
-					# If set, the name of a function will be used both in the Legend
-					# (if enabled thourgh ChartProperties) and on the Tooltip (if enabled).
-		{ color = Color.GREEN, marker = Function.Marker.CIRCLE }
+	var blackbird_function = Function.new(
+		x,
+		blackbird_spots,
+		"Blackbird",
+		{ color = Color.GREEN, marker = Function.Marker.CIRCLE, type = Function.Type.SCATTER }
+	)
+
+	var nightingale_function = Function.new(
+		x,
+		nightingale_spots,
+		"Nightingale",
+		{ color = Color.BLUE, marker = Function.Marker.CROSS, type = Function.Type.SCATTER }
 	)
 
 	# Now let's plot our data
-	chart.plot([f1], cp)
+	chart.y_labels_function = func(value: float): return str(int(value))
 
-	# Uncommenting this line will show how real time data plotting works
-	set_process(false)
+	# Configure the x axis so that there is one tick every two hours. This has to
+	# be precise to ensure that no interpolation happens
+	cp.x_scale = x.size() / 2 - 1
+	chart.set_x_domain(0, x.size() - 1)
+	chart.x_labels_function = func(value: float) -> String:
+		return "%02d:00 - %02d:00" % [value, value + 1]
 
+	# Configure the y axis 
+	var y_max_value := 0
+	for i in range(0, 24):
+		if blackbird_spots[i] > y_max_value:
+			y_max_value = blackbird_spots[i]
+		if nightingale_spots[i] > y_max_value:
+			y_max_value = nightingale_spots[i]
+	# Add one or two on top so that we have some nice spacing
+	y_max_value += 2 if (y_max_value % 2) == 0 else 1
+	cp.y_scale = y_max_value / 2
+	chart.set_y_domain(0, y_max_value)
 
-var new_val: float = 4.5
-
-func _process(delta: float):
-	# This function updates the values of a function and then updates the plot
-	new_val += 5
-
-	# we can use the `Function.add_point(x, y)` method to update a function
-	f1.add_point(new_val, cos(new_val) * 20)
-	f2.add_point(new_val, (sin(new_val) * 20) + 20)
-	chart.queue_redraw() # This will force the Chart to be updated
-
-
-func _on_CheckButton_pressed():
-	set_process(not is_processing())
+	chart.plot([blackbird_function, nightingale_function], cp)

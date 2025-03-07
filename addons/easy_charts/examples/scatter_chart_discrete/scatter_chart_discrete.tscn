@@ -25,16 +25,6 @@ layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-text = "Start Relatime Plotting"
-
 [node name="Chart" parent="VBoxContainer" instance=ExtResource("2_pd01x")]
 layout_mode = 2
 
@@ -44,5 +34,3 @@ size_flags_horizontal = 8
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_styles/normal = SubResource("1")
 text = "Try to scale the window!"
-
-[connection signal="pressed" from="VBoxContainer/CheckButton" to="." method="_on_CheckButton_pressed"]
