@@ -24,9 +24,7 @@ func _draw() -> void:
 	
 	if function.get_marker() != Function.Marker.NONE:
 		for point in points:
-			# Don't plot points outside domain upper and lower bounds!
-			if point.position.y <= y_sampled_domain.lb and point.position.y >= y_sampled_domain.ub: 
-				draw_function_point(point.position)
+			draw_function_point(point.position)
 
 func sample(x_sampled_domain: ChartAxisDomain, y_sampled_domain: ChartAxisDomain) -> void:
 	points = []
@@ -40,7 +38,13 @@ func sample(x_sampled_domain: ChartAxisDomain, y_sampled_domain: ChartAxisDomain
 			ECUtilities._map_domain(float(function.__x[i]), x_domain, x_sampled_domain),
 			ECUtilities._map_domain(float(function.__y[i]), y_domain, y_sampled_domain)
 		)
-		points.push_back(Point.new(_position, { x = function.__x[i], y = function.__y[i] }))
+
+		var point = Point.new(_position, { x = function.__x[i], y = function.__y[i] })
+		# Don't generate outside y domain upper and lower bounds!
+		if point.position.y > y_sampled_domain.lb || point.position.y < y_sampled_domain.ub:
+			continue
+
+		points.push_back(point)
 		points_positions.push_back(_position)
 
 func draw_function_point(point_position: Vector2) -> void:

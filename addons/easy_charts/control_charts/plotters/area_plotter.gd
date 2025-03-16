@@ -17,7 +17,10 @@ func _draw_areas() -> void:
 			fp_augmented = _get_spline_points()
 		Function.Interpolation.NONE, _:
 			return
-	
+
+	if fp_augmented.size() == 0:
+		return
+
 	fp_augmented.push_back(Vector2(fp_augmented[-1].x, box.end.y + 80))
 	fp_augmented.push_back(Vector2(fp_augmented[0].x, box.end.y + 80))
 	
