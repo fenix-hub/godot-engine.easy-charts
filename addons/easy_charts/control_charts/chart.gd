@@ -114,10 +114,6 @@ func _draw() -> void:
 			if function_plotter.function.get_visibility():
 				function_plotter.update_values(x_domain, y_domain)
 
-func calculate_domain(values: Array) -> Dictionary:
-	assert(false, "Deprecated, soon to be removed")
-	return {}
-
 func set_x_domain(lb: Variant, ub: Variant) -> void:
 	x_domain = ChartAxisDomain.from_bounds(lb, ub)
 

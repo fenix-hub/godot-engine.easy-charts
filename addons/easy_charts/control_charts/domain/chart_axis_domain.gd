@@ -24,7 +24,6 @@ static func from_bounds(lb: Variant, ub: Variant) -> ChartAxisDomain:
 
 static func from_values(values: Array, smooth_domain: bool) -> ChartAxisDomain:
 	var domain = ChartAxisDomain.new()
-#func _init(lb: Variant = null, ub: Variant = null, has_decimals: bool = false, fixed: bool = false):
 	for value_array in values:
 		if ECUtilities._contains_string(value_array):
 			domain.lb = 0.0
