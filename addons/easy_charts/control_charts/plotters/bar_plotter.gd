@@ -18,12 +18,12 @@ func _init(function: Function) -> void:
 func _draw() -> void:
 	super._draw()
 	var box: Rect2 = get_box()
-	var x_sampled_domain: Dictionary = { lb = box.position.x, ub = box.end.x }
-	var y_sampled_domain: Dictionary = { lb = box.end.y, ub = box.position.y }
+	var x_sampled_domain := ChartAxisDomain.from_bounds(box.position.x, box.end.x)
+	var y_sampled_domain := ChartAxisDomain.from_bounds(box.end.y, box.position.y)
 	sample(x_sampled_domain, y_sampled_domain)
 	_draw_bars()
 
-func sample(x_sampled_domain: Dictionary, y_sampled_domain: Dictionary) -> void:
+func sample(x_sampled_domain: ChartAxisDomain, y_sampled_domain: ChartAxisDomain) -> void:
 	bars = []
 	bars_rects = []
 	for i in function.__x.size():

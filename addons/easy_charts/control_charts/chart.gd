@@ -15,8 +15,8 @@ var y: Array = []
 var x_labels_function: Callable = Callable()
 var y_labels_function: Callable = Callable()
 
-var x_domain: Dictionary = {}
-var y_domain: Dictionary = {}
+var x_domain: ChartAxisDomain = null
+var y_domain: ChartAxisDomain = null
 
 var chart_properties: ChartProperties = null
 
@@ -73,8 +73,8 @@ func _draw() -> void:
 		printerr("Cannot plot an empty function!")
 		return
 
-	var is_x_fixed: bool = x_domain.get("fixed", false)
-	var is_y_fixed: bool = y_domain.get("fixed", false)
+	var is_x_fixed: bool = x_domain != null && x_domain.fixed
+	var is_y_fixed: bool = y_domain != null && y_domain.fixed
 
 	# GridBox
 	if not is_x_fixed or not is_y_fixed :
@@ -92,14 +92,14 @@ func _draw() -> void:
 					_y[i] = y[i].slice(max(0, y[i].size() - chart_properties.max_samples), y[i].size())
 
 			if not is_x_fixed:
-				x_domain = calculate_domain(_x)
+				x_domain = ChartAxisDomain.from_values(_x, chart_properties.smooth_domain)
 			if not is_y_fixed:
-				y_domain = calculate_domain(_y)
+				y_domain = ChartAxisDomain.from_values(_y, chart_properties.smooth_domain)
 		else:
 			if not is_x_fixed:
-				x_domain = calculate_domain(x)
+				x_domain = ChartAxisDomain.from_values(x, chart_properties.smooth_domain)
 			if not is_y_fixed:
-				y_domain = calculate_domain(y)
+				y_domain = ChartAxisDomain.from_values(y, chart_properties.smooth_domain)
 
 	# Update values for the PlotBox in order to propagate them to the children
 	update_plotbox(x_domain, y_domain, x_labels_function, y_labels_function)
@@ -115,32 +115,25 @@ func _draw() -> void:
 				function_plotter.update_values(x_domain, y_domain)
 
 func calculate_domain(values: Array) -> Dictionary:
-	for value_array in values:
-		if ECUtilities._contains_string(value_array):
-			return { lb = 0.0, ub = (value_array.size() - 1), has_decimals = false , fixed = false }
-	var min_max: Dictionary = ECUtilities._find_min_max(values)
-
-	if not chart_properties.smooth_domain:
-		return { lb = min_max.min, ub = min_max.max, has_decimals = ECUtilities._has_decimals(values), fixed = false }
-	else:
-		return { lb = ECUtilities._round_min(min_max.min), ub = ECUtilities._round_max(min_max.max), has_decimals = ECUtilities._has_decimals(values) , fixed = false }
+	assert(false, "Deprecated, soon to be removed")
+	return {}
 
 func set_x_domain(lb: Variant, ub: Variant) -> void:
-	x_domain = { lb = lb, ub = ub, has_decimals = ECUtilities._has_decimals([lb, ub]), fixed = true }
+	x_domain = ChartAxisDomain.from_bounds(lb, ub)
 
 func set_y_domain(lb: Variant, ub: Variant) -> void:
-	y_domain = { lb = lb, ub = ub, has_decimals = ECUtilities._has_decimals([lb, ub]), fixed = true }
+	y_domain = ChartAxisDomain.from_bounds(lb, ub)
 
-func update_plotbox(x_domain: Dictionary, y_domain: Dictionary, x_labels_function: Callable, y_labels_function: Callable) -> void:
+func update_plotbox(x_domain: ChartAxisDomain, y_domain: ChartAxisDomain, x_labels_function: Callable, y_labels_function: Callable) -> void:
 	plot_box.box_margins = calculate_plotbox_margins(x_domain, y_domain, y_labels_function)
 	plot_box.set_labels_functions(x_labels_function, y_labels_function)
 
-func update_gridbox(x_domain: Dictionary, y_domain: Dictionary, x_labels_function: Callable, y_labels_function: Callable) -> void:
+func update_gridbox(x_domain: ChartAxisDomain, y_domain: ChartAxisDomain, x_labels_function: Callable, y_labels_function: Callable) -> void:
 	grid_box.set_domains(x_domain, y_domain)
 	grid_box.set_labels_functions(x_labels_function, y_labels_function)
 	grid_box.queue_redraw()
 
-func calculate_plotbox_margins(x_domain: Dictionary, y_domain: Dictionary, y_labels_function: Callable) -> Vector2:
+func calculate_plotbox_margins(x_domain: ChartAxisDomain, y_domain: ChartAxisDomain, y_labels_function: Callable) -> Vector2:
 	var plotbox_margins: Vector2 = Vector2(
 		chart_properties.x_tick_size,
 		chart_properties.y_tick_size
