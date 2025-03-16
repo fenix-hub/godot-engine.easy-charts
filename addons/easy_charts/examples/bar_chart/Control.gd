@@ -42,22 +42,24 @@ func _ready():
 	)
 	
 	# Now let's plot our data
+	chart.x_labels_function = func(index: Variant): return x[int(index)]
+
 	chart.plot([f1], cp)
 	
 	# Uncommenting this line will show how real time data plotting works
-	set_process(false)
+	#set_process(false)
 
-
-var new_val: float = 4.5
-
-func _process(delta: float):
-	# This function updates the values of a function and then updates the plot
-	new_val += 5
-	
-	# we can use the `Function.add_point(x, y)` method to update a function
-	f1.add_point(new_val, cos(new_val) * 20)
-	chart.queue_redraw() # This will force the Chart to be updated
-
-
-func _on_CheckButton_pressed():
-	set_process(not is_processing())
+#
+#var new_val: float = 4.5
+#
+#func _process(delta: float):
+	## This function updates the values of a function and then updates the plot
+	#new_val += 5
+	#
+	## we can use the `Function.add_point(x, y)` method to update a function
+	#f1.add_point(new_val, cos(new_val) * 20)
+	#chart.queue_redraw() # This will force the Chart to be updated
+#
+#
+#func _on_CheckButton_pressed():
+	#set_process(not is_processing())

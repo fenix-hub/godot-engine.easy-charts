@@ -1,9 +1,11 @@
 extends Control
 class_name GridBox
 
+var x_tick_count: int = 0
 var x_domain: ChartAxisDomain = null
 var x_labels_function: Callable = Callable()
 
+var y_tick_count: int = 0
 var y_domain: ChartAxisDomain = null
 var y_labels_function: Callable = Callable()
 
@@ -70,18 +72,23 @@ func _draw_vertical_grid() -> void:
 	#    should be devided
 	# 2. calculate the spacing between each line in pixel. It is equals to x_sampled_domain / x_scale
 	# 3. calculate the offset in the real x domain, which is x_domain / x_scale.
-	var scaler: int = get_parent().chart_properties.x_scale
-	var x_pixel_dist: float = self.plot_box.size.x / scaler
+	var scaler: int = x_tick_count
+	var x_pixel_dist: float = self.plot_box.size.x / (scaler - 1)
 	
 	var vertical_grid: PackedVector2Array = []
 	var vertical_ticks: PackedVector2Array = []
 	
-	for _x in (scaler + 1):
-		var x_sampled_val: float = (_x * x_pixel_dist) + self.plot_box.position.x
-		var x_val: float = ECUtilities._map_domain(x_sampled_val, ChartAxisDomain.from_bounds(self.plot_box.position.x, self.plot_box.end.x), x_domain)
+	for _x in (scaler):
+		var x_position: float = (_x * x_pixel_dist) + self.plot_box.position.x
 
-		var top: Vector2 = Vector2(x_sampled_val, self.box.position.y)
-		var bottom: Vector2 = Vector2(x_sampled_val, self.box.end.y)
+		var x_val: Variant
+		if x_domain.is_discrete:
+			x_val = _x
+		else:
+			x_val = ECUtilities._map_domain(x_position, ChartAxisDomain.from_bounds(self.plot_box.position.x, self.plot_box.end.x), x_domain)
+
+		var top: Vector2 = Vector2(x_position, self.box.position.y)
+		var bottom: Vector2 = Vector2(x_position, self.box.end.y)
 		
 		vertical_grid.append(top)
 		vertical_grid.append(bottom)
@@ -114,15 +121,20 @@ func _draw_horizontal_grid() -> void:
 	#    should be devided
 	# 2. calculate the spacing between each line in pixel. It is equals to y_sampled_domain / y_scale
 	# 3. calculate the offset in the real y domain, which is y_domain / y_scale.
-	var scaler: int = get_parent().chart_properties.y_scale
+	var scaler: int = y_tick_count
 	var y_pixel_dist: float = self.plot_box.size.y / scaler
-	
+
 	var horizontal_grid: PackedVector2Array = []
 	var horizontal_ticks: PackedVector2Array = []
 	
-	for _y in (scaler + 1):
+	for _y in (scaler):
 		var y_sampled_val: float = (_y * y_pixel_dist) + self.plot_box.position.y
-		var y_val: float = ECUtilities._map_domain(y_sampled_val, ChartAxisDomain.from_bounds(self.plot_box.end.y, self.plot_box.position.y), y_domain)
+
+		var y_val: float
+		if y_domain.is_discrete:
+			y_val = _y
+		else:
+			y_val = ECUtilities._map_domain(y_sampled_val, ChartAxisDomain.from_bounds(self.plot_box.end.y, self.plot_box.position.y), y_domain)
 
 		var left: Vector2 = Vector2(self.box.position.x, y_sampled_val)
 		var right: Vector2 = Vector2(self.box.end.x, y_sampled_val)

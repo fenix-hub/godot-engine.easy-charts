@@ -6,8 +6,9 @@ var x_label: String
 var y_label: String
 
 ## {n}_scale defines in how many sectors the grid will be divided.
-var x_scale: float = 5.0
-var y_scale: float = 2.0
+## This can only be used with non-discrete axes.
+var x_scale: float = 5
+var y_scale: float = 4
 
 var x_tick_size: float = 7
 var x_ticklabel_space: float = 5
@@ -54,22 +55,22 @@ var max_samples: int = 100
 
 ## Dictionary of colors for all of the Chart elements.
 var colors: Dictionary = {
-    frame = Color.WHITE_SMOKE,
-    background = Color.WHITE,
-    borders = Color.RED,
-    bounding_box = Color.BLACK,
-    grid = Color.GRAY,
-    ticks = Color.BLACK,
-    text = Color.BLACK,
-    origin = Color.DIM_GRAY
+	frame = Color.WHITE_SMOKE,
+	background = Color.WHITE,
+	borders = Color.RED,
+	bounding_box = Color.BLACK,
+	grid = Color.GRAY,
+	ticks = Color.BLACK,
+	text = Color.BLACK,
+	origin = Color.DIM_GRAY
 }
 
 var font: FontFile = load("res://addons/easy_charts/utilities/assets/OpenSans-VariableFont_wdth,wght.ttf")
 var font_size: int = 13
 
 func _init() -> void:
-    ThemeDB.set_fallback_font(font)
-    ThemeDB.set_fallback_font_size(font_size)
+	ThemeDB.set_fallback_font(font)
+	ThemeDB.set_fallback_font_size(font_size)
 
 func get_string_size(text: String) -> Vector2:
-    return font.get_string_size(text)
+	return font.get_string_size(text)
