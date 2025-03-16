@@ -45,10 +45,10 @@ func _ready():
 
 	# Configure the x axis so that there is one tick every two hours. This has to
 	# be precise to ensure that no interpolation happens
-	cp.x_scale = x.size() / 2 - 1
+	cp.x_scale = x.size() - 1
 	chart.set_x_domain(0, x.size() - 1)
 	chart.x_labels_function = func(value: float) -> String:
-		return "%02d:00 - %02d:00" % [value, value + 1]
+		return "%2d h" % round(value)
 
 	# Configure the y axis 
 	var y_max_value := 0
