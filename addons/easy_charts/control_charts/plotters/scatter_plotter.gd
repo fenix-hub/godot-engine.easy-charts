@@ -4,7 +4,7 @@ class_name ScatterPlotter
 signal point_entered(point, function)
 signal point_exited(point, function)
 
-var points: Array[Point]
+var _points: Array[Point]
 var points_positions: PackedVector2Array
 var focused_point: Point
 
@@ -17,17 +17,18 @@ func _init(function: Function) -> void:
 func _draw() -> void:
 	super._draw()
 	
+	_sample()
+
+	if function.get_marker() != Function.Marker.NONE:
+		for point_position in points_positions:
+			draw_function_point(point_position)
+
+func _sample() -> void:
 	var box: Rect2 = get_box()
 	var x_sampled_domain := ChartAxisDomain.from_bounds(box.position.x, box.end.x)
 	var y_sampled_domain := ChartAxisDomain.from_bounds(box.end.y, box.position.y)
-	sample(x_sampled_domain, y_sampled_domain)
-	
-	if function.get_marker() != Function.Marker.NONE:
-		for point in points:
-			draw_function_point(point.position)
 
-func sample(x_sampled_domain: ChartAxisDomain, y_sampled_domain: ChartAxisDomain) -> void:
-	points = []
+	_points = []
 	points_positions = []
 	
 	var lower_bound: int = 0
@@ -45,7 +46,7 @@ func sample(x_sampled_domain: ChartAxisDomain, y_sampled_domain: ChartAxisDomain
 		if point.position.y > y_sampled_domain.lb || point.position.y < y_sampled_domain.ub:
 			continue
 
-		points.push_back(point)
+		_points.push_back(point)
 		points_positions.push_back(_position)
 
 func draw_function_point(point_position: Vector2) -> void:
@@ -79,7 +80,7 @@ func draw_function_point(point_position: Vector2) -> void:
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
-		for point in points:
+		for point in _points:
 			if Geometry2D.is_point_in_circle(get_relative_position(event.position), point.position, self.point_size * 4):
 				if focused_point == point:
 					return
