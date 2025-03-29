@@ -53,12 +53,30 @@ func _ready():
 			color = Color.SKY_BLUE,
 		}
 	)
+	
+	var f3 := Function.new(
+		x, y1, "Conversions",
+		{
+			type = Function.Type.BAR,
+			bar_size = 5,
+			color = Color.YELLOW,
+		}
+	)
+
+	var f4 := Function.new(
+		x, y2, "Clicks",
+		{
+			type = Function.Type.BAR,
+			bar_size = 5,
+			color = Color.DARK_RED,
+		}
+	)
 
 	# Now let's plot our data
 	chart.x_labels_function = func(index: Variant): return x[int(index)]
 	chart.set_y_domain(0, 55)
 
-	chart.plot([f1, f2], cp)
+	chart.plot([f1, f2, f3, f4], cp)
 	
 	# Uncommenting this line will show how real time data plotting works
 	#set_process(false)

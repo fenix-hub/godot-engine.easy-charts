@@ -17,18 +17,34 @@ func _draw() -> void:
 func sample() -> void:
 	var bar_size := function.props.get("bar_size", 5.0) as float
 
+	var bar_functions: Array[Function] = chart.get_functions_by_type(Function.Type.BAR)
+	var bar_function_count = bar_functions.size()
+	var index: int
+	for i in range(0, bar_function_count):
+		if bar_functions[i] == self.function:
+			index = i
+			break
+
+	var id := function.props.get("id", 0) as int
+	var x_offset_in_px := (id - index) * bar_size * 2
+
 	var box: Rect2 = get_box()
 	var x_sampled_domain := ChartAxisDomain.from_bounds(box.position.x, box.end.x)
 	var y_sampled_domain := ChartAxisDomain.from_bounds(box.end.y, box.position.y)
 
 	_bars_rects = []
 	for i in function.__x.size():
-		var top: Vector2 = Vector2(
-			ECUtilities._map_domain(i, x_domain, x_sampled_domain),
-			ECUtilities._map_domain(function.__y[i], y_domain, y_sampled_domain)
-		)
-		var base: Vector2 = Vector2(top.x, ECUtilities._map_domain(0.0, y_domain, y_sampled_domain))
-		_bars_rects.append(Rect2(Vector2(top.x - bar_size, top.y), Vector2(bar_size * 2, base.y - top.y)))
+		var x_value_in_px := ECUtilities._map_domain(i, x_domain, x_sampled_domain)
+		var x_next_in_px := ECUtilities._map_domain(i + 1, x_domain, x_sampled_domain)
+		var x_in_px := x_value_in_px + 0.5 * (x_next_in_px - x_value_in_px) - x_offset_in_px
+
+		var y_in_px := ECUtilities._map_domain(function.__y[i], y_domain, y_sampled_domain)
+		var y_zero_in_px := ECUtilities._map_domain(0.0, y_domain, y_sampled_domain)
+
+		_bars_rects.append(Rect2(
+			Vector2(x_in_px - bar_size, y_in_px),
+			Vector2(bar_size * 2, y_zero_in_px - y_in_px)
+		))
 
 func _draw_bars() -> void:
 	for bar in _bars_rects:

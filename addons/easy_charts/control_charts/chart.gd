@@ -54,7 +54,7 @@ func load_functions(functions: Array[Function]) -> void:
 		self.y.append(function.__y)
 
 		# Create FunctionPlotter
-		var function_plotter := FunctionPlotter.create_for_function(function)
+		var function_plotter := FunctionPlotter.create_for_function(self, function)
 		function_plotter.connect("point_entered", Callable(plot_box, "_on_point_entered"))
 		function_plotter.connect("point_exited", Callable(plot_box, "_on_point_exited"))
 		functions_box.add_child(function_plotter)
@@ -67,6 +67,11 @@ func load_functions(functions: Array[Function]) -> void:
 					function_legend.add_label(function.get_type(), interp_color, Function.Marker.NONE, function.__y[i])
 			_:
 				function_legend.add_function(function)
+
+func get_functions_by_type(type: Function.Type) -> Array[Function]:
+	return functions.filter(func(function: Function) -> bool:
+		return function.get_type() == type
+	)
 
 func _draw() -> void:
 	if (x.size() == 0) or (y.size() == 0) or (x.size() == 1 and x[0].is_empty()) or (y.size() == 1 and y[0].is_empty()):
