@@ -9,16 +9,14 @@ var bar_size: float
 var _bars_rects: Array
 var _focused_bar_midpoint: Point
 
-func _init(function: Function) -> void:
-	super(function)
-	self.bar_size = function.props.get("bar_size", 5.0)
-
 func _draw() -> void:
 	super._draw()
 	sample()
 	_draw_bars()
 
 func sample() -> void:
+	var bar_size := function.props.get("bar_size", 5.0) as float
+
 	var box: Rect2 = get_box()
 	var x_sampled_domain := ChartAxisDomain.from_bounds(box.position.x, box.end.x)
 	var y_sampled_domain := ChartAxisDomain.from_bounds(box.end.y, box.position.y)

@@ -1,9 +1,6 @@
 extends ScatterPlotter
 class_name LinePlotter
 
-func _init(function: Function) -> void:
-	super(function)
-
 func _get_spline_points(density: float = 10.0, tension: float = 1) -> PackedVector2Array:
 	var spline_points: PackedVector2Array = []
 	

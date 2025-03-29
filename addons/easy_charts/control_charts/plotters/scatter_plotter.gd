@@ -8,11 +8,8 @@ var _points: Array[Point]
 var points_positions: PackedVector2Array
 var focused_point: Point
 
-var point_size: float
-
-func _init(function: Function) -> void:
-	super(function)
-	self.point_size = function.props.get("point_size", 3.0)
+var _point_size: float:
+	get: return function.props.get("point_size", 3.0)
 
 func _draw() -> void:
 	super._draw()
@@ -53,35 +50,35 @@ func draw_function_point(point_position: Vector2) -> void:
 	match function.get_marker():
 		Function.Marker.SQUARE:
 			draw_rect(
-				Rect2(point_position - (Vector2.ONE * point_size), (Vector2.ONE * point_size * 2)), 
+				Rect2(point_position - (Vector2.ONE * _point_size), (Vector2.ONE * _point_size * 2)), 
 				function.get_color(), true, 1.0
 			)
 		Function.Marker.TRIANGLE:
 			draw_colored_polygon(
 				PackedVector2Array([
-					point_position + (Vector2.UP * point_size * 1.3),
-					point_position + (Vector2.ONE * point_size * 1.3),
-					point_position - (Vector2(1, -1) * point_size * 1.3)
+					point_position + (Vector2.UP * _point_size * 1.3),
+					point_position + (Vector2.ONE * _point_size * 1.3),
+					point_position - (Vector2(1, -1) * _point_size * 1.3)
 				]), function.get_color(), [], null
 			)
 		Function.Marker.CROSS:
 			draw_line(
-				point_position - (Vector2.ONE * point_size),
-				point_position + (Vector2.ONE * point_size),
-				function.get_color(), point_size, true
+				point_position - (Vector2.ONE * _point_size),
+				point_position + (Vector2.ONE * _point_size),
+				function.get_color(), _point_size, true
 			)
 			draw_line(
-				point_position + (Vector2(1, -1) * point_size),
-				point_position + (Vector2(-1, 1) * point_size),
-				function.get_color(), point_size / 2, true
+				point_position + (Vector2(1, -1) * _point_size),
+				point_position + (Vector2(-1, 1) * _point_size),
+				function.get_color(), _point_size / 2, true
 			)
 		Function.Marker.CIRCLE, _:
-			draw_circle(point_position, point_size, function.get_color())
+			draw_circle(point_position, _point_size, function.get_color())
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
 		for point in _points:
-			if Geometry2D.is_point_in_circle(get_relative_position(event.position), point.position, self.point_size * 4):
+			if Geometry2D.is_point_in_circle(get_relative_position(event.position), point.position, _point_size * 4):
 				if focused_point == point:
 					return
 				else:

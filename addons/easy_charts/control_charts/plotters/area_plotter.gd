@@ -1,10 +1,6 @@
 extends LinePlotter
 class_name AreaPlotter
 
-func _init(function: Function) -> void:
-	super(function)
-	pass
-
 func _draw_areas() -> void:
 	var box: Rect2 = get_box()
 	var fp_augmented: PackedVector2Array = []

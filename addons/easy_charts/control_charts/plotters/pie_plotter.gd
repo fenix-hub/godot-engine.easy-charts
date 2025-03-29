@@ -15,10 +15,6 @@ var slices_dirs: PackedVector2Array = []
 
 var focused_point: Point
 
-func _init(function: Function) -> void:
-	super(function)
-	pass
-
 func _draw() -> void:
 	super._draw()
 	box = get_box()
