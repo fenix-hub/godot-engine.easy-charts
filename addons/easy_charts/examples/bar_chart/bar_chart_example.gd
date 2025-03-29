@@ -29,7 +29,7 @@ func _ready():
 	cp.draw_vertical_grid = false
 	cp.interactive = true # false by default, it allows the chart to create a tooltip to show point values
 	# and interecept clicks on the plot
-	
+
 	# Let's add values to our functions
 	# This will create a function with x and y values taken by the Arrays 
 	# we have created previously. This function will also be named "Pressure"
@@ -41,19 +41,19 @@ func _ready():
 		{
 			type = Function.Type.BAR,
 			bar_size = 5,
-			color = Color.SEA_GREEN
+			color = Color.SEA_GREEN,
 		}
 	)
-	
+
 	f2 = Function.new(
 		x, y2, "Impressions",
 		{
 			type = Function.Type.BAR,
 			bar_size = 5,
-			color = Color.SKY_BLUE
+			color = Color.SKY_BLUE,
 		}
 	)
-	
+
 	# Now let's plot our data
 	chart.x_labels_function = func(index: Variant): return x[int(index)]
 	chart.set_y_domain(0, 55)
