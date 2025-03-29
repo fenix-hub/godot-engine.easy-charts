@@ -4,6 +4,7 @@ extends Control
 
 # This Chart will plot 3 different functions
 var f1: Function
+var f2: Function
 
 func _ready():
 	# Let's create our @x values
@@ -11,7 +12,8 @@ func _ready():
 	
 	# And our y values. It can be an n-size array of arrays.
 	# NOTE: `x.size() == y.size()` or `x.size() == y[n].size()`
-	var y: Array = [20, 10, 50, 30]
+	var y1: Array = [20, 10, 50, 30]
+	var y2: Array = [30, 15, 20, 10]
 	
 	# Let's customize the chart properties, which specify how the chart
 	# should look, plus some additional elements like labels, the scale, etc...
@@ -29,15 +31,26 @@ func _ready():
 	# and interecept clicks on the plot
 	
 	# Let's add values to our functions
+	# This will create a function with x and y values taken by the Arrays 
+	# we have created previously. This function will also be named "Pressure"
+	# as it contains 'pressure' values.
+	# If set, the name of a function will be used both in the Legend
+	# (if enabled thourgh ChartProperties) and on the Tooltip (if enabled).
 	f1 = Function.new(
-		x, y, "User", # This will create a function with x and y values taken by the Arrays 
-						# we have created previously. This function will also be named "Pressure"
-						# as it contains 'pressure' values.
-						# If set, the name of a function will be used both in the Legend
-						# (if enabled thourgh ChartProperties) and on the Tooltip (if enabled).
+		x, y1, "Users",
 		{
 			type = Function.Type.BAR,
-			bar_size = 5
+			bar_size = 5,
+			color = Color.SEA_GREEN
+		}
+	)
+	
+	f2 = Function.new(
+		x, y2, "Impressions",
+		{
+			type = Function.Type.BAR,
+			bar_size = 5,
+			color = Color.SKY_BLUE
 		}
 	)
 	
@@ -45,7 +58,7 @@ func _ready():
 	chart.x_labels_function = func(index: Variant): return x[int(index)]
 	chart.set_y_domain(0, 55)
 
-	chart.plot([f1], cp)
+	chart.plot([f1, f2], cp)
 	
 	# Uncommenting this line will show how real time data plotting works
 	#set_process(false)
