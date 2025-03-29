@@ -6,7 +6,6 @@ signal point_exited(point, function)
 
 var bar_size: float
 
-var _bars: PackedVector2Array
 var _bars_rects: Array
 var _focused_bar_midpoint: Point
 
@@ -24,7 +23,6 @@ func sample() -> void:
 	var x_sampled_domain := ChartAxisDomain.from_bounds(box.position.x, box.end.x)
 	var y_sampled_domain := ChartAxisDomain.from_bounds(box.end.y, box.position.y)
 
-	_bars = []
 	_bars_rects = []
 	for i in function.__x.size():
 		var top: Vector2 = Vector2(
@@ -32,8 +30,6 @@ func sample() -> void:
 			ECUtilities._map_domain(function.__y[i], y_domain, y_sampled_domain)
 		)
 		var base: Vector2 = Vector2(top.x, ECUtilities._map_domain(0.0, y_domain, y_sampled_domain))
-		_bars.push_back(top)
-		_bars.push_back(base)
 		_bars_rects.append(Rect2(Vector2(top.x - bar_size, top.y), Vector2(bar_size * 2, base.y - top.y)))
 
 func _draw_bars() -> void:
