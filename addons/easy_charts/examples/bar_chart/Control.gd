@@ -43,6 +43,7 @@ func _ready():
 	
 	# Now let's plot our data
 	chart.x_labels_function = func(index: Variant): return x[int(index)]
+	chart.set_y_domain(0, 55)
 
 	chart.plot([f1], cp)
 	
