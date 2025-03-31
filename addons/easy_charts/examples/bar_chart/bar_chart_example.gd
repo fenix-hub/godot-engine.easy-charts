@@ -36,7 +36,7 @@ func _ready():
 		x, y1, "Users",
 		{
 			type = Function.Type.BAR,
-			bar_size = 4,
+			bar_size = 5,
 			color = Color.SEA_GREEN,
 		}
 	)
@@ -45,7 +45,7 @@ func _ready():
 		x, y2, "Impressions",
 		{
 			type = Function.Type.BAR,
-			bar_size = 4,
+			bar_size = 5,
 			color = Color.SKY_BLUE,
 		}
 	)
@@ -54,7 +54,7 @@ func _ready():
 		x, y1, "Conversions",
 		{
 			type = Function.Type.BAR,
-			bar_size = 4,
+			bar_size = 5,
 			color = Color.YELLOW,
 		}
 	)
@@ -63,13 +63,12 @@ func _ready():
 		x, y2, "Clicks",
 		{
 			type = Function.Type.BAR,
-			bar_size = 4,
+			bar_size = 5,
 			color = Color.DARK_RED,
 		}
 	)
 
 	# Now let's plot our data
 	chart.x_labels_function = func(index: Variant): return x[int(index)]
-	#chart.set_y_domain(0, 55)
 
 	chart.plot([f1, f2, f3, f4], cp)
