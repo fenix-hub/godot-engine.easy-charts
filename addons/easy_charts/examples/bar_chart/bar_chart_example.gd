@@ -2,18 +2,14 @@ extends Control
 
 @onready var chart: Chart = $VBoxContainer/Chart
 
-# This Chart will plot 3 different functions
-var f1: Function
-var f2: Function
-
 func _ready():
 	# Let's create our @x values
-	var x: Array = ["Day 1", "Day 2", "Day 3", "Day 4"]
+	var x: Array = range(0, 24).map(func(i: int) -> String: return "%dh" % i)
 	
 	# And our y values. It can be an n-size array of arrays.
 	# NOTE: `x.size() == y.size()` or `x.size() == y[n].size()`
-	var y1: Array = [20, 10, 50, 30]
-	var y2: Array = [30, 15, 20, 10]
+	var y1: Array = ArrayOperations.add_int(ArrayOperations.multiply_int(range(0, 24), 10), 4)
+	var y2: Array = ArrayOperations.add_int(ArrayOperations.multiply_int(range(0, 24), 5), 4)
 	
 	# Let's customize the chart properties, which specify how the chart
 	# should look, plus some additional elements like labels, the scale, etc...
@@ -36,20 +32,20 @@ func _ready():
 	# as it contains 'pressure' values.
 	# If set, the name of a function will be used both in the Legend
 	# (if enabled thourgh ChartProperties) and on the Tooltip (if enabled).
-	f1 = Function.new(
+	var f1 = Function.new(
 		x, y1, "Users",
 		{
 			type = Function.Type.BAR,
-			bar_size = 5,
+			bar_size = 4,
 			color = Color.SEA_GREEN,
 		}
 	)
 
-	f2 = Function.new(
+	var f2 = Function.new(
 		x, y2, "Impressions",
 		{
 			type = Function.Type.BAR,
-			bar_size = 5,
+			bar_size = 4,
 			color = Color.SKY_BLUE,
 		}
 	)
@@ -58,7 +54,7 @@ func _ready():
 		x, y1, "Conversions",
 		{
 			type = Function.Type.BAR,
-			bar_size = 5,
+			bar_size = 4,
 			color = Color.YELLOW,
 		}
 	)
@@ -67,31 +63,13 @@ func _ready():
 		x, y2, "Clicks",
 		{
 			type = Function.Type.BAR,
-			bar_size = 5,
+			bar_size = 4,
 			color = Color.DARK_RED,
 		}
 	)
 
 	# Now let's plot our data
 	chart.x_labels_function = func(index: Variant): return x[int(index)]
-	chart.set_y_domain(0, 55)
+	#chart.set_y_domain(0, 55)
 
 	chart.plot([f1, f2, f3, f4], cp)
-	
-	# Uncommenting this line will show how real time data plotting works
-	#set_process(false)
-
-#
-#var new_val: float = 4.5
-#
-#func _process(delta: float):
-	## This function updates the values of a function and then updates the plot
-	#new_val += 5
-	#
-	## we can use the `Function.add_point(x, y)` method to update a function
-	#f1.add_point(new_val, cos(new_val) * 20)
-	#chart.queue_redraw() # This will force the Chart to be updated
-#
-#
-#func _on_CheckButton_pressed():
-	#set_process(not is_processing())
