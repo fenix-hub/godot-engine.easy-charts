@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://dlwq4kmdb3bhs"]
 
 [ext_resource type="Script" uid="uid://bn7n1q5r4n3jn" path="res://addons/easy_charts/control_charts/chart.gd" id="1"]
-[ext_resource type="PackedScene" path="res://addons/easy_charts/utilities/containers/data_tooltip/data_tooltip.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://dmesmjhiuqdo4" path="res://addons/easy_charts/utilities/containers/data_tooltip/data_tooltip.tscn" id="2"]
 [ext_resource type="Script" uid="uid://d3eig7fx6wtli" path="res://addons/easy_charts/utilities/containers/canvas/canvas.gd" id="3"]
 [ext_resource type="Script" uid="uid://8xd8yvw7lumm" path="res://addons/easy_charts/utilities/containers/canvas/plot_box/plot_box.gd" id="4"]
 [ext_resource type="Script" uid="uid://doelssxa0y7ap" path="res://addons/easy_charts/utilities/containers/canvas/plot_box/grid_box.gd" id="5"]
-[ext_resource type="PackedScene" path="res://addons/easy_charts/utilities/containers/legend/function_legend.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://c6ffuulowjw4g" path="res://addons/easy_charts/utilities/containers/legend/function_legend.tscn" id="6"]
 
 [sub_resource type="Theme" id="4"]
 

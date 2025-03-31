@@ -26,7 +26,7 @@ func _ready():
 	cp.y_scale = 10
 	cp.draw_origin = true
 	cp.draw_bounding_box = false
-	cp.draw_vertical_grid = false
+	cp.draw_vertical_grid = true
 	cp.interactive = true # false by default, it allows the chart to create a tooltip to show point values
 	# and interecept clicks on the plot
 

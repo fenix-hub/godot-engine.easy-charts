@@ -32,7 +32,7 @@ static func from_values(value_arrays: Array, smooth_domain: bool) -> ChartAxisDo
 	for value_array in value_arrays:
 		if ECUtilities._contains_string(value_array):
 			domain.lb = 0.0
-			domain.ub = (value_array.size() - 1)
+			domain.ub = (value_array.size())
 			domain.has_decimals = false
 			domain.is_discrete = true
 			domain.fixed = false

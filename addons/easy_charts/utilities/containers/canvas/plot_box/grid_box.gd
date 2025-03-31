@@ -4,6 +4,7 @@ class_name GridBox
 var x_tick_count: int = 0
 var x_domain: ChartAxisDomain = null
 var x_labels_function: Callable = Callable()
+var x_label_centered: bool = false
 
 var y_tick_count: int = 0
 var y_domain: ChartAxisDomain = null
@@ -36,8 +37,8 @@ func _draw() -> void:
 		_draw_background()
 	
 	if get_parent().chart_properties.draw_grid_box:
-		_draw_vertical_grid()
-		_draw_horizontal_grid()
+		_draw_x_ticks()
+		_draw_y_ticks()
 	
 	if get_parent().chart_properties.draw_origin:
 		_draw_origin()
@@ -65,15 +66,18 @@ func _draw_origin() -> void:
 		)
 
 
-func _draw_vertical_grid() -> void:
-	# draw vertical lines
+func _draw_x_ticks() -> void:
+	# draw x tick lines
 	
 	# 1. the amount of lines is equals to the X_scale: it identifies in how many sectors the x domain
 	#    should be devided
 	# 2. calculate the spacing between each line in pixel. It is equals to x_sampled_domain / x_scale
 	# 3. calculate the offset in the real x domain, which is x_domain / x_scale.
 	var scaler: int = x_tick_count
-	var x_pixel_dist: float = self.plot_box.size.x / (scaler - 1)
+	
+	var x_pixel_dist: float = self.plot_box.size.x / (scaler) \
+		if x_label_centered \
+		else self.plot_box.size.x / (scaler - 1)
 	
 	var vertical_grid: PackedVector2Array = []
 	var vertical_ticks: PackedVector2Array = []
@@ -101,9 +105,14 @@ func _draw_vertical_grid() -> void:
 			var tick_lbl: String = _get_tick_label(_x, x_val, x_domain.has_decimals, self.x_labels_function)
 			draw_string(
 				get_parent().chart_properties.font, 
-				_get_vertical_tick_label_pos(bottom, tick_lbl),
-				tick_lbl,HORIZONTAL_ALIGNMENT_CENTER, -1, ThemeDB.fallback_font_size,
-				get_parent().chart_properties.colors.text, TextServer.JUSTIFICATION_NONE, TextServer.DIRECTION_AUTO,
+				_get_vertical_tick_label_pos(bottom, tick_lbl, x_pixel_dist),
+				tick_lbl,
+				HORIZONTAL_ALIGNMENT_CENTER,
+				-1,
+				ThemeDB.fallback_font_size,
+				get_parent().chart_properties.colors.text,
+				TextServer.JUSTIFICATION_NONE,
+				TextServer.DIRECTION_AUTO,
 				TextServer.ORIENTATION_HORIZONTAL
 			)
 	
@@ -116,7 +125,7 @@ func _draw_vertical_grid() -> void:
 		draw_multiline(vertical_ticks, get_parent().chart_properties.colors.ticks, 1)
 
 
-func _draw_horizontal_grid() -> void:
+func _draw_y_ticks() -> void:
 	# 1. the amount of lines is equals to the y_scale: it identifies in how many sectors the y domain
 	#    should be devided
 	# 2. calculate the spacing between each line in pixel. It is equals to y_sampled_domain / y_scale
@@ -167,9 +176,11 @@ func _draw_horizontal_grid() -> void:
 		draw_multiline(horizontal_ticks, get_parent().chart_properties.colors.ticks, 1)
 		
 
-func _get_vertical_tick_label_pos(base_position: Vector2, text: String) -> Vector2:
+func _get_vertical_tick_label_pos(base_position: Vector2, text: String, x_pixel_dist: float) -> Vector2:
+	var x_offset: float = 0 if !x_label_centered else 0.5 * x_pixel_dist
+
 	return  base_position + Vector2(
-		- get_parent().chart_properties.font.get_string_size(text).x / 2,
+		- get_parent().chart_properties.font.get_string_size(text).x / 2 + x_offset,
 		ThemeDB.fallback_font_size + get_parent().chart_properties.x_tick_size
 	)
 
