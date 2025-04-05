@@ -37,21 +37,6 @@ func plot(functions: Array[Function], properties: ChartProperties = ChartPropert
 
 	load_functions(functions)
 
-func get_function_plotter(function: Function) -> FunctionPlotter:
-	var plotter: FunctionPlotter
-	match function.get_type():
-		Function.Type.LINE:
-			plotter = LinePlotter.new(function)
-		Function.Type.AREA:
-			plotter = AreaPlotter.new(function)
-		Function.Type.PIE:
-			plotter = PiePlotter.new(function)
-		Function.Type.BAR:
-			plotter = BarPlotter.new(function)
-		Function.Type.SCATTER, _:
-			plotter = ScatterPlotter.new(function)
-	return plotter
-
 func load_functions(functions: Array[Function]) -> void:
 	self.x = []
 	self.y = []
@@ -69,7 +54,7 @@ func load_functions(functions: Array[Function]) -> void:
 		self.y.append(function.__y)
 
 		# Create FunctionPlotter
-		var function_plotter: FunctionPlotter = get_function_plotter(function)
+		var function_plotter := FunctionPlotter.create_for_function(function)
 		function_plotter.connect("point_entered", Callable(plot_box, "_on_point_entered"))
 		function_plotter.connect("point_exited", Callable(plot_box, "_on_point_exited"))
 		functions_box.add_child(function_plotter)
