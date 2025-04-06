@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="godot-engine.easy-charts"
+run/main_scene="uid://do7xs7byk60p6"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
