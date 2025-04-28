@@ -33,7 +33,7 @@ func _draw() -> void:
 		Function.Type.PIE:
 			draw_rect(
 				Rect2(center - (Vector2.ONE * 3), (Vector2.ONE * 3 * 2)), 
-				color, true, 1.0
+				color, 1.0
 			)
 		Function.Type.SCATTER, _:
 			pass
@@ -44,7 +44,7 @@ func _draw() -> void:
 		Function.Marker.SQUARE:
 			draw_rect(
 				Rect2(center - (Vector2.ONE * 3), (Vector2.ONE * 3 * 2)), 
-				color, true, 1.0
+				color, 1.0
 			)
 		Function.Marker.TRIANGLE:
 			draw_colored_polygon(
