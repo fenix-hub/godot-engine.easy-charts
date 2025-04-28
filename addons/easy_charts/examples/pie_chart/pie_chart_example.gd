@@ -7,7 +7,7 @@ var f1: Function
 
 func _ready():
 	# Let's create our @x values
-	var x: Array = [10, 20, 30, 40]
+	var x: Array = [100, 400]
 	
 	# And our y values. It can be an n-size array of arrays.
 	# NOTE: `x.size() == y.size()` or `x.size() == y[n].size()`
