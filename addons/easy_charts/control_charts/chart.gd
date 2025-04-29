@@ -126,10 +126,10 @@ func calculate_domain(values: Array) -> Dictionary:
         return { lb = ECUtilities._round_min(min_max.min), ub = ECUtilities._round_max(min_max.max), has_decimals = ECUtilities._has_decimals(values) , fixed = false }
 
 func set_x_domain(lb: Variant, ub: Variant) -> void:
-    x_domain = { lb = lb, ub = ub, has_decimals = ECUtilities._has_decimals([lb, ub]), fixed = true }
+    x_domain = { lb = lb, ub = ub, has_decimals = ECUtilities._has_decimals([[lb, ub]]), fixed = true }
 
 func set_y_domain(lb: Variant, ub: Variant) -> void:
-    y_domain = { lb = lb, ub = ub, has_decimals = ECUtilities._has_decimals([lb, ub]), fixed = true }
+    y_domain = { lb = lb, ub = ub, has_decimals = ECUtilities._has_decimals([[lb, ub]]), fixed = true }
 
 func update_plotbox(x_domain: Dictionary, y_domain: Dictionary, x_labels_function: Callable, y_labels_function: Callable) -> void:
     plot_box.box_margins = calculate_plotbox_margins(x_domain, y_domain, y_labels_function)
