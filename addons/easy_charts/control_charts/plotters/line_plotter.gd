@@ -25,7 +25,7 @@ func _get_spline_points(density: float = 10.0, tension: float = 1) -> PackedVect
 
 
 func _get_stair_points() -> PackedVector2Array:
-	var stair_points: PackedVector2Array = points_positions
+	var 	stair_points: PackedVector2Array = points_positions
 	
 	for i in range(points_positions.size() - 1, 0, -1):
 		stair_points.insert(i, Vector2(points_positions[i].x, points_positions[i-1].y))

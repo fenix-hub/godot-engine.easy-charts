@@ -22,7 +22,7 @@ static func from_bounds(lb: Variant, ub: Variant) -> ChartAxisDomain:
 	var domain = ChartAxisDomain.new()
 	domain.lb = lb
 	domain.ub = ub
-	domain.has_decimals = ECUtilities._has_decimals([lb, ub])
+	domain.has_decimals = ECUtilities._has_decimals([[lb, ub]])
 	domain.fixed = true
 	domain.is_discrete = false
 	return domain

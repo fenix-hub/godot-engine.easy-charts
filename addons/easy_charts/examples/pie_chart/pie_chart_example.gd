@@ -57,7 +57,7 @@ var new_val: float = 4.5
 func _process(delta: float):
 	# This function updates the values of a function and then updates the plot
 	new_val += 5
-	
+
 	# we can use the `Function.add_point(x, y)` method to update a function
 	f1.add_point(new_val, cos(new_val) * 20)
 	chart.queue_redraw() # This will force the Chart to be updated
