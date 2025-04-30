@@ -12,11 +12,13 @@ var ub: Variant
 var has_decimals: bool
 
 ## True f this domain has only discrete values. For now, this is only
-## set to true in case the domain contains 
+## set to true in case the domain contains string values.
 var is_discrete: bool
 
 ## ???
 var fixed: bool
+
+var _string_values: Array
 
 static func from_bounds(lb: Variant, ub: Variant) -> ChartAxisDomain:
 	var domain = ChartAxisDomain.new()
@@ -36,6 +38,7 @@ static func from_values(value_arrays: Array, smooth_domain: bool) -> ChartAxisDo
 			domain.has_decimals = false
 			domain.is_discrete = true
 			domain.fixed = false
+			domain._string_values = value_array
 			return domain
 
 	var min_max: Dictionary = ECUtilities._find_min_max(value_arrays)
@@ -53,3 +56,11 @@ static func from_values(value_arrays: Array, smooth_domain: bool) -> ChartAxisDo
 		domain.fixed = false
 
 	return domain
+
+func get_tick_label(value: Variant, labels_function: Callable) -> String:
+	if labels_function.is_null():
+		return ECUtilities._format_value(value, is_discrete)
+	elif is_discrete:
+		return _string_values[value]
+	else:
+		return labels_function.call(value)

@@ -102,7 +102,7 @@ func _draw_x_ticks() -> void:
 		
 		# Draw V Tick Labels
 		if get_parent().chart_properties.show_tick_labels:
-			var tick_lbl: String = _get_tick_label(_x, x_val, x_domain.has_decimals, self.x_labels_function)
+			var tick_lbl: String = x_domain.get_tick_label(x_val, self.x_labels_function)
 			draw_string(
 				get_parent().chart_properties.font, 
 				_get_vertical_tick_label_pos(bottom, tick_lbl, x_pixel_dist),
@@ -156,7 +156,7 @@ func _draw_y_ticks() -> void:
 		
 		# Draw H Tick Labels
 		if get_parent().chart_properties.show_tick_labels:
-			var tick_lbl: String = _get_tick_label(_y, y_val, y_domain.has_decimals, y_labels_function)
+			var tick_lbl: String = y_domain.get_tick_label(y_val, y_labels_function)
 			draw_string(
 				get_parent().chart_properties.font, 
 				_get_horizontal_tick_label_pos(left, tick_lbl),
