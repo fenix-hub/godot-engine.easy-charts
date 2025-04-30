@@ -4,7 +4,7 @@ extends Control
 
 func _ready():
 	# Let's create our @x values
-	var x: Array = range(0, 24).map(func(i: int) -> String: return "%dh" % i)
+	var x: Array = range(0, 24).map(func(i: int) -> String: return "%d - %d h" % [i, i+1])
 	
 	# And our y values. It can be an n-size array of arrays.
 	# NOTE: `x.size() == y.size()` or `x.size() == y[n].size()`
