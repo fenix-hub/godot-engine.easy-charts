@@ -6,8 +6,6 @@ class_name PlotBox
 #signal function_point_entered(point, function)
 #signal function_point_exited(point, function)
 
-@onready var tooltip: DataTooltip = $Tooltip
-
 var focused_point: Point
 var focused_function: Function
 
