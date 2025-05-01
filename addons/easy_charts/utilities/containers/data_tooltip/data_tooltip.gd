@@ -19,11 +19,6 @@ func update_position(position: Vector2) -> void:
 	else:
 		self.position = position + Vector2(15, - (get_rect().size.y / 2))
 
-#func _process(delta):
-#	if Engine.editor_hint:
-#		return
-#	rect_position = get_global_mouse_position() + Vector2(15, - (get_rect().size.y / 2))
-
 func set_font(font: FontFile) -> void:
 	theme.set("default_font", font)
 
