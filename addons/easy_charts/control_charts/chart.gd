@@ -3,10 +3,10 @@ extends PanelContainer
 class_name Chart
 
 @onready var _canvas: Canvas = $Canvas
-@onready var plot_box: PlotBox = $"%PlotBox"
-@onready var grid_box: GridBox = $"%GridBox"
-@onready var functions_box: Control = $"%FunctionsBox"
-@onready var function_legend: FunctionLegend = $"%FunctionLegend"
+@onready var plot_box: PlotBox = %PlotBox
+@onready var grid_box: GridBox = %GridBox
+@onready var functions_box: Control = %FunctionsBox
+@onready var function_legend: FunctionLegend = %FunctionLegend
 
 var functions: Array = []
 var x: Array = []
