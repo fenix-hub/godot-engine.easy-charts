@@ -1,8 +1,9 @@
 extends Control
 class_name PlotBox
 
-signal function_point_entered(point, function)
-signal function_point_exited(point, function)
+#signal function_point_entered(point, function)
+#signal function_point_exited(point, function)
+
 @onready var tooltip: DataTooltip = $Tooltip
 
 var focused_point: Point
@@ -47,10 +48,8 @@ func _on_point_entered(point: Point, function: Function, props: Dictionary = {})
 	tooltip.show()
 	tooltip.update_values(x_value, y_value, function.name, color)
 	tooltip.update_position(point.position)
-	emit_signal("function_point_entered", point, function)
 
 func _on_point_exited(point: Point, function: Function) -> void:
 	if function != self.focused_function:
 		return
 	tooltip.hide()
-	emit_signal("function_point_exited", point, function)
