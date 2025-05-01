@@ -88,6 +88,7 @@ anchor_bottom = 1.0
 mouse_default_cursor_shape = 3
 
 [node name="Tooltip" parent="Canvas/CanvasContainer/DataContainer/PlotContainer/PlotBox" instance=ExtResource("2")]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = -67.0
 offset_top = -33.0
