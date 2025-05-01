@@ -69,6 +69,4 @@ func _ready():
 	)
 
 	# Now let's plot our data
-	chart.x_labels_function = func(index: Variant): return x[int(index)]
-
 	chart.plot([f1, f2, f3, f4], cp)

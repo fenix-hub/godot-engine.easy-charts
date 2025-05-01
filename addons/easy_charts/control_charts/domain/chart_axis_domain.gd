@@ -58,9 +58,10 @@ static func from_values(value_arrays: Array, smooth_domain: bool) -> ChartAxisDo
 	return domain
 
 func get_tick_label(value: Variant, labels_function: Callable) -> String:
-	if labels_function.is_null():
-		return ECUtilities._format_value(value, is_discrete)
-	elif is_discrete:
-		return _string_values[value]
-	else:
+	if !labels_function.is_null():
 		return labels_function.call(value)
+
+	if is_discrete:
+		return _string_values[value]
+	
+	return ECUtilities._format_value(value, is_discrete)
