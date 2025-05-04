@@ -18,6 +18,8 @@ var is_discrete: bool
 ## True if the domain was specified via from_bounds().
 var fixed: bool
 
+var _string_values: Array
+
 static func from_bounds(lb: Variant, ub: Variant) -> ChartAxisDomain:
 	var domain = ChartAxisDomain.new()
 	domain.lb = lb
@@ -36,6 +38,7 @@ static func from_values(value_arrays: Array, smooth_domain: bool) -> ChartAxisDo
 			domain.has_decimals = false
 			domain.is_discrete = true
 			domain.fixed = false
+			domain._string_values = value_array
 			return domain
 
 	var min_max: Dictionary = ECUtilities._find_min_max(value_arrays)

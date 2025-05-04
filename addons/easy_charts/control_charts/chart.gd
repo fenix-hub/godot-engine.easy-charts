@@ -8,6 +8,9 @@ class_name Chart
 @onready var functions_box: Control = %FunctionsBox
 @onready var function_legend: FunctionLegend = %FunctionLegend
 
+@onready var _tooltip: DataTooltip = %Tooltip
+var _function_of_tooltip: Function = null
+
 var functions: Array = []
 var x: Array = []
 var y: Array = []
@@ -54,9 +57,9 @@ func load_functions(functions: Array[Function]) -> void:
 		self.y.append(function.__y)
 
 		# Create FunctionPlotter
-		var function_plotter := FunctionPlotter.create_for_function(function)
-		function_plotter.connect("point_entered", Callable(plot_box, "_on_point_entered"))
-		function_plotter.connect("point_exited", Callable(plot_box, "_on_point_exited"))
+		var function_plotter := FunctionPlotter.create_for_function(self, function)
+		function_plotter.point_entered.connect(_show_tooltip)
+		function_plotter.point_exited.connect(_hide_tooltip)
 		functions_box.add_child(function_plotter)
 
 		# Create legend
@@ -67,6 +70,18 @@ func load_functions(functions: Array[Function]) -> void:
 					function_legend.add_label(function.get_type(), interp_color, Function.Marker.NONE, function.__y[i])
 			_:
 				function_legend.add_function(function)
+
+func get_functions_by_type(type: Function.Type) -> Array[Function]:
+	return functions.filter(func(function: Function) -> bool:
+		return function.get_type() == type
+	)
+
+## Returns true, if the x tick labels should be rendered centered between
+## tick lines. This is the case if there are multiple bar charts AND
+## the x values are discrete.
+func _center_x_tick_labels() -> bool:
+	return get_functions_by_type(Function.Type.BAR).size() > 1 && \
+			x_domain.is_discrete
 
 func _draw() -> void:
 	if (x.size() == 0) or (y.size() == 0) or (x.size() == 1 and x[0].is_empty()) or (y.size() == 1 and y[0].is_empty()):
@@ -105,6 +120,7 @@ func _draw() -> void:
 	update_plotbox(x_domain, y_domain, x_labels_function, y_labels_function)
 
 	# Update GridBox
+	grid_box.x_label_centered = _center_x_tick_labels()
 	update_gridbox(x_domain, y_domain, x_labels_function, y_labels_function)
 
 	# Update each FunctionPlotter in FunctionsBox
@@ -126,6 +142,8 @@ func update_plotbox(x_domain: ChartAxisDomain, y_domain: ChartAxisDomain, x_labe
 func update_gridbox(x_domain: ChartAxisDomain, y_domain: ChartAxisDomain, x_labels_function: Callable, y_labels_function: Callable) -> void:
 	grid_box.set_domains(x_domain, y_domain)
 	grid_box.set_labels_functions(x_labels_function, y_labels_function)
+	grid_box.x_tick_count = x[0].size() if x_domain.is_discrete else chart_properties.x_scale
+	grid_box.y_tick_count = y[0].size() if y_domain.is_discrete else chart_properties.y_scale
 	grid_box.queue_redraw()
 
 func calculate_plotbox_margins(x_domain: ChartAxisDomain, y_domain: ChartAxisDomain, y_labels_function: Callable) -> Vector2:
@@ -159,3 +177,19 @@ func _on_plot_box_resized() -> void:
 	grid_box.queue_redraw()
 	for function in functions_box.get_children():
 		function.queue_redraw()
+
+func _show_tooltip(point: Point, function: Function, options: Dictionary = {}) -> void:
+	var x_value: String = x_domain.get_tick_label(point.value.x, x_labels_function)
+	var y_value: String = y_domain.get_tick_label(point.value.y, y_labels_function)
+	var color: Color = function.get_color() if function.get_type() != Function.Type.PIE \
+		else function.get_gradient().sample(options.interpolation_index)
+	_tooltip.show()
+	_tooltip.update_values(x_value, y_value, function.name, color)
+	_tooltip.update_position(point.position)
+	_function_of_tooltip = function
+
+func _hide_tooltip(point: Point, function: Function) -> void:
+	if function != _function_of_tooltip:
+		return
+
+	_tooltip.hide()
