@@ -7,12 +7,12 @@ var f1: Function
 
 func _ready():
 	# Let's create our @x values
-	var x: Array = ["Day 1", "Day 2", "Day 3", "Day 4"]
-	
+	var x: Array = ArrayOperations.multiply_float(range(-10, 11, 1), 0.5)
+
 	# And our y values. It can be an n-size array of arrays.
 	# NOTE: `x.size() == y.size()` or `x.size() == y[n].size()`
-	var y: Array = [20, 10, 50, 30]
-	
+	var y: Array = ArrayOperations.multiply_int(ArrayOperations.cos(x), 20)
+
 	# Let's customize the chart properties, which specify how the chart
 	# should look, plus some additional elements like labels, the scale, etc...
 	var cp: ChartProperties = ChartProperties.new()
@@ -21,23 +21,29 @@ func _ready():
 	cp.colors.grid = Color("#283442")
 	cp.colors.ticks = Color("#283442")
 	cp.colors.text = Color.WHITE_SMOKE
-	cp.y_scale = 10
-	cp.draw_origin = true
 	cp.draw_bounding_box = false
-	cp.draw_vertical_grid = false
+	cp.title = "Air Quality Monitoring"
+	cp.x_label = "Time"
+	cp.y_label = "Sensor values"
+	cp.x_scale = 5
+	cp.y_scale = 10
 	cp.interactive = true # false by default, it allows the chart to create a tooltip to show point values
 	# and interecept clicks on the plot
 	
 	# Let's add values to our functions
 	f1 = Function.new(
-		x, y, "User", # This will create a function with x and y values taken by the Arrays 
+		x, y, "Pressure", # This will create a function with x and y values taken by the Arrays 
 						# we have created previously. This function will also be named "Pressure"
 						# as it contains 'pressure' values.
 						# If set, the name of a function will be used both in the Legend
 						# (if enabled thourgh ChartProperties) and on the Tooltip (if enabled).
-		{
-			type = Function.Type.BAR,
-			bar_size = 5
+		# Let's also provide a dictionary of configuration parameters for this specific function.
+		{ 
+			color = Color("#36a2eb"), 		# The color associated to this function
+			marker = Function.Marker.NONE, 	# The marker that will be displayed for each drawn point (x,y)
+											# since it is `NONE`, no marker will be shown.
+			type = Function.Type.AREA, 		# This defines what kind of plotting will be used, 
+											# in this case it will be an Area Chart.
 		}
 	)
 	
