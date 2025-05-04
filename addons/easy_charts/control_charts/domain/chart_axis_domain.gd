@@ -11,11 +11,11 @@ var ub: Variant
 ## True if any value on the axis has decimal places
 var has_decimals: bool
 
-## True f this domain has only discrete values. For now, this is only
+## True if the domain has only discrete values. For now, this is only
 ## set to true in case the domain contains string values.
 var is_discrete: bool
 
-## ???
+## True if the domain was specified via from_bounds().
 var fixed: bool
 
 var _string_values: Array
