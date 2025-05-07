@@ -18,6 +18,13 @@ var is_discrete: bool
 ## True if the domain was specified via from_bounds().
 var fixed: bool
 
+## Callable to overwrite the label generation.
+var labels_function: Callable
+
+var _tick_count: int = -1
+
+var _string_values: Array
+
 static func from_bounds(lb: Variant, ub: Variant) -> ChartAxisDomain:
 	var domain = ChartAxisDomain.new()
 	domain.lb = lb
@@ -36,6 +43,8 @@ static func from_values(value_arrays: Array, smooth_domain: bool) -> ChartAxisDo
 			domain.has_decimals = false
 			domain.is_discrete = true
 			domain.fixed = false
+			domain._string_values = value_array
+			domain._tick_count = value_array.size()
 			return domain
 
 	var min_max: Dictionary = ECUtilities._find_min_max(value_arrays)
@@ -54,11 +63,38 @@ static func from_values(value_arrays: Array, smooth_domain: bool) -> ChartAxisDo
 
 	return domain
 
+func set_tick_count(tick_count: int) -> void:
+	if is_discrete:
+		printerr("You cannot set tick count for a discrete chart axis domain")
+
+	_tick_count = tick_count
+
+func get_tick_labels() -> PackedStringArray:
+	if !labels_function.is_null():
+		return range(_tick_count).map(func(i) -> String:
+			var value = lerp(lb, ub, float(i) / float(_tick_count))
+			return labels_function.call(value)
+		)
+
+	if is_discrete:
+		return _string_values
+
+	return range(_tick_count).map(func(i) -> String:
+		var value = lerp(lb, ub, float(i) / float(_tick_count))
+		return ECUtilities._format_value(value, false)
+	)
+
 func get_tick_label(value: Variant, labels_function: Callable) -> String:
 	if !labels_function.is_null():
 		return labels_function.call(value)
 
 	if is_discrete:
-		return _string_values[value]
-	
+		return value
+
 	return ECUtilities._format_value(value, is_discrete)
+
+func map_to(value_index: int, function_values: Array, to_domain: ChartAxisDomain) -> Variant:
+	if is_discrete:
+		return ECUtilities._map_domain(value_index, self, to_domain)
+
+	return ECUtilities._map_domain(function_values[value_index], self, to_domain)
