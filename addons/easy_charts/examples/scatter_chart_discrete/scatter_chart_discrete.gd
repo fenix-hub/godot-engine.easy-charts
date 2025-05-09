@@ -4,7 +4,7 @@ extends Control
 
 func _ready():
 	# X values will be the hours of the day, starting with 0 ending on 23.
-	var x: Array = range(0, 24)
+	var x: Array = range(0, 24).map(func(i) -> String: return "%d - %d h" % [i, i+1])
 
 	# Arrays contain how many animals have been seen in each hour.
 	var blackbird_spots: Array =   [0, 0, 0, 0, 0, 0, 0, 4, 5, 3, 6, 0, 0, 0, 2, 0, 0, 4, 5, 0, 0, 0, 0, 0]
@@ -40,17 +40,9 @@ func _ready():
 		{ color = Color.BLUE, marker = Function.Marker.CROSS, type = Function.Type.SCATTER }
 	)
 
-	# Now let's plot our data
-	chart.y_labels_function = func(value: float): return str(int(value))
-
-	# Configure the x axis so that there is one tick every two hours. This has to
-	# be precise to ensure that no interpolation happens
-	cp.x_scale = x.size() - 1
-	chart.set_x_domain(0, x.size() - 1)
-	chart.x_labels_function = func(value: float) -> String:
-		return "%2d h" % round(value)
-
-	# Configure the y axis 
+	# Configure the y axis. We set the scale and domain in such
+	# that we get ticks only on integers, not on floats. 
+	# We also configure the label function to not print decimal places.
 	var y_max_value := 0
 	for i in range(0, 24):
 		if blackbird_spots[i] > y_max_value:
@@ -61,5 +53,7 @@ func _ready():
 	y_max_value += 2 if (y_max_value % 2) == 0 else 1
 	cp.y_scale = y_max_value / 2
 	chart.set_y_domain(0, y_max_value)
+	chart.y_labels_function = func(value: float): return str(int(value))
 
+	# Now let's plot our data
 	chart.plot([blackbird_function, nightingale_function], cp)

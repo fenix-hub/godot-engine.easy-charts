@@ -34,8 +34,8 @@ func _draw() -> void:
 		_draw_background()
 	
 	if get_parent().chart_properties.draw_grid_box:
-		_draw_vertical_grid()
-		_draw_horizontal_grid()
+		_draw_x_ticks()
+		_draw_y_ticks()
 	
 	if get_parent().chart_properties.draw_origin:
 		_draw_origin()
@@ -63,114 +63,104 @@ func _draw_origin() -> void:
 		)
 
 
-func _draw_vertical_grid() -> void:
-	# draw vertical lines
-	
-	# 1. the amount of lines is equals to the X_scale: it identifies in how many sectors the x domain
-	#    should be devided
-	# 2. calculate the spacing between each line in pixel. It is equals to x_sampled_domain / x_scale
-	# 3. calculate the offset in the real x domain, which is x_domain / x_scale.
-	var scaler: int = get_parent().chart_properties.x_scale
-	var x_pixel_dist: float = self.plot_box.size.x / scaler
+func _draw_x_ticks() -> void:
+	var labels = x_domain.get_tick_labels()
+	var tick_count = labels.size()
+
+	var x_pixel_dist: float = self.plot_box.size.x / tick_count
 	
 	var vertical_grid: PackedVector2Array = []
 	var vertical_ticks: PackedVector2Array = []
 	
-	for _x in (scaler + 1):
-		var x_sampled_val: float = (_x * x_pixel_dist) + self.plot_box.position.x
-		var x_val: float = ECUtilities._map_domain(x_sampled_val, ChartAxisDomain.from_bounds(self.plot_box.position.x, self.plot_box.end.x), x_domain)
+	for i in range(tick_count):
+		var x_position: float = (i * x_pixel_dist) + self.plot_box.position.x
 
-		var top: Vector2 = Vector2(x_sampled_val, self.box.position.y)
-		var bottom: Vector2 = Vector2(x_sampled_val, self.box.end.y)
-		
+		var top: Vector2 = Vector2(x_position, self.box.position.y)
+		var bottom: Vector2 = Vector2(x_position, self.box.end.y)
+
 		vertical_grid.append(top)
 		vertical_grid.append(bottom)
-		
+
 		vertical_ticks.append(bottom)
 		vertical_ticks.append(bottom + Vector2(0, get_parent().chart_properties.x_tick_size))
-		
-		# Draw V Tick Labels
+
+		# Draw x tick labels
 		if get_parent().chart_properties.show_tick_labels:
-			var tick_lbl: String = _get_tick_label(_x, x_val, x_domain.has_decimals, self.x_labels_function)
+			var label: String = labels[i]
 			draw_string(
 				get_parent().chart_properties.font, 
-				_get_vertical_tick_label_pos(bottom, tick_lbl),
-				tick_lbl,HORIZONTAL_ALIGNMENT_CENTER, -1, ThemeDB.fallback_font_size,
-				get_parent().chart_properties.colors.text, TextServer.JUSTIFICATION_NONE, TextServer.DIRECTION_AUTO,
+				_get_x_tick_label_position(bottom, label),
+				label,
+				HORIZONTAL_ALIGNMENT_CENTER,
+				-1,
+				ThemeDB.fallback_font_size,
+				get_parent().chart_properties.colors.text,
+				TextServer.JUSTIFICATION_NONE,
+				TextServer.DIRECTION_AUTO,
 				TextServer.ORIENTATION_HORIZONTAL
 			)
-	
-	# Draw V Grid
+
+	# Draw x grid
 	if get_parent().chart_properties.draw_vertical_grid:
 		draw_multiline(vertical_grid, get_parent().chart_properties.colors.grid, 1)
-	
-	# Draw V Ticks
+
+	# Draw x ticks
 	if get_parent().chart_properties.draw_ticks:
 		draw_multiline(vertical_ticks, get_parent().chart_properties.colors.ticks, 1)
 
-
-func _draw_horizontal_grid() -> void:
-	# 1. the amount of lines is equals to the y_scale: it identifies in how many sectors the y domain
-	#    should be devided
-	# 2. calculate the spacing between each line in pixel. It is equals to y_sampled_domain / y_scale
-	# 3. calculate the offset in the real y domain, which is y_domain / y_scale.
-	var scaler: int = get_parent().chart_properties.y_scale
-	var y_pixel_dist: float = self.plot_box.size.y / scaler
+func _draw_y_ticks() -> void:
+	var labels = y_domain.get_tick_labels()
+	var tick_count = labels.size()
+	var y_pixel_dist: float = self.plot_box.size.y / tick_count
 	
 	var horizontal_grid: PackedVector2Array = []
 	var horizontal_ticks: PackedVector2Array = []
 	
-	for _y in (scaler + 1):
-		var y_sampled_val: float = (_y * y_pixel_dist) + self.plot_box.position.y
-		var y_val: float = ECUtilities._map_domain(y_sampled_val, ChartAxisDomain.from_bounds(self.plot_box.end.y, self.plot_box.position.y), y_domain)
+	for i in range(tick_count):
+		var y_sampled_val: float = self.plot_box.size.y - (i * y_pixel_dist) + self.plot_box.position.y
 
 		var left: Vector2 = Vector2(self.box.position.x, y_sampled_val)
 		var right: Vector2 = Vector2(self.box.end.x, y_sampled_val)
-		
+
 		horizontal_grid.append(left)
 		horizontal_grid.append(right)
-		
+
 		horizontal_ticks.append(left)
 		horizontal_ticks.append(left - Vector2(get_parent().chart_properties.y_tick_size, 0))
-		
-		# Draw H Tick Labels
+
+		# Draw y tick labels
 		if get_parent().chart_properties.show_tick_labels:
-			var tick_lbl: String = _get_tick_label(_y, y_val, y_domain.has_decimals, y_labels_function)
+			var label: String = labels[i]
 			draw_string(
-				get_parent().chart_properties.font, 
-				_get_horizontal_tick_label_pos(left, tick_lbl),
-				tick_lbl,
+				get_parent().chart_properties.font,
+				_get_y_tick_label_position(left, label),
+				label,
 				HORIZONTAL_ALIGNMENT_CENTER,
-				-1, ThemeDB.fallback_font_size,
+				-1,
+				ThemeDB.fallback_font_size,
 				get_parent().chart_properties.colors.text,
-				TextServer.JUSTIFICATION_NONE, TextServer.DIRECTION_AUTO, TextServer.ORIENTATION_HORIZONTAL
+				TextServer.JUSTIFICATION_NONE,
+				TextServer.DIRECTION_AUTO,
+				TextServer.ORIENTATION_HORIZONTAL
 			)
 	
-	# Draw H Grid
+	# Draw y grid
 	if get_parent().chart_properties.draw_horizontal_grid:
 		draw_multiline(horizontal_grid, get_parent().chart_properties.colors.grid, 1)
 	
-	# Draw H Ticks
+	# Draw y ticks
 	if get_parent().chart_properties.draw_ticks:
 		draw_multiline(horizontal_ticks, get_parent().chart_properties.colors.ticks, 1)
 		
 
-func _get_vertical_tick_label_pos(base_position: Vector2, text: String) -> Vector2:
+func _get_x_tick_label_position(base_position: Vector2, text: String) -> Vector2:
 	return  base_position + Vector2(
 		- get_parent().chart_properties.font.get_string_size(text).x / 2,
 		ThemeDB.fallback_font_size + get_parent().chart_properties.x_tick_size
 	)
 
-func _get_horizontal_tick_label_pos(base_position: Vector2, text: String) -> Vector2:
+func _get_y_tick_label_position(base_position: Vector2, text: String) -> Vector2:
 	return base_position - Vector2(
 		get_parent().chart_properties.font.get_string_size(text).x + get_parent().chart_properties.y_tick_size + get_parent().chart_properties.x_ticklabel_space, 
 		- ThemeDB.fallback_font_size * 0.35
 	)
-
-func _get_tick_label(line_index: int, line_value: float, axis_has_decimals: bool, labels_function: Callable) -> String:
-	var tick_lbl: String = ""
-	if labels_function.is_null():
-		tick_lbl = ECUtilities._format_value(line_value, axis_has_decimals)
-	else:
-		tick_lbl = labels_function.call(line_value)
-	return tick_lbl

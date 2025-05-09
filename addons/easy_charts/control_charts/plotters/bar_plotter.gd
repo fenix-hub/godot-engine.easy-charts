@@ -28,8 +28,8 @@ func sample(x_sampled_domain: ChartAxisDomain, y_sampled_domain: ChartAxisDomain
 	bars_rects = []
 	for i in function.__x.size():
 		var top: Vector2 = Vector2(
-			ECUtilities._map_domain(i, x_domain, x_sampled_domain),
-			ECUtilities._map_domain(function.__y[i], y_domain, y_sampled_domain)
+			x_domain.map_to(i, function.__x, x_sampled_domain),
+			y_domain.map_to(i, function.__y, y_sampled_domain)
 		)
 		var base: Vector2 = Vector2(top.x, ECUtilities._map_domain(0.0, y_domain, y_sampled_domain))
 		bars.push_back(top)

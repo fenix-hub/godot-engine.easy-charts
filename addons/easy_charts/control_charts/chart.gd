@@ -8,6 +8,9 @@ class_name Chart
 @onready var functions_box: Control = %FunctionsBox
 @onready var function_legend: FunctionLegend = %FunctionLegend
 
+@onready var _tooltip: DataTooltip = %Tooltip
+var _function_of_tooltip: Function = null
+
 var functions: Array = []
 var x: Array = []
 var y: Array = []
@@ -55,8 +58,8 @@ func load_functions(functions: Array[Function]) -> void:
 
 		# Create FunctionPlotter
 		var function_plotter := FunctionPlotter.create_for_function(function)
-		function_plotter.connect("point_entered", Callable(plot_box, "_on_point_entered"))
-		function_plotter.connect("point_exited", Callable(plot_box, "_on_point_exited"))
+		function_plotter.point_entered.connect(_show_tooltip)
+		function_plotter.point_exited.connect(_hide_tooltip)
 		functions_box.add_child(function_plotter)
 
 		# Create legend
@@ -100,6 +103,18 @@ func _draw() -> void:
 				x_domain = ChartAxisDomain.from_values(x, chart_properties.smooth_domain)
 			if not is_y_fixed:
 				y_domain = ChartAxisDomain.from_values(y, chart_properties.smooth_domain)
+	
+	if !x_domain.is_discrete:
+		x_domain.set_tick_count(chart_properties.x_scale)
+
+	if x_labels_function:
+		x_domain.labels_function = x_labels_function
+
+	if !y_domain.is_discrete:
+		y_domain.set_tick_count(chart_properties.y_scale)
+
+	if y_labels_function:
+		y_domain.labels_function = y_labels_function
 
 	# Update values for the PlotBox in order to propagate them to the children
 	update_plotbox(x_domain, y_domain, x_labels_function, y_labels_function)
@@ -159,3 +174,19 @@ func _on_plot_box_resized() -> void:
 	grid_box.queue_redraw()
 	for function in functions_box.get_children():
 		function.queue_redraw()
+
+func _show_tooltip(point: Point, function: Function, options: Dictionary = {}) -> void:
+	var x_value: String = x_domain.get_tick_label(point.value.x, x_labels_function)
+	var y_value: String = y_domain.get_tick_label(point.value.y, y_labels_function)
+	var color: Color = function.get_color() if function.get_type() != Function.Type.PIE \
+		else function.get_gradient().sample(options.interpolation_index)
+	_tooltip.show()
+	_tooltip.update_values(x_value, y_value, function.name, color)
+	_tooltip.update_position(point.position)
+	_function_of_tooltip = function
+
+func _hide_tooltip(point: Point, function: Function) -> void:
+	if function != _function_of_tooltip:
+		return
+
+	_tooltip.hide()

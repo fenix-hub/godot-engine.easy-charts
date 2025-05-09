@@ -32,9 +32,9 @@ func sample(x_sampled_domain: ChartAxisDomain, y_sampled_domain: ChartAxisDomain
 	points = []
 	points_positions = []
 	var lower_bound: int = max(0, function.__x.size() - get_chart_properties().max_samples) \
-	#disable sample display limits
-	if get_chart_properties().max_samples > 0 \
-	else 0
+		if get_chart_properties().max_samples > 0 \
+		else 0
+
 	for i in range(lower_bound, function.__x.size()):
 		var _position: Vector2 = Vector2(
 			ECUtilities._map_domain(float(function.__x[i]), x_domain, x_sampled_domain),
