@@ -115,6 +115,18 @@ func _draw() -> void:
 				x_domain = ChartAxisDomain.from_values(x, chart_properties.smooth_domain)
 			if not is_y_fixed:
 				y_domain = ChartAxisDomain.from_values(y, chart_properties.smooth_domain)
+	
+	if !x_domain.is_discrete:
+		x_domain.set_tick_count(chart_properties.x_scale)
+
+	if x_labels_function:
+		x_domain.labels_function = x_labels_function
+
+	if !y_domain.is_discrete:
+		y_domain.set_tick_count(chart_properties.y_scale)
+
+	if y_labels_function:
+		y_domain.labels_function = y_labels_function
 
 	# Update values for the PlotBox in order to propagate them to the children
 	update_plotbox(x_domain, y_domain, x_labels_function, y_labels_function)

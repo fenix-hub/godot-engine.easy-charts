@@ -32,15 +32,15 @@ func sample() -> void:
 
 	_bars_rects = []
 	for i in function.__x.size():
-		var x_value_in_px := ECUtilities._map_domain(i, x_domain, x_sampled_domain)
-		var x_next_in_px := ECUtilities._map_domain(i + 1, x_domain, x_sampled_domain)
-		var left_pixel_padding := 0.5 * ((x_next_in_px - x_value_in_px) - total_bar_sizes) \
+		var x_value_in_px := x_domain.map_to(i, function.__x, x_sampled_domain)
+		var x_next_in_px := x_domain.map_to(i + 1, function.__x, x_sampled_domain)
+		var left_pixel_padding: float = 0.5 * ((x_next_in_px - x_value_in_px) - total_bar_sizes) \
 			+ index * bar_size * 2
 
-		var x_in_px := x_value_in_px + left_pixel_padding
+		var x_in_px: float = x_value_in_px + left_pixel_padding
 
-		var y_in_px := ECUtilities._map_domain(function.__y[i], y_domain, y_sampled_domain)
-		var y_zero_in_px := ECUtilities._map_domain(0.0, y_domain, y_sampled_domain)
+		var y_in_px := y_domain.map_to(i, function.__y, y_sampled_domain)
+		var y_zero_in_px := y_domain.map_to(0.0, function.__y, y_sampled_domain)
 
 		_bars_rects.append(Rect2(
 			Vector2(x_in_px, y_in_px),
