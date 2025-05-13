@@ -45,7 +45,7 @@ func _draw_bars() -> void:
 # of bars depending on if bars are placed on ticks or centered between ticks.
 func _get_bar_left_padding_function(x_sampled_domain) -> Callable:
 	# Function for non-centered bars will simply use the bar size.
-	if !chart._center_x_tick_labels():
+	if !chart.are_x_tick_labels_centered():
 		return func(_value_index: int) -> float: return -_bar_size
 
 	# Function for centered bars place bars next to each other between
