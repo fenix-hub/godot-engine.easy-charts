@@ -154,8 +154,6 @@ func update_plotbox(x_domain: ChartAxisDomain, y_domain: ChartAxisDomain, x_labe
 func update_gridbox(x_domain: ChartAxisDomain, y_domain: ChartAxisDomain, x_labels_function: Callable, y_labels_function: Callable) -> void:
 	grid_box.set_domains(x_domain, y_domain)
 	grid_box.set_labels_functions(x_labels_function, y_labels_function)
-	grid_box.x_tick_count = x[0].size() if x_domain.is_discrete else chart_properties.x_scale
-	grid_box.y_tick_count = y[0].size() if y_domain.is_discrete else chart_properties.y_scale
 	grid_box.queue_redraw()
 
 func calculate_plotbox_margins(x_domain: ChartAxisDomain, y_domain: ChartAxisDomain, y_labels_function: Callable) -> Vector2:

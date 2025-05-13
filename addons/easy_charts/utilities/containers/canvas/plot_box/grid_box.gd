@@ -1,12 +1,10 @@
 extends Control
 class_name GridBox
 
-var x_tick_count: int = 0
 var x_domain: ChartAxisDomain = null
 var x_labels_function: Callable = Callable()
 var x_label_centered: bool = false
 
-var y_tick_count: int = 0
 var y_domain: ChartAxisDomain = null
 var y_labels_function: Callable = Callable()
 
