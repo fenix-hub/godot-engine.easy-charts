@@ -1,6 +1,13 @@
 extends LinePlotter
 class_name AreaPlotter
 
+var base_color: Color = Color.WHITE
+
+func _init(chart: Chart, function: Function) -> void:
+	super(chart, function)
+	self.base_color = function.get_color()
+
+
 func _draw_areas() -> void:
 	var box: Rect2 = get_box()
 	var fp_augmented: PackedVector2Array = []
@@ -13,9 +20,6 @@ func _draw_areas() -> void:
 			fp_augmented = _get_spline_points()
 		Function.Interpolation.NONE, _:
 			return
-
-	if fp_augmented.size() == 0:
-		return
 
 	fp_augmented.push_back(Vector2(fp_augmented[-1].x, box.end.y + 80))
 	fp_augmented.push_back(Vector2(fp_augmented[0].x, box.end.y + 80))
@@ -31,7 +35,6 @@ func _draw_areas() -> void:
 	colors.resize(point_count)
 	
 	# Compute alpha for each point and assign the color.
-	var base_color: Color = function.get_color()
 	for i in range(point_count):
 		var point: Vector2 = fp_augmented[i]
 		var alpha: float = (point.y - end_y) * scale
@@ -42,4 +45,10 @@ func _draw_areas() -> void:
 
 func _draw() -> void:
 	super._draw()
+
+	#prevent error when drawing with no data.
+	if points_positions.size() < 2:
+		printerr("Cannot plot an area with less than two points!")
+		return
+
 	_draw_areas()

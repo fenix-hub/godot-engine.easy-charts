@@ -70,11 +70,11 @@ func _calc_circle_arc_poly(center: Vector2, radius: float, angle_from: float, an
 	var nb_points: int = 64
 	var points_arc: PackedVector2Array = PackedVector2Array()
 	points_arc.push_back(center)
-
+	
 	for i in range(nb_points + 1):
 		var angle_point: float = - (PI / 2) + angle_from + i * (angle_to - angle_from) / nb_points
 		points_arc.push_back(center + (Vector2.RIGHT.rotated(angle_point).normalized() * radius))
-
+	
 	return points_arc
 
 func _draw_pie() -> void:
@@ -123,6 +123,7 @@ func _input(event: InputEvent) -> void:
 					focused_point = point
 					emit_signal("point_entered", focused_point, function, { interpolation_index = float(i) / float(slices.size() - 1)})
 					return
-			# Mouse is not in any slice's box
-			emit_signal("point_exited", focused_point, function)
-			focused_point = null
+
+		# Mouse is not in any slice's box
+		emit_signal("point_exited", focused_point, function)
+		focused_point = null
