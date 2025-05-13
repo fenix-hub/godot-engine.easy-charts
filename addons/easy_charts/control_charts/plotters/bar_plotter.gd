@@ -55,7 +55,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
 		for i in _bars_rects.size():
 			if _bars_rects[i].grow(5).abs().has_point(get_relative_position(event.position)):
-				var point: Point = Point.new(_bars_rects[i].get_center(), { x = i, y = function.__y[i]})
+				var point: Point = Point.new(_bars_rects[i].get_center(), { x = function.__x[i], y = function.__y[i]})
 				if _focused_bar_midpoint == point:
 					return
 				else:
