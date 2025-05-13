@@ -49,7 +49,7 @@ func _draw() -> void:
 
 	#prevent error when drawing with no data.
 	if points_positions.size() < 2:
-		printerr("Cannot plot a line with less than two points!")
+		printerr("Cannot plot an area with less than two points!")
 		return
 
 	_draw_areas()
