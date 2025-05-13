@@ -4,6 +4,7 @@ extends Control
 
 var functions: Array[Function]
 var selected_functions: Array[Function]
+var line_function: Function
 
 # Let's create our @x values.
 var x: Array = range(0, 24).map(func(i: int) -> String: return "%d - %d h" % [i, i+1])
@@ -90,13 +91,28 @@ func _ready():
 		}
 	)
 
+	var line_function_y = ArrayOperations.add_float(
+			ArrayOperations.multiply_float(
+				ArrayOperations.cos(range(0, 24))
+			, 100),
+		110
+	)
+	line_function = Function.new(
+		x, line_function_y, "Avg Duration",
+		{
+			type = Function.Type.LINE,
+			color = Color.DODGER_BLUE
+		}
+	)
+
 	functions = [f1, f2, f3, f4, f5, f6]
 	selected_functions = functions.slice(0, 2)
 	_plot()
 
 func _plot():
-	# Now let's plot our data
-	chart.plot(selected_functions, cp)
+	# Now let's plot the selected bar functions + the line function
+	var line_function_array: Array[Function] = [line_function]
+	chart.plot(selected_functions + line_function_array, cp)
 
 func _on_add_function():
 	# Do not exceed the max number of functions
@@ -113,4 +129,9 @@ func _on_remove_function():
 		return
 
 	selected_functions = functions.slice(0, selected_functions.size() - 1)
+	_plot()
+
+
+func _on_show_line_chart_check_button_toggled(toggled_on: bool) -> void:
+	line_function.props.set("visible", toggled_on)
 	_plot()
