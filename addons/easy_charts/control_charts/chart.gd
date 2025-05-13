@@ -132,7 +132,7 @@ func _draw() -> void:
 	update_plotbox(x_domain, y_domain, x_labels_function, y_labels_function)
 
 	# Update GridBox
-	grid_box.x_label_centered = _center_x_tick_labels()
+	grid_box.x_labels_centered = _center_x_tick_labels()
 	update_gridbox(x_domain, y_domain, x_labels_function, y_labels_function)
 
 	# Update each FunctionPlotter in FunctionsBox
