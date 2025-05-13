@@ -65,7 +65,7 @@ func _get_bar_left_padding_function(x_sampled_domain) -> Callable:
 
 	# Return the padding lambda for centered bars.
 	return func(value_index: int) -> float:
-		return 0.5 * ((distance_between_ticks_px * value_index) - total_bar_sizes) \
+		return 0.5 * (distance_between_ticks_px - total_bar_sizes) \
 			+ function_index * _bar_size * 2
 
 func _input(event: InputEvent) -> void:
