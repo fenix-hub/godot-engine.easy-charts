@@ -8,8 +8,11 @@ var _points: Array[Point]
 var points_positions: PackedVector2Array
 var focused_point: Point
 
-var _point_size: float:
-	get: return function.props.get("point_size", 3.0)
+var _point_size: float
+
+func _init(chart: Chart, function: Function):
+	super(chart, function)
+	_point_size = function.props.get("point_size", 3.0)
 
 func _draw() -> void:
 	super._draw()
