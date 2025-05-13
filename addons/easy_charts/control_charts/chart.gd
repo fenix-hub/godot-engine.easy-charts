@@ -71,6 +71,8 @@ func load_functions(functions: Array[Function]) -> void:
 			_:
 				function_legend.add_function(function)
 
+	_draw()
+
 func get_functions_by_type(type: Function.Type) -> Array[Function]:
 	return functions.filter(func(function: Function) -> bool:
 		return function.get_type() == type
