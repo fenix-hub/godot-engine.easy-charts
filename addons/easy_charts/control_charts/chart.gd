@@ -73,6 +73,7 @@ func load_functions(functions: Array[Function]) -> void:
 
 	_draw()
 
+## Returns all functions of a specific type that are part of this chart.
 func get_functions_by_type(type: Function.Type) -> Array[Function]:
 	return functions.filter(func(function: Function) -> bool:
 		return function.get_type() == type
