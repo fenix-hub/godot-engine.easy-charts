@@ -35,7 +35,7 @@ func _get_stair_points() -> PackedVector2Array:
 
 func _draw() -> void:
 	super._draw()
-	
+
 	#prevent error when drawing with no data.
 	if points_positions.size() < 2:
 		printerr("Cannot plot a line with less than two points!")

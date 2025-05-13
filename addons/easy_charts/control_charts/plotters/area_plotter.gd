@@ -21,8 +21,6 @@ func _draw_areas() -> void:
 			fp_augmented = _get_spline_points()
 		Function.Interpolation.NONE, _:
 			return
-	if fp_augmented.size() == 0:
-		return
 
 	fp_augmented.push_back(Vector2(fp_augmented[-1].x, box.end.y + 80))
 	fp_augmented.push_back(Vector2(fp_augmented[0].x, box.end.y + 80))
@@ -48,4 +46,10 @@ func _draw_areas() -> void:
 
 func _draw() -> void:
 	super._draw()
+
+	#prevent error when drawing with no data.
+	if points_positions.size() < 2:
+		printerr("Cannot plot a line with less than two points!")
+		return
+
 	_draw_areas()
