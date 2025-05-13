@@ -42,7 +42,8 @@ func _sample() -> void:
 		)
 
 		var point = Point.new(_position, { x = function.__x[i], y = function.__y[i] })
-		# Don't generate outside y domain upper and lower bounds!
+
+		# Don't sample outside y domain upper and lower bounds
 		if point.position.y > y_sampled_domain.lb || point.position.y < y_sampled_domain.ub:
 			continue
 
