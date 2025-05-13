@@ -1,26 +1,23 @@
 extends ScatterPlotter
 class_name LinePlotter
 
-func _init(function: Function) -> void:
-	super(function)
-
 func _get_spline_points(density: float = 10.0, tension: float = 1) -> PackedVector2Array:
 	var spline_points: PackedVector2Array = []
 	
-	var augmented: PackedVector2Array = points_positions
-	var pi: Vector2 = augmented[0] - Vector2(10, -10)
-	var pf: Vector2 = augmented[augmented.size() - 1] + Vector2(10, 10)
+	var augmented_positions: PackedVector2Array = points_positions
+	var pi: Vector2 = augmented_positions[0] - Vector2(10, -10)
+	var pf: Vector2 = augmented_positions[augmented_positions.size() - 1] + Vector2(10, 10)
 	
-	augmented.insert(0, pi)
-	augmented.push_back(pf)
+	augmented_positions.insert(0, pi)
+	augmented_positions.push_back(pf)
 	
-	for p in range(1, augmented.size() - 2, 1) : #(inclusive)
+	for p in range(1, augmented_positions.size() - 2, 1) : #(inclusive)
 		for f in range(0, density + 1, 1):
 			spline_points.append(
-				augmented[p].cubic_interpolate(
-					augmented[p + 1], 
-					augmented[p - 1], 
-					augmented[p + 2], 
+				augmented_positions[p].cubic_interpolate(
+					augmented_positions[p + 1], 
+					augmented_positions[p - 1], 
+					augmented_positions[p + 2], 
 					f / density)
 				)
 	
@@ -38,7 +35,7 @@ func _get_stair_points() -> PackedVector2Array:
 
 func _draw() -> void:
 	super._draw()
-	
+
 	#prevent error when drawing with no data.
 	if points_positions.size() < 2:
 		printerr("Cannot plot a line with less than two points!")
