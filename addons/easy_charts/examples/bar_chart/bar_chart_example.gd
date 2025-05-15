@@ -4,6 +4,8 @@ extends Control
 
 var functions: Array[Function]
 var selected_functions: Array[Function]
+
+var is_line_function_shown := true
 var line_function: Function
 
 # Let's create our @x values.
@@ -111,7 +113,10 @@ func _ready():
 
 func _plot():
 	# Now let's plot the selected bar functions + the line function
-	var line_function_array: Array[Function] = [line_function]
+	var line_function_array: Array[Function] = []
+	if is_line_function_shown:
+		line_function_array = [line_function]
+
 	chart.plot(selected_functions + line_function_array, cp)
 
 func _on_add_function():
@@ -122,7 +127,6 @@ func _on_add_function():
 	selected_functions = functions.slice(0, selected_functions.size() + 1)
 	_plot()
 
-
 func _on_remove_function():
 	# Ensure to always have at least one function to show
 	if selected_functions.size() == 1:
@@ -131,7 +135,6 @@ func _on_remove_function():
 	selected_functions = functions.slice(0, selected_functions.size() - 1)
 	_plot()
 
-
-func _on_show_line_chart_check_button_toggled(toggled_on: bool) -> void:
-	line_function.props.set("visible", toggled_on)
+func _on_show_line_chart_toggled(toggled_on: bool) -> void:
+	is_line_function_shown = toggled_on
 	_plot()

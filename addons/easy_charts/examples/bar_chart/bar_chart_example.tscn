@@ -64,4 +64,4 @@ text = "Try to scale the window!"
 
 [connection signal="pressed" from="VBoxContainer/MarginContainer/HBoxContainer/AddFunctionButton" to="." method="_on_add_function"]
 [connection signal="pressed" from="VBoxContainer/MarginContainer/HBoxContainer/RemoveFunctionButton" to="." method="_on_remove_function"]
-[connection signal="toggled" from="VBoxContainer/MarginContainer/HBoxContainer/ShowLineChartCheckButton" to="." method="_on_show_line_chart_check_button_toggled"]
+[connection signal="toggled" from="VBoxContainer/MarginContainer/HBoxContainer/ShowLineChartCheckButton" to="." method="_on_show_line_chart_toggled"]
