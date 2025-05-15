@@ -42,7 +42,7 @@ func get_box() -> Rect2:
 	return get_parent().get_parent().get_plot_box()
 
 func get_chart_properties() -> ChartProperties:
-	return get_parent().get_parent().chart_properties
+	return chart.chart_properties
 
 func get_relative_position(position: Vector2) -> Vector2:
 	return position - global_position
