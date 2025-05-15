@@ -56,9 +56,9 @@ func sample(radius: float, center: Vector2, total: float, ratios: PackedFloat32A
 				end_angle
 			)
 		)
-		slices_conc.append( abs(end_angle - start_angle) >= PI )
+		slices_conc.append(abs(end_angle - start_angle) >= PI)
 		start_angle = end_angle
-	
+
 	for i in slices.size():
 		var slice = slices[i]
 		var mid_point: Vector2 = (slice[-1] + slice[1]) / 2
@@ -123,6 +123,7 @@ func _input(event: InputEvent) -> void:
 					focused_point = point
 					emit_signal("point_entered", focused_point, function, { interpolation_index = float(i) / float(slices.size() - 1)})
 					return
+
 		# Mouse is not in any slice's box
 		emit_signal("point_exited", focused_point, function)
 		focused_point = null

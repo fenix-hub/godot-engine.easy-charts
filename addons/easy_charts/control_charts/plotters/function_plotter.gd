@@ -2,23 +2,26 @@ extends Control
 class_name FunctionPlotter
 
 var function: Function
+var chart: Chart
+
 var x_domain: ChartAxisDomain
 var y_domain: ChartAxisDomain
 
-static func create_for_function(function: Function) -> FunctionPlotter:
+static func create_for_function(chart: Chart, function: Function) -> FunctionPlotter:
 	match function.get_type():
 		Function.Type.LINE:
-			return LinePlotter.new(function)
+			return LinePlotter.new(chart, function)
 		Function.Type.AREA:
-			return AreaPlotter.new(function)
+			return AreaPlotter.new(chart, function)
 		Function.Type.PIE:
-			return PiePlotter.new(function)
+			return PiePlotter.new(chart, function)
 		Function.Type.BAR:
-			return BarPlotter.new(function)
+			return BarPlotter.new(chart, function)
 		Function.Type.SCATTER, _:
-			return ScatterPlotter.new(function)
+			return ScatterPlotter.new(chart, function)
 
-func _init(function: Function) -> void:
+func _init(chart: Chart, function: Function) -> void:
+	self.chart = chart
 	self.function = function
 
 func _ready() -> void:
@@ -39,7 +42,7 @@ func get_box() -> Rect2:
 	return get_parent().get_parent().get_plot_box()
 
 func get_chart_properties() -> ChartProperties:
-	return get_parent().get_parent().chart_properties
+	return chart.chart_properties
 
 func get_relative_position(position: Vector2) -> Vector2:
 	return position - global_position
