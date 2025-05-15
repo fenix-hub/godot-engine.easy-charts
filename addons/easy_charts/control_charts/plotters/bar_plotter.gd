@@ -29,7 +29,7 @@ func _sample() -> void:
 	for i in function.__x.size():
 		var x_in_px := x_domain.map_to(i, function.__x, x_sampled_domain)
 		var y_in_px := y_domain.map_to(i, function.__y, y_sampled_domain)
-		var y_zero_in_px := y_domain.map_to(0.0, function.__y, y_sampled_domain)
+		var y_zero_in_px := ECUtilities._map_domain(0.0, y_domain, y_sampled_domain)
 
 		var left_padding_px := get_bar_left_padding.call(i)
 		_bars_rects.append(Rect2(
