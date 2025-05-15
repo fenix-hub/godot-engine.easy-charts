@@ -46,12 +46,28 @@ text = "Add Function"
 layout_mode = 2
 text = "Remove Function"
 
-[node name="ShowLineChartCheckButton" type="CheckBox" parent="VBoxContainer/MarginContainer/HBoxContainer"]
-layout_mode = 2
-button_pressed = true
-text = "Show Line Chart"
-
 [node name="Spacer" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SecondaryFunctionLabel" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Secondary Function:"
+
+[node name="SecondaryFunctionTypeOption" type="OptionButton" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+selected = 2
+item_count = 4
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "Scatter"
+popup/item_1/id = 1
+popup/item_2/text = "Line"
+popup/item_2/id = 2
+popup/item_3/text = "Area"
+popup/item_3/id = 3
+
+[node name="Spacer2" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -64,4 +80,4 @@ text = "Try to scale the window!"
 
 [connection signal="pressed" from="VBoxContainer/MarginContainer/HBoxContainer/AddFunctionButton" to="." method="_on_add_function"]
 [connection signal="pressed" from="VBoxContainer/MarginContainer/HBoxContainer/RemoveFunctionButton" to="." method="_on_remove_function"]
-[connection signal="toggled" from="VBoxContainer/MarginContainer/HBoxContainer/ShowLineChartCheckButton" to="." method="_on_show_line_chart_toggled"]
+[connection signal="item_selected" from="VBoxContainer/MarginContainer/HBoxContainer/SecondaryFunctionTypeOption" to="." method="_on_secondary_function_type_option_item_selected"]

@@ -5,8 +5,8 @@ extends Control
 var functions: Array[Function]
 var selected_functions: Array[Function]
 
-var is_line_function_shown := true
-var line_function: Function
+var is_secondary_function_visible := true
+var secondary_function: Function
 
 # Let's create our @x values.
 var x: Array = range(0, 24).map(func(i: int) -> String: return "%d - %d h" % [i, i+1])
@@ -93,16 +93,17 @@ func _ready():
 		}
 	)
 
-	var line_function_y = ArrayOperations.add_float(
+	var secondary_function_y = ArrayOperations.add_float(
 			ArrayOperations.multiply_float(
 				ArrayOperations.cos(range(0, 24))
 			, 100),
 		110
 	)
-	line_function = Function.new(
-		x, line_function_y, "Avg Duration",
+	secondary_function = Function.new(
+		x, secondary_function_y, "Avg Duration",
 		{
 			type = Function.Type.LINE,
+			marker = Function.Marker.CROSS,
 			color = Color.DODGER_BLUE
 		}
 	)
@@ -113,11 +114,11 @@ func _ready():
 
 func _plot():
 	# Now let's plot the selected bar functions + the line function
-	var line_function_array: Array[Function] = []
-	if is_line_function_shown:
-		line_function_array = [line_function]
+	var secondary_function_array: Array[Function] = []
+	if is_secondary_function_visible:
+		secondary_function_array = [secondary_function]
 
-	chart.plot(selected_functions + line_function_array, cp)
+	chart.plot(selected_functions + secondary_function_array, cp)
 
 func _on_add_function():
 	# Do not exceed the max number of functions
@@ -136,5 +137,15 @@ func _on_remove_function():
 	_plot()
 
 func _on_show_line_chart_toggled(toggled_on: bool) -> void:
-	is_line_function_shown = toggled_on
+	is_secondary_function_visible = toggled_on
+	_plot()
+
+
+func _on_secondary_function_type_option_item_selected(index: int) -> void:
+	is_secondary_function_visible = true
+	match index:
+		0: is_secondary_function_visible = false
+		1: secondary_function.props.type = Function.Type.SCATTER
+		2: secondary_function.props.type = Function.Type.LINE
+		3: secondary_function.props.type = Function.Type.AREA
 	_plot()
