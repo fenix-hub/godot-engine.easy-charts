@@ -37,8 +37,8 @@ func _sample() -> void:
 
 	for i in range(lower_bound, function.__x.size()):
 		var _position: Vector2 = Vector2(
-			ECUtilities._map_domain(float(function.__x[i]), x_domain, x_sampled_domain),
-			ECUtilities._map_domain(float(function.__y[i]), y_domain, y_sampled_domain)
+			x_domain.map_to(i, function.__x, x_sampled_domain),
+			y_domain.map_to(i, function.__y, y_sampled_domain)
 		)
 
 		var point = Point.new(_position, { x = function.__x[i], y = function.__y[i] })
