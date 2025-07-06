@@ -52,14 +52,14 @@ func _ready():
 	set_process(false)
 
 
-var new_val: float = 4.5
+var new_val: int = 20
 
 func _process(delta: float):
 	# This function updates the values of a function and then updates the plot
-	new_val += 5
+	new_val += 10
 
 	# we can use the `Function.add_point(x, y)` method to update a function
-	f1.add_point(new_val, cos(new_val) * 20)
+	f1.add_point(new_val, "C++ %s" % new_val)
 	chart.queue_redraw() # This will force the Chart to be updated
 
 
