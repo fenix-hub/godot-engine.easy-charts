@@ -30,4 +30,3 @@ func _gui_input(event: InputEvent) -> void:
 
 func _on_function_visibilty_changed(visible: bool) -> void:
 	type_lbl.indicator_visible = visible
-	type_lbl.queue_redraw()

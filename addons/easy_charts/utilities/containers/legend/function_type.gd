@@ -4,7 +4,12 @@ class_name FunctionTypeLabel
 var type: int
 var marker: int
 var color: Color
-var indicator_visible: bool
+var indicator_visible: bool:
+	get:
+		return indicator_visible
+	set(value):
+		indicator_visible = value
+		queue_redraw()
 
 func _draw() -> void:
 	if !indicator_visible:
