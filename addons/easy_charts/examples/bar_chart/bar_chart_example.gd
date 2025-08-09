@@ -24,6 +24,7 @@ func _ready():
 	cp.draw_bounding_box = false
 	cp.draw_vertical_grid = true
 	cp.interactive = true # false by default, it allows the chart to create a tooltip to show point values
+	cp.show_legend = true
 	# and interecept clicks on the plot
 
 	# Let's add values to our functions

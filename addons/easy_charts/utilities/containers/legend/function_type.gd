@@ -4,8 +4,17 @@ class_name FunctionTypeLabel
 var type: int
 var marker: int
 var color: Color
+var indicator_visible: bool:
+	get:
+		return indicator_visible
+	set(value):
+		indicator_visible = value
+		queue_redraw()
 
 func _draw() -> void:
+	if !indicator_visible:
+		return
+
 	var center: Vector2 = get_rect().get_center()
 
 	match self.type:
@@ -55,7 +64,7 @@ func _draw() -> void:
 			pass
 		Function.Marker.SQUARE:
 			draw_rect(
-				Rect2(center - (Vector2.ONE * 3), (Vector2.ONE * 3 * 2)),
+				Rect2(center - (Vector2.ONE * 3), (Vector2.ONE * 3 * 2)), 
 				color, 1.0
 			)
 		Function.Marker.TRIANGLE:
