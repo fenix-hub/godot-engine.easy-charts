@@ -59,8 +59,8 @@ func _draw_origin() -> void:
 	draw_line(Vector2(self.plot_box.position.x, yorigin), Vector2(self.plot_box.position.x + self.plot_box.size.x, yorigin), get_parent().chart_properties.colors.origin, 1)
 	draw_string(
 		get_parent().chart_properties.font, Vector2(xorigin, yorigin) - Vector2(15, -15), "O", HORIZONTAL_ALIGNMENT_CENTER, -1, 
-		ThemeDB.fallback_font_size, get_parent().chart_properties.colors.text, TextServer.JUSTIFICATION_NONE, TextServer.DIRECTION_AUTO, TextServer.ORIENTATION_HORIZONTAL
-		)
+		ThemeDB.fallback_font_size, get_theme_color("tick_label_color", "Chart"), TextServer.JUSTIFICATION_NONE, TextServer.DIRECTION_AUTO, TextServer.ORIENTATION_HORIZONTAL
+	)
 
 
 func _draw_x_ticks() -> void:
@@ -94,7 +94,7 @@ func _draw_x_ticks() -> void:
 				HORIZONTAL_ALIGNMENT_CENTER,
 				-1,
 				ThemeDB.fallback_font_size,
-				get_parent().chart_properties.colors.text,
+				get_theme_color("tick_label_color", "Chart"),
 				TextServer.JUSTIFICATION_NONE,
 				TextServer.DIRECTION_AUTO,
 				TextServer.ORIENTATION_HORIZONTAL
@@ -138,7 +138,7 @@ func _draw_y_ticks() -> void:
 				HORIZONTAL_ALIGNMENT_CENTER,
 				-1,
 				ThemeDB.fallback_font_size,
-				get_parent().chart_properties.colors.text,
+				get_theme_color("tick_label_color", "Chart"),
 				TextServer.JUSTIFICATION_NONE,
 				TextServer.DIRECTION_AUTO,
 				TextServer.ORIENTATION_HORIZONTAL
