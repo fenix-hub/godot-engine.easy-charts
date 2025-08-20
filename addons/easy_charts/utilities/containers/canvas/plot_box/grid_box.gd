@@ -102,11 +102,11 @@ func _draw_x_ticks() -> void:
 
 	# Draw x grid
 	if get_parent().chart_properties.draw_vertical_grid:
-		draw_multiline(vertical_grid, get_parent().chart_properties.colors.grid, 1)
+		draw_multiline(vertical_grid, get_theme_color("tick_grid_line_color", "Chart"), 1)
 
 	# Draw x ticks
 	if get_parent().chart_properties.draw_ticks:
-		draw_multiline(vertical_ticks, get_parent().chart_properties.colors.ticks, 1)
+		draw_multiline(vertical_ticks, get_theme_color("tick_color", "Chart"), 1)
 
 func _draw_y_ticks() -> void:
 	var labels = y_domain.get_tick_labels()
@@ -146,11 +146,11 @@ func _draw_y_ticks() -> void:
 	
 	# Draw y grid
 	if get_parent().chart_properties.draw_horizontal_grid:
-		draw_multiline(horizontal_grid, get_parent().chart_properties.colors.grid, 1)
+		draw_multiline(horizontal_grid, get_theme_color("tick_grid_line_color", "Chart"), 1)
 	
 	# Draw y ticks
 	if get_parent().chart_properties.draw_ticks:
-		draw_multiline(horizontal_ticks, get_parent().chart_properties.colors.ticks, 1)
+		draw_multiline(horizontal_ticks, get_theme_color("tick_color", "Chart"), 1)
 		
 
 func _get_x_tick_label_position(base_position: Vector2, text: String) -> Vector2:

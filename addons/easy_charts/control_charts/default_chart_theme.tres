@@ -1,4 +1,6 @@
 [gd_resource type="Theme" format=3 uid="uid://dbgw3bjtopyhv"]
 
 [resource]
+Chart/colors/tick_color = Color(0, 0, 0, 1)
+Chart/colors/tick_grid_line_color = Color(0.745098, 0.745098, 0.745098, 1)
 Chart/colors/tick_label_color = Color(0, 0, 0, 1)
