@@ -19,7 +19,6 @@ var y_ticklabel_space: float = 5
 var x_scale_type: int = 0
 var y_scale_type: int = 0
 
-var draw_borders: bool = true
 var draw_frame: bool = true
 var draw_background: bool = true
 var draw_bounding_box: bool = true
@@ -57,7 +56,6 @@ var max_samples: int = 100
 var colors: Dictionary = {
 	frame = Color.WHITE_SMOKE,
 	background = Color.WHITE,
-	borders = Color.RED,
 	bounding_box = Color.BLACK,
 	grid = Color.GRAY,
 	ticks = Color.BLACK,
