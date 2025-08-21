@@ -1,4 +1,7 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dbgw3bjtopyhv"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://dwbt0h7cp3cg5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rmy2u"]
+bg_color = Color(0.960784, 0.960784, 0.960784, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_34bsk"]
 bg_color = Color(1, 1, 1, 1)
@@ -13,4 +16,5 @@ Chart/colors/origin_color = Color(0.411765, 0.411765, 0.411765, 1)
 Chart/colors/text_color = Color(0, 0, 0, 1)
 Chart/colors/tick_color = Color(0, 0, 0, 1)
 Chart/colors/tick_grid_line_color = Color(0.745098, 0.745098, 0.745098, 1)
+Chart/styles/chart_area = SubResource("StyleBoxFlat_rmy2u")
 Chart/styles/plot_area = SubResource("StyleBoxFlat_34bsk")

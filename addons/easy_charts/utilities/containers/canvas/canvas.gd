@@ -10,13 +10,15 @@ func _ready():
     pass # Replace with function body.
 
 func prepare_canvas(chart_properties: ChartProperties) -> void:
-	
-	if chart_properties.draw_frame:
-		set_color(chart_properties.colors.frame)
-		set_frame_visible(true)
-	else:
-		set_frame_visible(false)
-	
+
+	#if chart_properties.draw_frame:
+		#set_color(chart_properties.colors.frame)
+		#set_frame_visible(true)
+	#else:
+		#set_frame_visible(false)
+
+	add_theme_stylebox_override("panel", get_theme_stylebox("chart_area", "Chart"))
+
 	if chart_properties.show_title:
 		update_title(chart_properties.title, get_theme_color("text_color", "Chart"))
 	else:
