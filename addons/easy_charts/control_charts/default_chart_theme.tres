@@ -10,7 +10,7 @@ border_color = Color(0, 0, 0, 1)
 
 [resource]
 Chart/colors/origin_color = Color(0.411765, 0.411765, 0.411765, 1)
+Chart/colors/text_color = Color(0, 0, 0, 1)
 Chart/colors/tick_color = Color(0, 0, 0, 1)
 Chart/colors/tick_grid_line_color = Color(0.745098, 0.745098, 0.745098, 1)
-Chart/colors/tick_label_color = Color(0, 0, 0, 1)
 Chart/styles/plot_area = SubResource("StyleBoxFlat_34bsk")

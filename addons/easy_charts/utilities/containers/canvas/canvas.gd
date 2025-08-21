@@ -10,32 +10,32 @@ func _ready():
     pass # Replace with function body.
 
 func prepare_canvas(chart_properties: ChartProperties) -> void:
-    
-    if chart_properties.draw_frame:
-        set_color(chart_properties.colors.frame)
-        set_frame_visible(true)
-    else:
-        set_frame_visible(false)
-    
-    if chart_properties.show_title:
-        update_title(chart_properties.title, chart_properties.colors.text)
-    else:
-        _title_lbl.hide()
-    
-    if chart_properties.show_x_label:
-        update_x_label(chart_properties.x_label, chart_properties.colors.text)
-    else:
-        _x_lbl.hide()
-    
-    if chart_properties.show_y_label:
-        update_y_label(chart_properties.y_label, chart_properties.colors.text, -90)
-    else:
-        _y_lbl.hide()
-    
-    if chart_properties.show_legend:
-        _legend.show()
-    else:
-        hide_legend()
+	
+	if chart_properties.draw_frame:
+		set_color(chart_properties.colors.frame)
+		set_frame_visible(true)
+	else:
+		set_frame_visible(false)
+	
+	if chart_properties.show_title:
+		update_title(chart_properties.title, get_theme_color("text_color", "Chart"))
+	else:
+		_title_lbl.hide()
+	
+	if chart_properties.show_x_label:
+		update_x_label(chart_properties.x_label, get_theme_color("text_color", "Chart"))
+	else:
+		_x_lbl.hide()
+	
+	if chart_properties.show_y_label:
+		update_y_label(chart_properties.y_label, get_theme_color("text_color", "Chart"), -90)
+	else:
+		_y_lbl.hide()
+	
+	if chart_properties.show_legend:
+		_legend.show()
+	else:
+		hide_legend()
 
 func update_title(text: String, color: Color, rotation: float = 0.0) -> void:
     _title_lbl.show()
