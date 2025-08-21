@@ -23,17 +23,21 @@ var y_domain: ChartAxisDomain = null
 
 var chart_properties: ChartProperties = null
 
+var _has_user_defined_theme: bool
+
 ###########
 
 func _ready() -> void:
-	if theme == null:
-		theme = Theme.new()
+	_has_user_defined_theme = theme != null
 
 func plot(functions: Array[Function], properties: ChartProperties = ChartProperties.new()) -> void:
 	self.functions = functions
 	self.chart_properties = properties
 
-	theme.set("default_font", self.chart_properties.font)
+	# If user does not set a theme, generate a Theme from chart properties.
+	if !_has_user_defined_theme:
+		theme = chart_properties.to_theme()
+
 	_canvas.prepare_canvas(self.chart_properties)
 	plot_box.chart_properties = self.chart_properties
 	function_legend.chart_properties = self.chart_properties

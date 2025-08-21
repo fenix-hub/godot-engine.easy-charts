@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dn8rdqup8ldnw"]
 
 [ext_resource type="Script" uid="uid://b1ioy02qwjlpe" path="res://addons/easy_charts/examples/bar_chart/bar_chart_example.gd" id="1"]
-[ext_resource type="Theme" uid="uid://dbgw3bjtopyhv" path="res://addons/easy_charts/control_charts/default_chart_theme.tres" id="1_2ibwh"]
+[ext_resource type="Theme" uid="uid://dwbt0h7cp3cg5" path="res://addons/easy_charts/control_charts/default_chart_theme.tres" id="1_2ibwh"]
 [ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="2"]
 
 [sub_resource type="StyleBoxFlat" id="1"]

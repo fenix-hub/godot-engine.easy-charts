@@ -19,9 +19,15 @@ var y_ticklabel_space: float = 5
 var x_scale_type: int = 0
 var y_scale_type: int = 0
 
+## draw_frame is deprecated. Use a theme instead.
 var draw_frame: bool = true
+
+## draw_background is deprecated. Use a theme instead.
 var draw_background: bool = true
+
+## draw_bounding_box is deprecated. Use a theme instead.
 var draw_bounding_box: bool = true
+
 var draw_vertical_grid: bool = true
 var draw_horizontal_grid: bool = true
 var draw_ticks: bool = true
@@ -53,6 +59,7 @@ var smooth_domain: bool = false
 var max_samples: int = 100
 
 ## Dictionary of colors for all of the Chart elements.
+## Note: This is deprecated. Use a theme instead
 var colors: Dictionary = {
 	frame = Color.WHITE_SMOKE,
 	background = Color.WHITE,
@@ -72,3 +79,26 @@ func _init() -> void:
 
 func get_string_size(text: String) -> Vector2:
 	return font.get_string_size(text)
+
+## Converts theming related properties into a Theme.
+func to_theme() -> Theme:
+	var theme = Theme.new()
+	theme.default_font = font
+	theme.set_color("origin_color", "Chart", colors.origin)
+	theme.set_color("text_color", "Chart", colors.text)
+	theme.set_color("tick_color", "Chart", colors.ticks)
+	theme.set_color("tick_grid_line_color", "Chart", colors.grid)
+
+	var chart_area := StyleBoxFlat.new()
+	chart_area.bg_color = colors.frame
+	chart_area.draw_center = draw_frame
+	theme.set_stylebox("chart_area", "Chart", chart_area)
+
+	var plot_area := StyleBoxFlat.new()
+	plot_area.bg_color = colors.background
+	plot_area.draw_center = draw_background
+	plot_area.border_color = colors.bounding_box
+	plot_area.set_border_width_all(1 if draw_bounding_box else 0)
+	theme.set_stylebox("plot_area", "Chart", plot_area)
+
+	return theme
