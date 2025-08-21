@@ -92,6 +92,7 @@ func to_theme() -> Theme:
 	var chart_area := StyleBoxFlat.new()
 	chart_area.bg_color = colors.frame
 	chart_area.draw_center = draw_frame
+	chart_area.set_content_margin_all(15)
 	theme.set_stylebox("chart_area", "Chart", chart_area)
 
 	var plot_area := StyleBoxFlat.new()
