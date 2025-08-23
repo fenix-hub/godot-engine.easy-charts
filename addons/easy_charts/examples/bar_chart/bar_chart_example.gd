@@ -13,7 +13,7 @@ func _ready():
 	
 	# Let's customize the chart properties, which specify how the chart
 	# should look, plus some additional elements like labels, the scale, etc...
-	cp = ChartProperties.new()
+	var cp = ChartProperties.new()
 	cp.y_scale = 10
 	cp.draw_origin = true
 	cp.draw_bounding_box = false
