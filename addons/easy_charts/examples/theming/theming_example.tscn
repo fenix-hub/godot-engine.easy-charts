@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://ca8dgkbl6jcuq"]
+
+[ext_resource type="Theme" uid="uid://bnljqbatun5ty" path="res://addons/easy_charts/examples/theming/theming_example.tres" id="1_20x4x"]
+[ext_resource type="Script" uid="uid://c2mn4bclpax8f" path="res://addons/easy_charts/examples/theming/theming_example.gd" id="1_j62b8"]
+[ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="2_7liax"]
+
+[node name="ThemingExample" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_20x4x")
+script = ExtResource("1_j62b8")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Chart" parent="MarginContainer" instance=ExtResource("2_7liax")]
+unique_name_in_owner = true
+layout_mode = 2
