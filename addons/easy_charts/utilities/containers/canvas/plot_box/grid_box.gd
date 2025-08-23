@@ -47,8 +47,10 @@ func _draw_background() -> void:
 	var style_box := get_theme_stylebox("plot_area", "Chart")
 	if style_box is StyleBoxFlat:
 		draw_rect(self.box, style_box.bg_color, true)# false) TODOGODOT4 Antialiasing argument is missing
+	elif style_box is StyleBoxEmpty:
+		return
 	else:
-		push_error("plot_area style box must be StyleBoxFlat")
+		push_error("plot_area style box must be StyleBoxFlat or StyleBoxEmpty")
 
 func _draw_bounding_box() -> void:
 	var box: Rect2 = self.box
@@ -57,8 +59,10 @@ func _draw_bounding_box() -> void:
 	var style_box := get_theme_stylebox("plot_area", "Chart")
 	if style_box is StyleBoxFlat:
 		draw_rect(box, style_box.border_color, false, 1)# true) TODOGODOT4 Antialiasing argument is missing
+	elif style_box is StyleBoxEmpty:
+		return
 	else:
-		push_error("plot_area style box must be StyleBoxFlat")
+		push_error("plot_area style box must be StyleBoxFlat or StyleBoxEmpty")
 
 func _draw_origin() -> void:
 	var xorigin: float = ECUtilities._map_domain(0.0, x_domain, ChartAxisDomain.from_bounds(self.plot_box.position.x, self.plot_box.end.x))

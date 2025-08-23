@@ -13,12 +13,6 @@ func _ready():
 	# Let's customize the chart properties, which specify how the chart
 	# should look, plus some additional elements like labels, the scale, etc...
 	var cp: ChartProperties = ChartProperties.new()
-	cp.colors.frame = Color("#161a1d")
-	cp.colors.background = Color.TRANSPARENT
-	cp.colors.grid = Color("#283442")
-	cp.colors.ticks = Color("#283442")
-	cp.colors.text = Color.WHITE_SMOKE
-	cp.draw_bounding_box = false
 	cp.title = "Animal spots"
 	cp.x_label = "Time"
 	cp.y_label = "Spots"
