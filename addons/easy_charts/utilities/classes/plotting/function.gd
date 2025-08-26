@@ -42,7 +42,7 @@ func _init(x: Array, y: Array, name: String = "", props: Dictionary = {}) -> voi
 func get_point(index: int) -> Array:
 	return [self.__x[index], self.__y[index]]
 
-func add_point(x: float, y: float) -> void:
+func add_point(x: float, y: Variant) -> void:
 	self.__x.append(x)
 	self.__y.append(y)
 
