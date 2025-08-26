@@ -1,6 +1,8 @@
 extends RefCounted
 class_name Function
 
+signal visibility_changed(visible: bool)
+
 enum Type {
 	SCATTER,
 	LINE,
@@ -40,7 +42,7 @@ func _init(x: Array, y: Array, name: String = "", props: Dictionary = {}) -> voi
 func get_point(index: int) -> Array:
 	return [self.__x[index], self.__y[index]]
 
-func add_point(x: float, y: float) -> void:
+func add_point(x: float, y: Variant) -> void:
 	self.__x.append(x)
 	self.__y.append(y)
 
@@ -83,6 +85,17 @@ func get_line_width() -> float:
 
 func get_visibility() -> bool:
 	return props.get("visible", true)
+
+func set_visibility(visible: bool) -> void:
+	if get_visibility() == visible:
+		return
+
+	props.set("visible", visible)
+	visibility_changed.emit(visible)
+
+func toggle_visibility() -> void:
+	var new_visibility = !get_visibility()
+	set_visibility(new_visibility)
 
 func copy() -> Function:
 	return Function.new(

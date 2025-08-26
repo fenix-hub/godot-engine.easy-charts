@@ -105,3 +105,4 @@ use_parent_material = true
 layout_mode = 2
 
 [connection signal="resized" from="Canvas/CanvasContainer/DataContainer/PlotContainer/PlotBox" to="." method="_on_plot_box_resized"]
+[connection signal="function_clicked" from="Canvas/CanvasContainer/DataContainer/FunctionLegend" to="." method="_on_function_legend_function_clicked"]

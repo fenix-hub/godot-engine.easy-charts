@@ -1,23 +1,26 @@
 extends VBoxContainer
 class_name FunctionLegend
 
-@onready var f_label_scn: PackedScene = preload("res://addons/easy_charts/utilities/containers/legend/function_label.tscn")
+signal function_clicked(function: Function)
+
+@onready var function_label_scene: PackedScene = preload("res://addons/easy_charts/utilities/containers/legend/function_label.tscn")
 
 var chart_properties: ChartProperties
 
 func _ready() -> void:
-    pass
+	pass
 
 func clear() -> void:
-    for label in get_children():
-        label.queue_free()
+	for label in get_children():
+		label.queue_free()
 
 func add_function(function: Function) -> void:
-    var f_label: FunctionLabel = f_label_scn.instantiate()
-    add_child(f_label)
-    f_label.init_label(function)
+	var function_label: FunctionLabel = function_label_scene.instantiate()
+	add_child(function_label)
+	function_label.clicked.connect(function_clicked.emit.bind(function))
+	function_label.init_label(function)
 
 func add_label(type: int, color: Color, marker: int, name: String) -> void:
-    var f_label: FunctionLabel = f_label_scn.instantiate()
-    add_child(f_label)
-    f_label.init_clabel(type, color, marker, name)
+	var function_label: FunctionLabel = function_label_scene.instantiate()
+	add_child(function_label)
+	function_label.init_clabel(type, color, marker, name)

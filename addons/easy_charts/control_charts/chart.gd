@@ -206,3 +206,7 @@ func _hide_tooltip(point: Point, function: Function) -> void:
 		return
 
 	_tooltip.hide()
+
+func _on_function_legend_function_clicked(function: Function) -> void:
+	function.toggle_visibility()
+	queue_redraw()

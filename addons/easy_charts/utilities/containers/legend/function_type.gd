@@ -4,40 +4,61 @@ class_name FunctionTypeLabel
 var type: int
 var marker: int
 var color: Color
+var indicator_visible: bool:
+	get:
+		return indicator_visible
+	set(value):
+		indicator_visible = value
+		queue_redraw()
 
 func _draw() -> void:
+	if !indicator_visible:
+		return
+
 	var center: Vector2 = get_rect().get_center()
-	
+
 	match self.type:
 		Function.Type.LINE:
 			draw_line(
-				Vector2(get_rect().position.x, center.y), 
-				Vector2(get_rect().end.x, center.y), 
+				Vector2(get_rect().position.x, center.y),
+				Vector2(get_rect().end.x, center.y),
 				color, 3
 			)
 		Function.Type.AREA:
-			var c2: Color = color
-			c2.a = 0.3
+			var color_light: Color = color
+			color_light.a = 0.3
 			draw_rect(
 				Rect2(
-					Vector2(get_rect().position.x, center.y), 
+					Vector2(get_rect().position.x, center.y),
 					Vector2(get_rect().end.x, get_rect().end.y / 2)
 				),
-				c2, 3
+				color_light,
+				3
 			)
 			draw_line(
-				Vector2(get_rect().position.x, center.y), 
-				Vector2(get_rect().end.x, center.y), 
-				color, 3
+				Vector2(get_rect().position.x, center.y),
+				Vector2(get_rect().end.x, center.y),
+				color,
+				3
 			)
 		Function.Type.PIE:
 			draw_rect(
-				Rect2(center - (Vector2.ONE * 3), (Vector2.ONE * 3 * 2)), 
-				color, 1.0
+				Rect2(center - (Vector2.ONE * 3), (Vector2.ONE * 3 * 2)),
+				color,
+				1.0
+			)
+		Function.Type.BAR:
+			draw_rect(
+				Rect2(
+					Vector2(get_rect().position),
+					Vector2(get_rect().end.x, get_rect().end.y)
+				),
+				color,
+				3
 			)
 		Function.Type.SCATTER, _:
 			pass
-	
+
 	match self.marker:
 		Function.Marker.NONE:
 			pass
