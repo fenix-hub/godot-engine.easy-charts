@@ -19,10 +19,15 @@ var y_ticklabel_space: float = 5
 var x_scale_type: int = 0
 var y_scale_type: int = 0
 
-var draw_borders: bool = true
+## draw_frame is deprecated. Use a theme instead.
 var draw_frame: bool = true
+
+## draw_background is deprecated. Use a theme instead.
 var draw_background: bool = true
+
+## draw_bounding_box is deprecated. Use a theme instead.
 var draw_bounding_box: bool = true
+
 var draw_vertical_grid: bool = true
 var draw_horizontal_grid: bool = true
 var draw_ticks: bool = true
@@ -54,10 +59,10 @@ var smooth_domain: bool = false
 var max_samples: int = 100
 
 ## Dictionary of colors for all of the Chart elements.
+## Note: This is deprecated. Use a theme instead
 var colors: Dictionary = {
 	frame = Color.WHITE_SMOKE,
 	background = Color.WHITE,
-	borders = Color.RED,
 	bounding_box = Color.BLACK,
 	grid = Color.GRAY,
 	ticks = Color.BLACK,
