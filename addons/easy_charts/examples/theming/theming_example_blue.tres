@@ -1,0 +1,33 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://bnljqbatun5ty"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rmy2u"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 40.0
+content_margin_bottom = 15.0
+bg_color = Color(0.513499, 0.746508, 0.951353, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.246478, 0.508126, 0.848807, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_34bsk"]
+bg_color = Color(0.826829, 0.909094, 0.988475, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.210852, 0.538651, 0.820464, 1)
+
+[resource]
+Chart/colors/origin_color = Color(0.773454, 0, 0.180562, 1)
+Chart/colors/text_color = Color(0.068957, 0.324306, 0.651482, 1)
+Chart/colors/tick_color = Color(0.146677, 0.233932, 0.465296, 1)
+Chart/colors/tick_grid_line_color = Color(0.407889, 0.473545, 0.699079, 1)
+Chart/styles/chart_area = SubResource("StyleBoxFlat_rmy2u")
+Chart/styles/plot_area = SubResource("StyleBoxFlat_34bsk")

@@ -25,15 +25,13 @@ var chart_properties: ChartProperties = null
 
 ###########
 
-func _ready() -> void:
-	if theme == null:
-		theme = Theme.new()
-
 func plot(functions: Array[Function], properties: ChartProperties = ChartProperties.new()) -> void:
 	self.functions = functions
 	self.chart_properties = properties
 
-	theme.set("default_font", self.chart_properties.font)
+	# If user does not set a theme, generate a Theme from chart properties.
+	theme = _get_theme_from_properties(chart_properties)
+
 	_canvas.prepare_canvas(self.chart_properties)
 	plot_box.chart_properties = self.chart_properties
 	function_legend.chart_properties = self.chart_properties
@@ -194,3 +192,36 @@ func _hide_tooltip(point: Point, function: Function) -> void:
 func _on_function_legend_function_clicked(function: Function) -> void:
 	function.toggle_visibility()
 	queue_redraw()
+
+func _get_theme_from_properties(chart_properties: ChartProperties) -> Theme:
+	var theme = Theme.new()
+	theme.default_font = chart_properties.font
+	
+	if !has_theme_color("origin_color", "Chart"):
+		theme.set_color("origin_color", "Chart", chart_properties.colors.origin)
+
+	if !has_theme_color("text_color", "Chart"):
+		theme.set_color("text_color", "Chart", chart_properties.colors.text)
+
+	if !has_theme_color("tick_color", "Chart"):
+		theme.set_color("tick_color", "Chart", chart_properties.colors.ticks)
+
+	if !has_theme_color("tick_grid_line_color", "Chart"):
+		theme.set_color("tick_grid_line_color", "Chart", chart_properties.colors.grid)
+
+	if !has_theme_stylebox("chart_area", "Chart"):
+		var chart_area := StyleBoxFlat.new()
+		chart_area.bg_color = chart_properties.colors.frame
+		chart_area.draw_center = chart_properties.draw_frame
+		chart_area.set_content_margin_all(15)
+		theme.set_stylebox("chart_area", "Chart", chart_area)
+
+	if !has_theme_stylebox("plot_area", "Chart"):
+		var plot_area := StyleBoxFlat.new()
+		plot_area.bg_color = chart_properties.colors.background
+		plot_area.draw_center = chart_properties.draw_background
+		plot_area.border_color = chart_properties.colors.bounding_box
+		plot_area.set_border_width_all(1 if chart_properties.draw_bounding_box else 0)
+		theme.set_stylebox("plot_area", "Chart", plot_area)
+
+	return theme

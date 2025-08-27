@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dlwq4kmdb3bhs"]
+[gd_scene load_steps=8 format=3 uid="uid://dlwq4kmdb3bhs"]
 
 [ext_resource type="Script" uid="uid://bn7n1q5r4n3jn" path="res://addons/easy_charts/control_charts/chart.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://dmesmjhiuqdo4" path="res://addons/easy_charts/utilities/containers/data_tooltip/data_tooltip.tscn" id="2"]
@@ -7,16 +7,7 @@
 [ext_resource type="Script" uid="uid://doelssxa0y7ap" path="res://addons/easy_charts/utilities/containers/canvas/plot_box/grid_box.gd" id="5"]
 [ext_resource type="PackedScene" uid="uid://c6ffuulowjw4g" path="res://addons/easy_charts/utilities/containers/legend/function_legend.tscn" id="6"]
 
-[sub_resource type="Theme" id="4"]
-
 [sub_resource type="StyleBoxEmpty" id="8"]
-
-[sub_resource type="StyleBoxFlat" id="5"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
-draw_center = false
 
 [node name="Chart" type="PanelContainer"]
 anchors_preset = 15
@@ -25,7 +16,6 @@ anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 1
-theme = SubResource("4")
 theme_override_styles/panel = SubResource("8")
 script = ExtResource("1")
 
@@ -34,7 +24,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 1
-theme_override_styles/panel = SubResource("5")
 script = ExtResource("3")
 
 [node name="CanvasContainer" type="VBoxContainer" parent="Canvas"]

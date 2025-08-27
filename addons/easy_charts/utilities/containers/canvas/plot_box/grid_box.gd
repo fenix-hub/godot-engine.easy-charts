@@ -44,23 +44,36 @@ func _draw() -> void:
 		_draw_bounding_box()
 
 func _draw_background() -> void:
-	draw_rect(self.box, get_parent().chart_properties.colors.background, true)# false) TODOGODOT4 Antialiasing argument is missing
+	var style_box := get_theme_stylebox("plot_area", "Chart")
+	if style_box is StyleBoxFlat:
+		draw_rect(self.box, style_box.bg_color, true)# false) TODOGODOT4 Antialiasing argument is missing
+	elif style_box is StyleBoxEmpty:
+		return
+	else:
+		push_error("plot_area style box must be StyleBoxFlat or StyleBoxEmpty")
 
 func _draw_bounding_box() -> void:
 	var box: Rect2 = self.box
 	box.position.y += 1
-	draw_rect(box, get_parent().chart_properties.colors.bounding_box, false, 1)# true) TODOGODOT4 Antialiasing argument is missing
+
+	var style_box := get_theme_stylebox("plot_area", "Chart")
+	if style_box is StyleBoxFlat:
+		draw_rect(box, style_box.border_color, false, 1)# true) TODOGODOT4 Antialiasing argument is missing
+	elif style_box is StyleBoxEmpty:
+		return
+	else:
+		push_error("plot_area style box must be StyleBoxFlat or StyleBoxEmpty")
 
 func _draw_origin() -> void:
 	var xorigin: float = ECUtilities._map_domain(0.0, x_domain, ChartAxisDomain.from_bounds(self.plot_box.position.x, self.plot_box.end.x))
 	var yorigin: float = ECUtilities._map_domain(0.0, y_domain, ChartAxisDomain.from_bounds(self.plot_box.end.y, self.plot_box.position.y))
-		
-	draw_line(Vector2(xorigin, self.plot_box.position.y), Vector2(xorigin, self.plot_box.position.y + self.plot_box.size.y), get_parent().chart_properties.colors.origin, 1)
-	draw_line(Vector2(self.plot_box.position.x, yorigin), Vector2(self.plot_box.position.x + self.plot_box.size.x, yorigin), get_parent().chart_properties.colors.origin, 1)
+	
+	draw_line(Vector2(xorigin, self.plot_box.position.y), Vector2(xorigin, self.plot_box.position.y + self.plot_box.size.y), get_theme_color("origin_color", "Chart"), 1)
+	draw_line(Vector2(self.plot_box.position.x, yorigin), Vector2(self.plot_box.position.x + self.plot_box.size.x, yorigin), get_theme_color("origin_color", "Chart"), 1)
 	draw_string(
 		get_parent().chart_properties.font, Vector2(xorigin, yorigin) - Vector2(15, -15), "O", HORIZONTAL_ALIGNMENT_CENTER, -1, 
-		ThemeDB.fallback_font_size, get_parent().chart_properties.colors.text, TextServer.JUSTIFICATION_NONE, TextServer.DIRECTION_AUTO, TextServer.ORIENTATION_HORIZONTAL
-		)
+		ThemeDB.fallback_font_size, get_theme_color("text_color", "Chart"), TextServer.JUSTIFICATION_NONE, TextServer.DIRECTION_AUTO, TextServer.ORIENTATION_HORIZONTAL
+	)
 
 
 func _draw_x_ticks() -> void:
@@ -94,7 +107,7 @@ func _draw_x_ticks() -> void:
 				HORIZONTAL_ALIGNMENT_CENTER,
 				-1,
 				ThemeDB.fallback_font_size,
-				get_parent().chart_properties.colors.text,
+				get_theme_color("text_color", "Chart"),
 				TextServer.JUSTIFICATION_NONE,
 				TextServer.DIRECTION_AUTO,
 				TextServer.ORIENTATION_HORIZONTAL
@@ -102,20 +115,20 @@ func _draw_x_ticks() -> void:
 
 	# Draw x grid
 	if get_parent().chart_properties.draw_vertical_grid:
-		draw_multiline(vertical_grid, get_parent().chart_properties.colors.grid, 1)
+		draw_multiline(vertical_grid, get_theme_color("tick_grid_line_color", "Chart"), 1)
 
 	# Draw x ticks
 	if get_parent().chart_properties.draw_ticks:
-		draw_multiline(vertical_ticks, get_parent().chart_properties.colors.ticks, 1)
+		draw_multiline(vertical_ticks, get_theme_color("tick_color", "Chart"), 1)
 
 func _draw_y_ticks() -> void:
 	var labels = y_domain.get_tick_labels()
 	var tick_count = labels.size()
 	var y_pixel_dist: float = self.plot_box.size.y / tick_count
-	
+
 	var horizontal_grid: PackedVector2Array = []
 	var horizontal_ticks: PackedVector2Array = []
-	
+
 	for i in range(tick_count):
 		var y_sampled_val: float = self.plot_box.size.y - (i * y_pixel_dist) + self.plot_box.position.y
 
@@ -138,7 +151,7 @@ func _draw_y_ticks() -> void:
 				HORIZONTAL_ALIGNMENT_CENTER,
 				-1,
 				ThemeDB.fallback_font_size,
-				get_parent().chart_properties.colors.text,
+				get_theme_color("text_color", "Chart"),
 				TextServer.JUSTIFICATION_NONE,
 				TextServer.DIRECTION_AUTO,
 				TextServer.ORIENTATION_HORIZONTAL
@@ -146,11 +159,11 @@ func _draw_y_ticks() -> void:
 	
 	# Draw y grid
 	if get_parent().chart_properties.draw_horizontal_grid:
-		draw_multiline(horizontal_grid, get_parent().chart_properties.colors.grid, 1)
+		draw_multiline(horizontal_grid, get_theme_color("tick_grid_line_color", "Chart"), 1)
 	
 	# Draw y ticks
 	if get_parent().chart_properties.draw_ticks:
-		draw_multiline(horizontal_ticks, get_parent().chart_properties.colors.ticks, 1)
+		draw_multiline(horizontal_ticks, get_theme_color("tick_color", "Chart"), 1)
 		
 
 func _get_x_tick_label_position(base_position: Vector2, text: String) -> Vector2:
