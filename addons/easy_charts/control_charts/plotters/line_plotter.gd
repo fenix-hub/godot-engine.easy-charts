@@ -22,8 +22,7 @@ func _get_spline_points(density: float = 10.0, tension: float = 1) -> PackedVect
 				)
 			)
 	
-	return spline_points	
-
+	return spline_points
 
 func _get_stair_points() -> PackedVector2Array:
 	var stair_points: PackedVector2Array = points_positions
