@@ -55,7 +55,7 @@ func load_functions(functions: Array[Function]) -> void:
 		self.y.append(function.__y)
 
 		# Create FunctionPlotter
-		var function_plotter := FunctionPlotter.create_for_function(function)
+		var function_plotter := FunctionPlotter.create_for_function(self, function)
 		function_plotter.point_entered.connect(_show_tooltip)
 		function_plotter.point_exited.connect(_hide_tooltip)
 		functions_box.add_child(function_plotter)
@@ -68,6 +68,21 @@ func load_functions(functions: Array[Function]) -> void:
 					function_legend.add_label(function.get_type(), interp_color, Function.Marker.NONE, function.__y[i])
 			_:
 				function_legend.add_function(function)
+
+	_draw()
+
+## Returns all functions of a specific type that are part of this chart.
+func get_functions_by_type(type: Function.Type) -> Array[Function]:
+	return functions.filter(func(function: Function) -> bool:
+		return function.get_type() == type
+	)
+
+## Returns true, if the x tick labels should be rendered centered between
+## tick lines. This is the case if there are multiple bar charts AND
+## the x values are discrete.
+func are_x_tick_labels_centered() -> bool:
+	return get_functions_by_type(Function.Type.BAR).size() > 1 && \
+			x_domain.is_discrete
 
 func _draw() -> void:
 	if (x.size() == 0) or (y.size() == 0) or (x.size() == 1 and x[0].is_empty()) or (y.size() == 1 and y[0].is_empty()):
@@ -118,6 +133,7 @@ func _draw() -> void:
 	update_plotbox(x_domain, y_domain, x_labels_function, y_labels_function)
 
 	# Update GridBox
+	grid_box.x_labels_centered = are_x_tick_labels_centered()
 	update_gridbox(x_domain, y_domain, x_labels_function, y_labels_function)
 
 	# Update each FunctionPlotter in FunctionsBox

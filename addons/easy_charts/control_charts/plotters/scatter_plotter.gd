@@ -10,8 +10,8 @@ var focused_point: Point
 
 var _point_size: float
 
-func _init(function: Function):
-	super(function)
+func _init(chart: Chart, function: Function):
+	super(chart, function)
 	_point_size = function.props.get("point_size", 3.0)
 
 func _draw() -> void:
@@ -34,6 +34,13 @@ func _sample() -> void:
 	var lower_bound: int = 0
 	if get_chart_properties().max_samples > 0:
 		lower_bound = max(0, function.__x.size() - get_chart_properties().max_samples)
+
+	var left_padding := 0.0
+	if chart.are_x_tick_labels_centered():
+		var distance_between_ticks_px = \
+			x_domain.map_to(1, function.__x, x_sampled_domain)\
+			- x_domain.map_to(0, function.__x, x_sampled_domain)
+		left_padding = 0.5 * distance_between_ticks_px
 
 	for i in range(lower_bound, function.__x.size()):
 		var _position: Vector2 = Vector2(

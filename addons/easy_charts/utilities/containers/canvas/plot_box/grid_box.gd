@@ -3,6 +3,7 @@ class_name GridBox
 
 var x_domain: ChartAxisDomain = null
 var x_labels_function: Callable = Callable()
+var x_labels_centered: bool = false
 
 var y_domain: ChartAxisDomain = null
 var y_labels_function: Callable = Callable()
@@ -102,7 +103,7 @@ func _draw_x_ticks() -> void:
 			var label: String = labels[i]
 			draw_string(
 				get_parent().chart_properties.font, 
-				_get_x_tick_label_position(bottom, label),
+				_get_x_tick_label_position(bottom, label, x_pixel_dist),
 				label,
 				HORIZONTAL_ALIGNMENT_CENTER,
 				-1,
@@ -166,9 +167,11 @@ func _draw_y_ticks() -> void:
 		draw_multiline(horizontal_ticks, get_theme_color("tick_color", "Chart"), 1)
 		
 
-func _get_x_tick_label_position(base_position: Vector2, text: String) -> Vector2:
+func _get_x_tick_label_position(base_position: Vector2, text: String, x_pixel_dist: float) -> Vector2:
+	var x_offset: float = 0 if !x_labels_centered else 0.5 * x_pixel_dist
+
 	return  base_position + Vector2(
-		- get_parent().chart_properties.font.get_string_size(text).x / 2,
+		- get_parent().chart_properties.font.get_string_size(text).x / 2 + x_offset,
 		ThemeDB.fallback_font_size + get_parent().chart_properties.x_tick_size
 	)
 

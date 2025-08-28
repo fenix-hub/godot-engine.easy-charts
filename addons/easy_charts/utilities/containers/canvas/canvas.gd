@@ -7,7 +7,7 @@ class_name Canvas
 @onready var _legend: FunctionLegend = $CanvasContainer/DataContainer/FunctionLegend
 
 func _ready():
-    pass # Replace with function body.
+	pass # Replace with function body.
 
 func prepare_canvas(chart_properties: ChartProperties) -> void:
 	add_theme_stylebox_override("panel", get_theme_stylebox("chart_area", "Chart"))
@@ -33,27 +33,27 @@ func prepare_canvas(chart_properties: ChartProperties) -> void:
 		hide_legend()
 
 func update_title(text: String, color: Color, rotation: float = 0.0) -> void:
-    _title_lbl.show()
-    _update_canvas_label(_title_lbl, text, color, rotation)
+	_title_lbl.show()
+	_update_canvas_label(_title_lbl, text, color, rotation)
 
 func update_y_label(text: String, color: Color, rotation: float = 0.0) -> void:
-    _y_lbl.show()
-    _update_canvas_label(_y_lbl, text, color, rotation)
+	_y_lbl.show()
+	_update_canvas_label(_y_lbl, text, color, rotation)
 
 func update_x_label(text: String, color: Color, rotation: float = 0.0) -> void:
-    _x_lbl.show()
-    _update_canvas_label(_x_lbl, text, color, rotation)
+	_x_lbl.show()
+	_update_canvas_label(_x_lbl, text, color, rotation)
 
 func _update_canvas_label(canvas_label: Label, text: String, color: Color, rotation: float = 0.0) -> void:
-    canvas_label.set_text(text)
-    canvas_label.modulate = color
-    canvas_label.rotation = rotation
+	canvas_label.set_text(text)
+	canvas_label.modulate = color
+	canvas_label.rotation = rotation
 
 func hide_legend() -> void:
-    _legend.hide()
+	_legend.hide()
 
 func set_color(color: Color) -> void:
-    get("theme_override_styles/panel").set("bg_color", color)
+	get("theme_override_styles/panel").set("bg_color", color)
 
 func set_frame_visible(visible: bool) -> void:
-    get("theme_override_styles/panel").set("draw_center", visible)
+	get("theme_override_styles/panel").set("draw_center", visible)

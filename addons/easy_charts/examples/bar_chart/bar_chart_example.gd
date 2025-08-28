@@ -2,18 +2,25 @@ extends Control
 
 @onready var chart: Chart = $VBoxContainer/Chart
 
+var functions: Array[Function]
+var selected_functions: Array[Function]
+
+var is_secondary_function_visible := true
+var secondary_function: Function
+
+# Let's create our @x values.
+var x: Array = range(0, 24).map(func(i: int) -> String: return "%d - %d h" % [i, i+1])
+
+# And our y values.
+var y1: Array = ArrayOperations.add_int(ArrayOperations.multiply_int(range(0, 24), 10), 4)
+var y2: Array = ArrayOperations.add_int(ArrayOperations.multiply_int(range(0, 24), 5), 4)
+
+var cp: ChartProperties
+
 func _ready():
-	# Let's create our @x values
-	var x: Array = range(0, 24).map(func(i: int) -> String: return "%d - %d h" % [i, i+1])
-	
-	# And our y values. It can be an n-size array of arrays.
-	# NOTE: `x.size() == y.size()` or `x.size() == y[n].size()`
-	var y1: Array = ArrayOperations.add_int(ArrayOperations.multiply_int(range(0, 24), 10), 4)
-	var y2: Array = ArrayOperations.add_int(ArrayOperations.multiply_int(range(0, 24), 5), 4)
-	
 	# Let's customize the chart properties, which specify how the chart
 	# should look, plus some additional elements like labels, the scale, etc...
-	var cp = ChartProperties.new()
+	cp = ChartProperties.new()
 	cp.y_scale = 10
 	cp.draw_origin = true
 	cp.draw_bounding_box = false
@@ -63,6 +70,78 @@ func _ready():
 			color = Color.DARK_RED,
 		}
 	)
+	
+	var f5 := Function.new(
+		x, y1, "Bounce Rate",
+		{
+			type = Function.Type.BAR,
+			bar_size = 5,
+			color = Color.CORAL
+		}
+	)
+	
+	var f6 = Function.new(
+		x, y2, "New Users",
+		{
+			type = Function.Type.BAR,
+			bar_size = 5,
+			color = Color.PLUM
+		}
+	)
 
-	# Now let's plot our data
-	chart.plot([f1, f2, f3, f4], cp)
+	var secondary_function_y = ArrayOperations.add_float(
+			ArrayOperations.multiply_float(
+				ArrayOperations.cos(range(0, 24))
+			, 100),
+		110
+	)
+	secondary_function = Function.new(
+		x, secondary_function_y, "Avg Duration",
+		{
+			type = Function.Type.LINE,
+			marker = Function.Marker.CROSS,
+			color = Color.DODGER_BLUE
+		}
+	)
+
+	functions = [f1, f2, f3, f4, f5, f6]
+	selected_functions = functions.slice(0, 2)
+	_plot()
+
+func _plot():
+	# Now let's plot the selected bar functions + the line function
+	var secondary_function_array: Array[Function] = []
+	if is_secondary_function_visible:
+		secondary_function_array = [secondary_function]
+
+	chart.plot(selected_functions + secondary_function_array, cp)
+
+func _on_add_function():
+	# Do not exceed the max number of functions
+	if selected_functions.size() == functions.size():
+		return
+
+	selected_functions = functions.slice(0, selected_functions.size() + 1)
+	_plot()
+
+func _on_remove_function():
+	# Ensure to always have at least one function to show
+	if selected_functions.size() == 1:
+		return
+
+	selected_functions = functions.slice(0, selected_functions.size() - 1)
+	_plot()
+
+func _on_show_line_chart_toggled(toggled_on: bool) -> void:
+	is_secondary_function_visible = toggled_on
+	_plot()
+
+
+func _on_secondary_function_type_option_item_selected(index: int) -> void:
+	is_secondary_function_visible = true
+	match index:
+		0: is_secondary_function_visible = false
+		1: secondary_function.props.type = Function.Type.SCATTER
+		2: secondary_function.props.type = Function.Type.LINE
+		3: secondary_function.props.type = Function.Type.AREA
+	_plot()

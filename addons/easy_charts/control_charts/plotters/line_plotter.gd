@@ -18,11 +18,11 @@ func _get_spline_points(density: float = 10.0, tension: float = 1) -> PackedVect
 					augmented_positions[p + 1], 
 					augmented_positions[p - 1], 
 					augmented_positions[p + 2], 
-					f / density)
+					f / density
 				)
+			)
 	
 	return spline_points
-
 
 func _get_stair_points() -> PackedVector2Array:
 	var stair_points: PackedVector2Array = points_positions
