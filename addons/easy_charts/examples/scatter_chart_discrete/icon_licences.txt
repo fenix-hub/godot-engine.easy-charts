@@ -1,0 +1,15 @@
+Icon licences
+=============
+
+blackbird_icon.png
+
+Licence: https://creativecommons.org/publicdomain/zero/1.0/
+Source URL: https://www.phylopic.org/images/ec11f62e-ed3e-49bb-bcff-4e47b281d378/turdus-merula
+
+
+nightingale_icon.png
+
+Author: Stephan Sprinz
+Licence: https://creativecommons.org/licenses/by/4.0/
+Source URL: https://www.phylopic.org/images/46036e45-f30d-4857-8dd4-e9dc57a2bddc/luscinia-svecicat
+Changes: The colors of the file have been inverted. The original image is black.

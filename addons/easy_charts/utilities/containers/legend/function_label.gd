@@ -10,10 +10,12 @@ func init_label(function: Function) -> void:
 	type_lbl.type = function.get_type()
 	type_lbl.color = function.get_color()
 	type_lbl.marker = function.get_marker()
+	type_lbl.icon = function.get_icon()
+
 	name_lbl.text = function.name
 	name_lbl.set("theme_override_colors/font_color", get_theme_color("text_color", "Chart"))
 
-	type_lbl.indicator_visible = function.get_visibility()
+	_on_function_visibilty_changed(function.get_visibility())
 	function.visibility_changed.connect(_on_function_visibilty_changed)
 
 func init_clabel(type: int, color: Color, marker: int, name: String) -> void:
