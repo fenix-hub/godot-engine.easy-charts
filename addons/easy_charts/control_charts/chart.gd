@@ -195,7 +195,7 @@ func _show_tooltip(point: Point, function: Function, options: Dictionary = {}) -
 	var color: Color = function.get_color() if function.get_type() != Function.Type.PIE \
 		else function.get_gradient().sample(options.interpolation_index)
 	_tooltip.show()
-	_tooltip.update_values(x_value, y_value, function.name, color)
+	_tooltip.update_values(x_value, y_value, function)
 	_tooltip.update_position(point.position)
 	_function_of_tooltip = function
 
