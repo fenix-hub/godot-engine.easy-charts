@@ -22,11 +22,11 @@ func update_position(position: Vector2) -> void:
 func set_font(font: FontFile) -> void:
 	theme.set("default_font", font)
 
-func update_values(x: String, y: String, function: Function) -> void:
+func update_values(x: String, y: String, function: Function, color: Color) -> void:
 	x_lbl.set_text(x)
 	y_lbl.set_text(y)
 	func_lbl.set_text(function.name)
-	function_type_label.color = function.get_color()
+	function_type_label.color = color
 	function_type_label.marker = function.get_marker()
 	function_type_label.type = function.get_type()
 	function_type_label.icon = function.get_icon()
