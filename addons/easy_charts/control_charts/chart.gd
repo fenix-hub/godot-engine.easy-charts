@@ -65,7 +65,7 @@ func load_functions(functions: Array[Function]) -> void:
 			Function.Type.PIE:
 				for i in function.__x.size():
 					var interp_color: Color = function.get_gradient().sample(float(i) / float(function.__x.size()))
-					function_legend.add_label(function.get_type(), interp_color, Function.Marker.NONE, function.__y[i])
+					function_legend.add_label(function.get_type(), interp_color, function.__y[i])
 			_:
 				function_legend.add_function(function)
 

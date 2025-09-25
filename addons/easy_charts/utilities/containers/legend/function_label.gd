@@ -18,10 +18,10 @@ func init_label(function: Function) -> void:
 	_on_function_visibilty_changed(function.get_visibility())
 	function.visibility_changed.connect(_on_function_visibilty_changed)
 
-func init_clabel(type: int, color: Color, marker: int, name: String) -> void:
+func init_clabel(type: int, color: Color, name: String) -> void:
 	type_label.type = type
 	type_label.color = color
-	type_label.marker = marker
+	type_label.marker = Function.Marker.NONE
 	type_label.indicator_visible = true
 
 	name_label.text = name
