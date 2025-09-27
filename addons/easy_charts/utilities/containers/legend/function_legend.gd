@@ -20,7 +20,7 @@ func add_function(function: Function) -> void:
 	function_label.clicked.connect(function_clicked.emit.bind(function))
 	function_label.init_label(function)
 
-func add_label(type: int, color: Color, marker: int, name: String) -> void:
+func add_label(type: int, color: Color, name: String) -> void:
 	var function_label: FunctionLabel = function_label_scene.instantiate()
 	add_child(function_label)
-	function_label.init_clabel(type, color, marker, name)
+	function_label.init_clabel(type, color, name)

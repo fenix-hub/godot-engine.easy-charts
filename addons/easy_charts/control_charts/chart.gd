@@ -65,7 +65,7 @@ func load_functions(functions: Array[Function]) -> void:
 			Function.Type.PIE:
 				for i in function.__x.size():
 					var interp_color: Color = function.get_gradient().sample(float(i) / float(function.__x.size()))
-					function_legend.add_label(function.get_type(), interp_color, Function.Marker.NONE, function.__y[i])
+					function_legend.add_label(function.get_type(), interp_color, function.__y[i])
 			_:
 				function_legend.add_function(function)
 
@@ -195,7 +195,7 @@ func _show_tooltip(point: Point, function: Function, options: Dictionary = {}) -
 	var color: Color = function.get_color() if function.get_type() != Function.Type.PIE \
 		else function.get_gradient().sample(options.interpolation_index)
 	_tooltip.show()
-	_tooltip.update_values(x_value, y_value, function.name, color)
+	_tooltip.update_values(x_value, y_value, function, color)
 	_tooltip.update_position(point.position)
 	_function_of_tooltip = function
 

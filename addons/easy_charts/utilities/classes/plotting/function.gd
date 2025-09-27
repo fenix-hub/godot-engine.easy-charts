@@ -86,6 +86,9 @@ func get_line_width() -> float:
 func get_visibility() -> bool:
 	return props.get("visible", true)
 
+func get_icon() -> Texture2D:
+	return props.get("icon", null)
+
 func set_visibility(visible: bool) -> void:
 	if get_visibility() == visible:
 		return

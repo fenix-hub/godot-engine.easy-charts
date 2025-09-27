@@ -5,8 +5,13 @@ extends Panel
 
 var _chart_scene := preload("res://addons/easy_charts/control_charts/chart.tscn")
 var _chart: Chart
+var _chart_properties: ChartProperties
 
 func _ready() -> void:
+	_chart_properties = ChartProperties.new()
+	_chart_properties.show_legend = true
+	_chart_properties.interactive = true
+
 	_theme_options_button.item_selected.connect(_on_theme_option_button_item_selected)
 	_theme_options_button.selected = 0
 	_on_theme_option_button_item_selected(_theme_options_button.selected)
@@ -27,7 +32,7 @@ func _draw_chart() -> void:
 	_chart = _chart_scene.instantiate()
 	_vbox_container.add_child(_chart)
 	_chart.set_y_domain(-50, 50)
-	_chart.plot([f])
+	_chart.plot([f], _chart_properties)
 
 func _on_theme_option_button_item_selected(index: int) -> void:
 	var selected_theme: Theme

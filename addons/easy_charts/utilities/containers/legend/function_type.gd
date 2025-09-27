@@ -4,6 +4,8 @@ class_name FunctionTypeLabel
 var type: int
 var marker: int
 var color: Color
+var icon: Texture2D
+
 var indicator_visible: bool:
 	get:
 		return indicator_visible
@@ -15,6 +17,12 @@ func _draw() -> void:
 	if !indicator_visible:
 		return
 
+	if icon == null:
+		_draw_function_and_marker()
+	else:
+		_draw_icon()
+
+func _draw_function_and_marker() -> void:
 	var center: Vector2 = get_rect().get_center()
 
 	match self.type:
@@ -88,3 +96,6 @@ func _draw() -> void:
 			)
 		Function.Marker.CIRCLE, _:
 			draw_circle(center, 3, color)
+
+func _draw_icon() -> void:
+	draw_texture_rect(icon, get_rect(), false, color)
