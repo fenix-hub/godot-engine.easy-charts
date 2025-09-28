@@ -1,7 +1,19 @@
 site_name: godot-engine.easy-charts
+site_url: !ENV READTHEDOCS_CANONICAL_URL
 nav:
   - Home: index.md
   - Installation: installation.md
   - Getting Started: getting-started.md
   - Theming: theming.md
   - Advanced: advanced-topics.md
+
+theme:
+  name: material
+
+extra_javascript:
+  - javascript/readthedocs.js
+
+markdown_extensions:
+  - pymdownx.highlight:
+      use_pygments: true
+  - pymdownx.superfences
