@@ -1,4 +1,4 @@
-## Advanced Topics
+# Advanced Topics
 
 This page contains some more detailed and advanced topics.
 
