@@ -1,0 +1,7 @@
+site_name: godot-engine.easy-charts
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Getting Started: getting-started.md
+  - Theming: theming.md
+  - Advanced: advanced-topics.md

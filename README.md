@@ -72,3 +72,19 @@ This library offers a set of charts for each main Godot Node:
 This addon was built for a **personal use** intention. It was released as an open source plugin in the hope that it could be useful to the Godot Engine Community.
 As a "work in progress" project, there is *no warranty* for any eventual issue and bug that may broke your project.  
 I don't assume any responsibility for possible corruptions of your project. It is always advisable to keep a copy of your project and check any changes you make in your Github repository.  
+
+## Development
+
+### Plugin
+
+To develop the plugin, simply open checkout the repository and open it as a project in Godot.
+
+### Documentation
+
+Documentation can be found in `./docs`. It is written via MkDocs, a python tool.
+
+For building them locally, you have to have python installed.
+If you have [mise](https://mise.jdx.dev/) installed, run `mise install` to install python and auto-create a virtual env.
+Install MkDocs via `pip install -r requirements.txt`.
+
+Run `mkdocs serve` to run a server hosting the documentation locally.
