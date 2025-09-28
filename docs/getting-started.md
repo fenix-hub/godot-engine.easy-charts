@@ -1,6 +1,6 @@
 # Getting started
 
-After you [installed](Installation) easy-charts, it is time to create your first chart.
+After you [installed](installation.md) easy-charts, it is time to create your first chart.
 
 ## Basic scene setup
 
@@ -75,7 +75,7 @@ The result should look as follows:
 
 > A note about theming
 >
-> The `ChartProperties` also contains settings to control drawing of the chart, like background colors, grids and ticks. However, these are deprecated in favor of using a `Theme`. See [Theming](Theming) for details.
+> The `ChartProperties` also contains settings to control drawing of the chart, like background colors, grids and ticks. However, these are deprecated in favor of using a `Theme`. See [Theming](theming.md) for details.
 
 
 ## Putting it all together
