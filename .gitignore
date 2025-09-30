@@ -16,3 +16,6 @@ export_presets.cfg
 # Mono-specific ignores
 .mono/
 .godot/
+
+# IDE specific ignores
+.idea
