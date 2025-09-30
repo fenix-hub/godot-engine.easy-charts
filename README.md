@@ -6,7 +6,7 @@
 Looking for 3.x version? 👉 [3.x](https://github.com/fenix-hub/godot-engine.easy-charts/tree/godot-3)
 
 ## How does it work?
-There is a [WIKI](https://github.com/fenix-hub/godot-engine.easy-charts/wiki) with some tutorials, even if it is a work in progress.  
+First, check out our [documentation]( https://fenix-hub.github.io/godot-engine.easy-charts/)!
 You can also find practical examples in `addons/easy_charts/examples/`.
 
 # Available Charts and when to use them    
