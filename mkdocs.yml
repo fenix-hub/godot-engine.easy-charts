@@ -1,5 +1,4 @@
 site_name: godot-engine.easy-charts
-site_url: !ENV READTHEDOCS_CANONICAL_URL
 nav:
   - Home: index.md
   - Installation: installation.md
@@ -9,9 +8,6 @@ nav:
 
 theme:
   name: material
-
-extra_javascript:
-  - javascript/readthedocs.js
 
 markdown_extensions:
   - pymdownx.highlight:
