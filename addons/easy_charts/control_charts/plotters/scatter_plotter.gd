@@ -10,27 +10,29 @@ var focused_point: Point
 
 var _point_size: float
 
+var _x_sampled_domain: ChartAxisDomain
+var _y_sampled_domain: ChartAxisDomain
+
 func _init(chart: Chart, function: Function):
 	super(chart, function)
 	_point_size = function.props.get("point_size", 3.0)
 
 func _draw() -> void:
 	super._draw()
-	
-	_sample()
 
-	if function.get_marker() != Function.Marker.NONE:
-		for point_position in points_positions:
-			draw_function_point(point_position)
+	_update_sample_domains()
+	_sample_points()
+	_draw_points()
 
-func _sample() -> void:
+func _update_sample_domains():
 	var box: Rect2 = get_box()
-	var x_sampled_domain := ChartAxisDomain.from_bounds(box.position.x, box.end.x)
-	var y_sampled_domain := ChartAxisDomain.from_bounds(box.end.y, box.position.y)
+	_x_sampled_domain = ChartAxisDomain.from_bounds(box.position.x, box.end.x)
+	_y_sampled_domain = ChartAxisDomain.from_bounds(box.end.y, box.position.y)
 
+func _sample_points() -> void:
 	_points = []
 	points_positions = []
-	
+
 	var lower_bound: int = 0
 	if get_chart_properties().max_samples > 0:
 		lower_bound = max(0, function.__x.size() - get_chart_properties().max_samples)
@@ -38,30 +40,33 @@ func _sample() -> void:
 	var left_padding := 0.0
 	if chart.are_x_tick_labels_centered():
 		var distance_between_ticks_px = \
-			x_domain.map_to(1, function.__x, x_sampled_domain)\
-			- x_domain.map_to(0, function.__x, x_sampled_domain)
+			x_domain.map_to(1, function.__x, _x_sampled_domain)\
+			- x_domain.map_to(0, function.__x, _x_sampled_domain)
 		left_padding = 0.5 * distance_between_ticks_px
 
 	for i in range(lower_bound, function.__x.size()):
 		var _position: Vector2 = Vector2(
-			x_domain.map_to(i, function.__x, x_sampled_domain),
-			y_domain.map_to(i, function.__y, y_sampled_domain)
+			x_domain.map_to(i, function.__x, _x_sampled_domain),
+			y_domain.map_to(i, function.__y, _y_sampled_domain)
 		)
 
 		var point = Point.new(_position, { x = function.__x[i], y = function.__y[i] })
-
-		# Don't sample outside y domain upper and lower bounds
-		if point.position.y > y_sampled_domain.lb || point.position.y < y_sampled_domain.ub:
-			continue
-
 		_points.push_back(point)
 		points_positions.push_back(_position)
 
-func draw_function_point(point_position: Vector2) -> void:
+func _draw_points():
+	if function.get_marker() != Function.Marker.NONE:
+		for point_position in points_positions:
+			# Don't plot points outside domain upper and lower bounds!
+			if point_position.y > _y_sampled_domain.lb and point_position.y < _y_sampled_domain.ub:
+				continue
+			_draw_single_point(point_position)
+
+func _draw_single_point(point_position: Vector2) -> void:
 	match function.get_marker():
 		Function.Marker.SQUARE:
 			draw_rect(
-				Rect2(point_position - (Vector2.ONE * _point_size), (Vector2.ONE * _point_size * 2)), 
+				Rect2(point_position - (Vector2.ONE * _point_size), (Vector2.ONE * _point_size * 2)),
 				function.get_color(), true
 			)
 		Function.Marker.TRIANGLE:
