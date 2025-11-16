@@ -21,6 +21,9 @@ var fixed: bool
 ## Callable to overwrite the label generation.
 var labels_function: Callable
 
+# axis size used when all values in from_values() call are equal
+var epsilon = 0.00001
+
 var _tick_count: int = -1
 
 var _string_values: Array
@@ -60,6 +63,8 @@ static func from_values(value_arrays: Array, smooth_domain: bool) -> ChartAxisDo
 		domain.has_decimals = ECUtilities._has_decimals(value_arrays)
 		domain.is_discrete = false
 		domain.fixed = false
+	if domain.lb == domain.ub:
+		domain.ub += domain.epsilon
 
 	return domain
 
