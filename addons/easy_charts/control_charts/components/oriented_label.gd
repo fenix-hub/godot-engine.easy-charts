@@ -15,8 +15,9 @@ var orientation: Orientation = HORIZONTAL:
 		orientation = value
 		_update_size()
 
-# Using function instead of  @onrady variable, to make it accesible
-# within get and set text property accessors.
+# Using function instead of @onrady variable, because in editor, the
+# text property is set before the _ready() function is invoked. Therefore,
+# the @onready variable would not be initialized.
 func _label() -> Label:
 	return $Label
 
