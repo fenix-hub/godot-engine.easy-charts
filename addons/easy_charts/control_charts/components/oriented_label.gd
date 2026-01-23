@@ -28,10 +28,10 @@ func _update_size() -> void:
 	if orientation == HORIZONTAL:
 		custom_minimum_size.x = _label().size.x
 		_label().rotation = 0
-		_label().position = Vector2(0, 0)
+		_label().position = Vector2(0, get_rect().get_center().y)
 	else:
 		custom_minimum_size.x = _label().size.y
 		_label().rotation = -0.5 * PI
-		_label().position = Vector2(0, _label().size.x)
+		_label().position = Vector2(0, get_rect().get_center().y + _label().size.x)
 
 	print_debug("Size updated")
