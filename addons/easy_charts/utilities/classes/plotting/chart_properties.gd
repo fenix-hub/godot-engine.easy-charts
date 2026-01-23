@@ -4,6 +4,7 @@ class_name ChartProperties
 var title: String
 var x_label: String
 var y_label: String
+var y_label_orientation: Orientation = HORIZONTAL
 
 ## {n}_scale defines in how many sectors the grid will be divided.
 ## This can only be used with non-discrete axes.
