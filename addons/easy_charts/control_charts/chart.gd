@@ -216,7 +216,36 @@ func _init_theme(chart_properties: ChartProperties) -> void:
 	if theme:
 		return
 
+	_warn_about_deprecated_chart_properties_styling_if_required()
+
 	theme = _get_theme_from_properties(chart_properties)
+
+func _warn_about_deprecated_chart_properties_styling_if_required():
+	var default_theme: Theme = load("res://addons/easy_charts/control_charts/default_chart_theme.tres")
+	var is_color_different = func (col1, col2): return col1.to_html() != col2.to_html()
+	
+	var warning_required: bool = is_color_different.call(default_theme.get_color("origin_color", "Chart"), chart_properties.colors.origin) \
+		|| is_color_different.call(default_theme.get_color("text_color", "Chart"), chart_properties.colors.text) \
+		|| is_color_different.call(default_theme.get_color("tick_color", "Chart"), chart_properties.colors.ticks) \
+		|| is_color_different.call(default_theme.get_color("tick_grid_line_color", "Chart"), chart_properties.colors.grid)
+
+	var default_chart_area: StyleBox = default_theme.get_stylebox("chart_area", "Chart")
+	warning_required = warning_required \
+		|| is_color_different.call(default_chart_area.bg_color, chart_properties.colors.frame) \
+		|| default_chart_area.draw_center != chart_properties.draw_frame
+	
+	var default_plot_area: StyleBox = default_theme.get_stylebox("plot_area", "Chart")
+	warning_required = warning_required \
+		|| is_color_different.call(default_plot_area.bg_color, chart_properties.colors.background) \
+		|| is_color_different.call(default_plot_area.border_color, chart_properties.colors.bounding_box) \
+		|| default_plot_area.draw_center != chart_properties.draw_background \
+		|| chart_properties.draw_bounding_box == false
+
+	if warning_required:
+		push_warning("It seems that you are styling Charts with ChartProperties." +
+		" This is deprecated and will be removed in future. " +
+		" Please use a Theme. Refer to: https://www.nicolosantilio.it/godot-engine.easy-charts/theming/")
+
 
 func _get_theme_from_properties(chart_properties: ChartProperties) -> Theme:
 	var theme = Theme.new()
