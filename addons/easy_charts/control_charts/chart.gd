@@ -30,7 +30,7 @@ func plot(functions: Array[Function], properties: ChartProperties = ChartPropert
 	self.chart_properties = properties
 
 	# If user does not set a theme, generate a Theme from chart properties.
-	theme = _get_theme_from_properties(chart_properties)
+	_init_theme(self.chart_properties)
 
 	_canvas.prepare_canvas(self.chart_properties)
 	plot_box.chart_properties = self.chart_properties
@@ -211,6 +211,12 @@ func _hide_tooltip(point: Point, function: Function) -> void:
 func _on_function_legend_function_clicked(function: Function) -> void:
 	function.toggle_visibility()
 	queue_redraw()
+
+func _init_theme(chart_properties: ChartProperties) -> void:
+	if theme:
+		return
+
+	theme = _get_theme_from_properties(chart_properties)
 
 func _get_theme_from_properties(chart_properties: ChartProperties) -> Theme:
 	var theme = Theme.new()
