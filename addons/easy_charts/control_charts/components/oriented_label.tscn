@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://4x4kr1y5n8q3"]
+
+[ext_resource type="Script" uid="uid://dggg5ild73qdn" path="res://addons/easy_charts/control_charts/components/oriented_label.gd" id="1_fk103"]
+
+[node name="OrientedLabel" type="Control"]
+custom_minimum_size = Vector2(23, 0)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_fk103")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+offset_right = 59.0
+offset_bottom = 23.0

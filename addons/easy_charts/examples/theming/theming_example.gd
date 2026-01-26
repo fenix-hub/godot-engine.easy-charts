@@ -11,6 +11,9 @@ func _ready() -> void:
 	_chart_properties = ChartProperties.new()
 	_chart_properties.show_legend = true
 	_chart_properties.interactive = true
+	_chart_properties.x_label = "X-Label"
+	_chart_properties.y_label = "Y-Label"
+	_chart_properties.y_label_orientation = VERTICAL
 
 	_theme_options_button.item_selected.connect(_on_theme_option_button_item_selected)
 	_theme_options_button.selected = 0
