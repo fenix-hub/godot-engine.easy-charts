@@ -30,7 +30,7 @@ func plot(functions: Array[Function], properties: ChartProperties = ChartPropert
 	self.chart_properties = properties
 
 	# If user does not set a theme, generate a Theme from chart properties.
-	theme = _get_theme_from_properties(chart_properties)
+	_init_theme(self.chart_properties)
 
 	_canvas.prepare_canvas(self.chart_properties)
 	plot_box.chart_properties = self.chart_properties
@@ -212,8 +212,56 @@ func _on_function_legend_function_clicked(function: Function) -> void:
 	function.toggle_visibility()
 	queue_redraw()
 
-func _get_theme_from_properties(chart_properties: ChartProperties) -> Theme:
-	var theme = Theme.new()
+# The _init_theme() method ensures that all styling properties are
+# available via Godot's theming engine. Note: This also handles theming
+# via ChartProperties (which is deprecated).
+func _init_theme(chart_properties: ChartProperties) -> void:
+	# We need to assign a theme, so that we can add missing theme properties.
+	# If a theme exists on the node, missing properties will be added.
+	# This allows users to partially overwrite the default theme (e.g. only the label color
+	# with the rest of the styling being derived from the default style).
+	if theme == null:
+		theme = Theme.new()
+
+	_warn_about_deprecated_chart_properties_styling_if_required()
+
+	_init_missing_theming_properties_with_defaults(chart_properties)
+
+# Push a warning in case that users use ChartProperties for styling.
+# This is done by detecting if styling related ChartProperties differ
+# from their default values.
+func _warn_about_deprecated_chart_properties_styling_if_required():
+	var default_theme: Theme = load("res://addons/easy_charts/control_charts/default_chart_theme.tres")
+	var is_color_different = func (col1, col2): return col1.to_html() != col2.to_html()
+	
+	var warning_required: bool = is_color_different.call(default_theme.get_color("origin_color", "Chart"), chart_properties.colors.origin) \
+		|| is_color_different.call(default_theme.get_color("text_color", "Chart"), chart_properties.colors.text) \
+		|| is_color_different.call(default_theme.get_color("tick_color", "Chart"), chart_properties.colors.ticks) \
+		|| is_color_different.call(default_theme.get_color("tick_grid_line_color", "Chart"), chart_properties.colors.grid)
+
+	var default_chart_area: StyleBox = default_theme.get_stylebox("chart_area", "Chart")
+	warning_required = warning_required \
+		|| is_color_different.call(default_chart_area.bg_color, chart_properties.colors.frame) \
+		|| default_chart_area.draw_center != chart_properties.draw_frame
+	
+	var default_plot_area: StyleBox = default_theme.get_stylebox("plot_area", "Chart")
+	warning_required = warning_required \
+		|| is_color_different.call(default_plot_area.bg_color, chart_properties.colors.background) \
+		|| is_color_different.call(default_plot_area.border_color, chart_properties.colors.bounding_box) \
+		|| default_plot_area.draw_center != chart_properties.draw_background \
+		|| chart_properties.draw_bounding_box == false
+
+	if warning_required:
+		push_warning("It seems that you are styling Charts with ChartProperties." +
+		" This is deprecated and will be removed in future. " +
+		" Please use a Theme. Refer to: https://www.nicolosantilio.it/godot-engine.easy-charts/theming/")
+
+# Assign missing styling properties to the theme of the Chart node.
+#
+# Note: This function right now uses the ChartProperties to assign missing
+# theme properties. In future, when styling related ChartProperties are removed
+# this should be changed to use the values from the default_chart_theme.tres.
+func _init_missing_theming_properties_with_defaults(chart_properties: ChartProperties):
 	theme.default_font = chart_properties.font
 	
 	if !has_theme_color("origin_color", "Chart"):
@@ -242,5 +290,3 @@ func _get_theme_from_properties(chart_properties: ChartProperties) -> Theme:
 		plot_area.border_color = chart_properties.colors.bounding_box
 		plot_area.set_border_width_all(1 if chart_properties.draw_bounding_box else 0)
 		theme.set_stylebox("plot_area", "Chart", plot_area)
-
-	return theme
