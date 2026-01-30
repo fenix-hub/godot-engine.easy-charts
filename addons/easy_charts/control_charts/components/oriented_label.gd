@@ -34,5 +34,3 @@ func _update_size() -> void:
 		custom_minimum_size.x = _label().size.y
 		_label().rotation = -0.5 * PI
 		_label().position = Vector2(0, get_rect().get_center().y)
-
-	print_debug("Size updated")
