@@ -84,6 +84,20 @@ func are_x_tick_labels_centered() -> bool:
 	return get_functions_by_type(Function.Type.BAR).size() > 1 && \
 			x_domain.is_discrete
 
+## Returns the slice of data_array that should be used for domain computation.
+## When max_samples > 0, limits to the last max_samples values. Additionally,
+## when new data has been added via add_point() (detected by comparing size to
+## function._initial_size), the slice starts from _initial_size to exclude initial
+## data from the domain. This prevents the axis range from extending while the
+## initial data is still in the sliding window.
+func _get_domain_slice(data_array: Array, function_index: int) -> Array:
+	var standard_lower: int = max(0, data_array.size() - chart_properties.max_samples)
+	var initial_size: int = functions[function_index]._initial_size if function_index < functions.size() else 0
+	var effective_lower: int = standard_lower
+	if data_array.size() > initial_size:
+		effective_lower = max(standard_lower, initial_size)
+	return data_array.slice(effective_lower, data_array.size())
+
 func _draw() -> void:
 	if (x.size() == 0) or (y.size() == 0) or (x.size() == 1 and x[0].is_empty()) or (y.size() == 1 and y[0].is_empty()):
 		printerr("Cannot plot an empty function!")
@@ -105,9 +119,9 @@ func _draw() -> void:
 
 			for i in x.size():
 				if not is_x_fixed:
-					_x[i] = x[i].slice(max(0, x[i].size() - chart_properties.max_samples), x[i].size())
+					_x[i] = _get_domain_slice(x[i], i)
 				if not is_y_fixed:
-					_y[i] = y[i].slice(max(0, y[i].size() - chart_properties.max_samples), y[i].size())
+					_y[i] = _get_domain_slice(y[i], i)
 
 		# Ensure that zero is available on the y-axis in case of we have at least one
 		# bar chart function. This is a dirty hack to ensure that bars are not drawn below

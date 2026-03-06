@@ -32,9 +32,15 @@ var __y: Array
 var name: String
 var props: Dictionary = {}
 
+# Tracks the number of data points present at Function creation time.
+# Used to distinguish initial data from points added via add_point()
+# so that the chart's sliding-window domain only covers newly-added data.
+var _initial_size: int = 0
+
 func _init(x: Array, y: Array, name: String = "", props: Dictionary = {}) -> void:
 	self.__x = x.duplicate()
 	self.__y = y.duplicate()
+	self._initial_size = self.__x.size()
 	self.name = name
 	if not props.is_empty() and props != null:
 		self.props = props

@@ -36,6 +36,11 @@ func _sample_points() -> void:
 	var lower_bound: int = 0
 	if get_chart_properties().max_samples > 0:
 		lower_bound = max(0, function.__x.size() - get_chart_properties().max_samples)
+		# When new data has been added via add_point(), skip initial data so that only
+		# newly-added points are sampled. This keeps the plotted region consistent with
+		# the domain computed in chart._draw().
+		if function.__x.size() > function._initial_size:
+			lower_bound = max(lower_bound, function._initial_size)
 
 	var left_padding := 0.0
 	if chart.are_x_tick_labels_centered():
