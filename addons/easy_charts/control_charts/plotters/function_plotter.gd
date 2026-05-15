@@ -17,6 +17,8 @@ static func create_for_function(chart: Chart, function: Function) -> FunctionPlo
 			return PiePlotter.new(chart, function)
 		Function.Type.BAR:
 			return BarPlotter.new(chart, function)
+		Function.Type.RADAR:
+			return RadarPlotter.new(chart, function)
 		Function.Type.SCATTER, _:
 			return ScatterPlotter.new(chart, function)
 

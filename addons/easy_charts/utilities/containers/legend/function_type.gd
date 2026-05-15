@@ -64,6 +64,10 @@ func _draw_function_and_marker() -> void:
 				color,
 				true
 			)
+		Function.Type.RADAR:
+			var r := minf(get_rect().size.x, get_rect().size.y) * 0.45
+			draw_circle(center, r, Color(color.r, color.g, color.b, 0.35))
+			draw_arc(center, r, 0.0, TAU, 24, color, 2.0)
 		Function.Type.SCATTER, _:
 			pass
 
