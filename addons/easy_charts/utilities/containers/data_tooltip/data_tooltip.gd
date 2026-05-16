@@ -14,9 +14,9 @@ func _ready():
 	update_size()
 
 func update_position(position: Vector2) -> void:
-	var x_pos: float = gap + get_rect().size.x
-	if x_pos > get_parent().size.x - position.x:
-		x_pos = - x_pos
+	var x_pos: float = gap
+	if x_pos + get_rect().size.x > get_parent().size.x - position.x:
+		x_pos = - x_pos - get_rect().size.x
 	self.position = position + Vector2(x_pos, - get_rect().size.y / 2)
 
 func set_font(font: FontFile) -> void:
