@@ -8,7 +8,8 @@ enum Type {
 	LINE,
 	AREA,
 	PIE,
-	BAR
+	BAR,
+	RADAR
 }
 
 enum Interpolation {

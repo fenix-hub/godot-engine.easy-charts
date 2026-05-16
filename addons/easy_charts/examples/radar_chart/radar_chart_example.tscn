@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://dn4xm0f5ppp6x"]
+
+[ext_resource type="Script" uid="uid://d0m7swejffo2f" path="res://addons/easy_charts/examples/radar_chart/radar_chart_example.gd" id="1_c2x2w"]
+[ext_resource type="Theme" uid="uid://dtt7rfw0ictfw" path="res://addons/easy_charts/control_charts/dark_chart_theme.tres" id="1_lkmgs"]
+[ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="2_nx0v2"]
+
+[sub_resource type="StyleBoxFlat" id="1"]
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+draw_center = false
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[node name="RadarChartExample" type="Control" unique_id=669651819]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_lkmgs")
+script = ExtResource("1_c2x2w")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=237936817]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Chart" parent="VBoxContainer" unique_id=796437018 instance=ExtResource("2_nx0v2")]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1400371668]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("1")
+text = "Try to scale the window!"
