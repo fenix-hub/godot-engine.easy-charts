@@ -14,10 +14,10 @@ func _ready():
 	update_size()
 
 func update_position(position: Vector2) -> void:
-	if (position.x + gap + size.x) > get_parent().size.x:
-		self.position = position - Vector2(size.x + gap, (get_rect().size.y / 2))
-	else:
-		self.position = position + Vector2(15, - (get_rect().size.y / 2))
+	var x_pos: float = gap + get_rect().size.x
+	if x_pos > get_parent().size.x - position.x:
+		x_pos = - x_pos
+	self.position = position + Vector2(x_pos, - get_rect().size.y / 2)
 
 func set_font(font: FontFile) -> void:
 	theme.set("default_font", font)
