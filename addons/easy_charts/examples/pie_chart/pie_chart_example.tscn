@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://be3nkm3rmqe7m"]
+[gd_scene format=3 uid="uid://be3nkm3rmqe7m"]
 
 [ext_resource type="Script" uid="uid://btfgl143uq8jc" path="res://addons/easy_charts/examples/pie_chart/pie_chart_example.gd" id="1"]
 [ext_resource type="Theme" uid="uid://dtt7rfw0ictfw" path="res://addons/easy_charts/control_charts/dark_chart_theme.tres" id="1_pwysg"]

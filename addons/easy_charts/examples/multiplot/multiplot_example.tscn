@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://7v0v5lsl0kqe"]
+[gd_scene format=3 uid="uid://7v0v5lsl0kqe"]
 
 [ext_resource type="Script" uid="uid://ouq5e3pbw5c1" path="res://addons/easy_charts/examples/multiplot/multiplot_example.gd" id="1"]
 [ext_resource type="Theme" uid="uid://dtt7rfw0ictfw" path="res://addons/easy_charts/control_charts/dark_chart_theme.tres" id="1_eb5nb"]
