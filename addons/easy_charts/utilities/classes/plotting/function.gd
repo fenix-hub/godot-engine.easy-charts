@@ -50,6 +50,8 @@ func get_point(index: int) -> Array:
 	return [self.__x[index], self.__y[index]]
 
 func add_point(x: float, y: Variant) -> void:
+	if self.__x.is_empty() and self.__y.is_empty():
+		self._initial_size = 0
 	self.__x.append(x)
 	self.__y.append(y)
 
