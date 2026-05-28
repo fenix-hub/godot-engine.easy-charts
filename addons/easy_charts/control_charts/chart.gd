@@ -92,11 +92,7 @@ func are_x_tick_labels_centered() -> bool:
 ## initial data is still in the sliding window.
 func _get_domain_slice(data_array: Array, function_index: int) -> Array:
 	var standard_lower: int = max(0, data_array.size() - chart_properties.max_samples)
-	var initial_size: int = functions[function_index]._initial_size if function_index < functions.size() else 0
-	var effective_lower: int = standard_lower
-	if data_array.size() > initial_size:
-		effective_lower = max(standard_lower, initial_size)
-	return data_array.slice(effective_lower, data_array.size())
+	return data_array.slice(standard_lower, data_array.size())
 
 func _draw() -> void:
 	if (x.size() == 0) or (y.size() == 0) or (x.size() == 1 and x[0].is_empty()) or (y.size() == 1 and y[0].is_empty()):
