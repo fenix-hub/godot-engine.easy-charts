@@ -85,18 +85,10 @@ func are_x_tick_labels_centered() -> bool:
 			x_domain.is_discrete
 
 ## Returns the slice of data_array that should be used for domain computation.
-## When max_samples > 0, limits to the last max_samples values. Additionally,
-## when new data has been added via add_point() (detected by comparing size to
-## function._initial_size), the slice starts from _initial_size to exclude initial
-## data from the domain. This prevents the axis range from extending while the
-## initial data is still in the sliding window.
+## When max_samples > 0, limits to the last max_samples values.
 func _get_domain_slice(data_array: Array, function_index: int) -> Array:
 	var standard_lower: int = max(0, data_array.size() - chart_properties.max_samples)
-	var initial_size: int = functions[function_index]._initial_size if function_index < functions.size() else 0
-	var effective_lower: int = standard_lower
-	if data_array.size() > initial_size:
-		effective_lower = max(standard_lower, initial_size)
-	return data_array.slice(effective_lower, data_array.size())
+	return data_array.slice(standard_lower, data_array.size())
 
 func _draw() -> void:
 	if (x.size() == 0) or (y.size() == 0) or (x.size() == 1 and x[0].is_empty()) or (y.size() == 1 and y[0].is_empty()):
