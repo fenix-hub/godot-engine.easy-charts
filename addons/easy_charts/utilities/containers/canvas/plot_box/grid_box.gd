@@ -81,7 +81,7 @@ func _draw_x_ticks() -> void:
 	var labels = x_domain.get_tick_labels()
 	var tick_count = labels.size()
 
-	var x_pixel_dist: float = self.plot_box.size.x / tick_count
+	var x_pixel_dist: float = self.plot_box.size.x / (x_domain._tick_count)
 	
 	var vertical_grid: PackedVector2Array = []
 	var vertical_ticks: PackedVector2Array = []
@@ -101,6 +101,7 @@ func _draw_x_ticks() -> void:
 		# Draw x tick labels
 		if get_parent().chart_properties.show_tick_labels:
 			var label: String = labels[i]
+			
 			draw_string(
 				get_parent().chart_properties.font, 
 				_get_x_tick_label_position(bottom, label, x_pixel_dist),
@@ -125,7 +126,7 @@ func _draw_x_ticks() -> void:
 func _draw_y_ticks() -> void:
 	var labels = y_domain.get_tick_labels()
 	var tick_count = labels.size()
-	var y_pixel_dist: float = self.plot_box.size.y / tick_count
+	var y_pixel_dist: float = self.plot_box.size.y / y_domain._tick_count
 
 	var horizontal_grid: PackedVector2Array = []
 	var horizontal_ticks: PackedVector2Array = []

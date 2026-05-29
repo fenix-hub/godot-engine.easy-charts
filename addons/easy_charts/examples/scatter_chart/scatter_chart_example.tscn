@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cekkstadxpimf"]
 
-[ext_resource type="Script" path="res://addons/easy_charts/examples/scatter_chart/scatter_chart_example.gd" id="1"]
+[ext_resource type="Script" uid="uid://drjv3jppfmods" path="res://addons/easy_charts/examples/scatter_chart/scatter_chart_example.gd" id="1"]
 [ext_resource type="Theme" uid="uid://b15ml05yp44ww" path="res://addons/easy_charts/control_charts/dark_chart_theme.tres" id="1_72vbu"]
 [ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="2"]
 

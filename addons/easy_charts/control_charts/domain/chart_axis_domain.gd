@@ -76,7 +76,7 @@ func set_tick_count(tick_count: int) -> void:
 
 func get_tick_labels() -> PackedStringArray:
 	if !labels_function.is_null():
-		return range(_tick_count).map(func(i) -> String:
+		return range(_tick_count + 1).map(func(i) -> String:
 			var value = lerp(lb, ub, float(i) / float(_tick_count))
 			return labels_function.call(value)
 		)
@@ -84,7 +84,7 @@ func get_tick_labels() -> PackedStringArray:
 	if is_discrete:
 		return _string_values
 
-	return range(_tick_count).map(func(i) -> String:
+	return range(_tick_count + 1).map(func(i) -> String:
 		var value = lerp(lb, ub, float(i) / float(_tick_count))
 		return ECUtilities._format_value(value, false)
 	)

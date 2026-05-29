@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://do7xs7byk60p6"]
+[gd_scene format=3 uid="uid://do7xs7byk60p6"]
 
 [ext_resource type="Script" uid="uid://dsyeot56mw5yy" path="res://src/Control.gd" id="1_xu6i7"]
 
@@ -10,7 +10,7 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0, 0, 0, 1)
 
-[node name="Control2" type="Control"]
+[node name="Control2" type="Control" unique_id=247087006]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,22 +19,22 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xu6i7")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1023862883]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer" unique_id=480195553]
 layout_mode = 2
-theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
 text = "Start Relatime Plotting"
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=93125820]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_colors/font_color = Color(0, 0, 0, 1)

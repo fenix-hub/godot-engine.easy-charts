@@ -23,6 +23,7 @@ func _ready():
 	cp.y_label = "Sensor values"
 	cp.x_scale = 5
 	cp.y_scale = 10
+	cp.max_samples = 10
 	cp.interactive = true # false by default, it allows the chart to create a tooltip to show point values
 	# and interecept clicks on the plot
 	
