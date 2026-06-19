@@ -159,10 +159,10 @@ func set(position: StringName, value: Variant) -> void:
 	values[t_pos[0]][t_pos[1]] = value
 
 # --------------
-func _get(_property : StringName):
-	# ":" --> Columns 
+func _get(_property : StringName) -> Variant:
+	# ":" --> Columns
 	if ":" in _property:
-		var property : PackedStringArray = _property.split(":") 
+		var property : PackedStringArray = _property.split(":")
 		var from : PackedStringArray = property[0].split(",")
 		var to : PackedStringArray = property[1].split(",")
 	elif "," in _property:
@@ -172,3 +172,4 @@ func _get(_property : StringName):
 	else:
 		if (_property as String).is_valid_int():
 			return get_row(int(_property))
+	return null
