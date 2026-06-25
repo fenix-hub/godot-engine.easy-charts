@@ -160,11 +160,11 @@ func get_irows(indexes : PackedInt32Array) -> Array:
 # dataset["0:5"] ---> Returns an array containing all columns from the 1st to the 4th
 # dataset["label0;label5"] ---> Returns an array containing all row from the one with label == "label0" to the one with label == "label5"
 # dataset["header0:header0"] ---> Returns an array containing all columns from the one with label == "label0" to the one with label == "label5"
-func _get(_property : StringName):
-	# ":" --> Columns 
+func _get(_property : StringName) -> Variant:
+	# ":" --> Columns
 	if ":" in _property:
 		var property : PackedStringArray = _property.split(":")
-		if (property[0]).is_valid_int(): 
+		if (property[0]).is_valid_int():
 			if property[1] == "*":
 				return get_icolumns(range(property[0] as int, headers.size()-1))
 			else:
@@ -173,18 +173,20 @@ func _get(_property : StringName):
 			if property[1] == "*":
 				return get_icolumns(range(get_column_index(property[0]), headers.size()-1))
 			else:
-				return get_icolumns(range(get_column_index(property[0]), get_column_index(property[1])))    
-	# ";" --> Rows 
+				return get_icolumns(range(get_column_index(property[0]), get_column_index(property[1])))
+	# ";" --> Rows
 	elif ";" in _property:
 		var property : PackedStringArray = _property.split(";")
-		if (property[0]).is_valid_int(): 
+		if (property[0]).is_valid_int():
 			return get_irows(range(property[0] as int, property[1] as int + 1 ))
-		else: 
+		else:
 			return get_irows(range(get_row_index(property[0]), get_row_index(property[1])))
 	elif "," in _property:
 		var property : PackedStringArray = _property.split(",")
+		return null
 	else:
 		if (_property as String).is_valid_int():
 			return get_icolumn(int(_property))
 		else:
 			return get_column(_property)
+	return null
