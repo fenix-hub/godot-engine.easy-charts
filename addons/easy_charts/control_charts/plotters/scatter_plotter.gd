@@ -67,7 +67,7 @@ func _draw_single_point(point_position: Vector2) -> void:
 		Function.Marker.SQUARE:
 			draw_rect(
 				Rect2(point_position - (Vector2.ONE * _point_size), (Vector2.ONE * _point_size * 2)),
-				function.get_color(), true
+				function.get_marker_color(), true
 			)
 		Function.Marker.TRIANGLE:
 			draw_colored_polygon(
@@ -75,21 +75,21 @@ func _draw_single_point(point_position: Vector2) -> void:
 					point_position + (Vector2.UP * _point_size * 1.3),
 					point_position + (Vector2.ONE * _point_size * 1.3),
 					point_position - (Vector2(1, -1) * _point_size * 1.3)
-				]), function.get_color(), [], null
+				]), function.get_marker_color(), [], null
 			)
 		Function.Marker.CROSS:
 			draw_line(
 				point_position - (Vector2.ONE * _point_size),
 				point_position + (Vector2.ONE * _point_size),
-				function.get_color(), _point_size, true
+				function.get_marker_color(), _point_size, true
 			)
 			draw_line(
 				point_position + (Vector2(1, -1) * _point_size),
 				point_position + (Vector2(-1, 1) * _point_size),
-				function.get_color(), _point_size / 2, true
+				function.get_marker_color(), _point_size / 2, true
 			)
 		Function.Marker.CIRCLE, _:
-			draw_circle(point_position, _point_size, function.get_color())
+			draw_circle(point_position, _point_size, function.get_marker_color())
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:

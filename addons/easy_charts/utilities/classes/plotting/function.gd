@@ -74,6 +74,9 @@ func pop_front_point() -> void:
 func count_points() -> int:
 	return self.__x.size()
 
+func get_marker_color() -> Color:
+	return props.get("marker_color", Color.DARK_SLATE_GRAY)
+
 func get_color() -> Color:
 	return props.get("color", Color.DARK_SLATE_GRAY)
 
